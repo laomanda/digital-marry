@@ -1,38 +1,11 @@
-import { useRef, useEffect } from 'react'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
 import { weddingData } from '../../data/wedding.data'
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function WishesSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const prefersReduced = usePrefersReducedMotion()
-
-  useEffect(() => {
-    if (prefersReduced) return
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.wish-card',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' },
-        }
-      )
-    }, sectionRef)
-    return () => ctx.revert()
-  }, [prefersReduced])
 
   return (
-    <section id="wishes" ref={sectionRef} data-section data-theme="dark" className="section-padding bg-[#050505]">
+    <section id="wishes" data-section data-theme="dark" data-global-reveal="true" className="section-padding bg-[#050505]">
       <div className="container-base">
-        <div className="text-center mb-16">
+        <div data-animate="title" className="text-center mb-16">
           <span className="label-caps text-muted-gray tracking-[0.35em] block mb-4">Ucapan</span>
           <h2
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: 'clamp(36px,5vw,56px)' }}
@@ -44,7 +17,7 @@ export default function WishesSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {weddingData.wishes.map((wish) => (
-            <div
+            <div data-animate="card"
               key={wish.id}
               className="wish-card border border-[rgba(255,255,255,0.07)] p-6 bg-[rgba(255,255,255,0.015)]"
             >

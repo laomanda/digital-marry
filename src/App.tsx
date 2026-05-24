@@ -19,8 +19,10 @@ import WishesSection from './components/sections/WishesSection'
 import GallerySection from './components/sections/GallerySection'
 import GiftSection from './components/sections/GiftSection'
 import ClosingSection from './components/sections/ClosingSection'
+import { useGlobalReveal } from './hooks/useGlobalReveal'
 
 export default function App() {
+  useGlobalReveal()
   return (
     <SmoothScrollProvider>
       <GrainOverlay />

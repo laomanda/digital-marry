@@ -1,9 +1,6 @@
 import { useEffect, ReactNode } from 'react'
 import Lenis from 'lenis'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
+import { ScrollTrigger } from '../../lib/gsap'
 
 interface Props {
   children: ReactNode

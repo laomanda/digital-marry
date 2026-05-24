@@ -1,15 +1,10 @@
-import { useRef, useEffect, useState } from 'react'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Check } from 'lucide-react'
 import { Input, Textarea } from '../ui/Input'
 import { Button } from '../ui/Button'
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
-
-gsap.registerPlugin(ScrollTrigger)
 
 const schema = z.object({
   name: z.string().min(2, 'Nama minimal 2 karakter'),
@@ -23,9 +18,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>
 
 export default function RsvpSection() {
-  const sectionRef = useRef<HTMLElement>(null)
   const [submitted, setSubmitted] = useState(false)
-  const prefersReduced = usePrefersReducedMotion()
 
   const {
     register,
@@ -35,24 +28,6 @@ export default function RsvpSection() {
     resolver: zodResolver(schema),
   })
 
-  useEffect(() => {
-    if (prefersReduced) return
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.rsvp-inner',
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' },
-        }
-      )
-    }, sectionRef)
-    return () => ctx.revert()
-  }, [prefersReduced])
-
   const onSubmit = async (_data: FormValues) => {
     // Simulate submit delay
     await new Promise((r) => setTimeout(r, 1200))
@@ -60,10 +35,10 @@ export default function RsvpSection() {
   }
 
   return (
-    <section id="rsvp" ref={sectionRef} data-section data-theme="dark" className="section-padding bg-[#050505]">
+    <section id="rsvp" data-section data-theme="dark" data-global-reveal="true" className="section-padding bg-[#050505]">
       <div className="container-base max-w-2xl mx-auto">
-        <div className="rsvp-inner">
-          <div className="text-center mb-16">
+        <div data-animate="card" className="rsvp-inner">
+          <div data-animate="title" className="text-center mb-16">
             <span className="label-caps text-muted-gray tracking-[0.35em] block mb-4">RSVP</span>
             <h2
               style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: 'clamp(36px,5vw,56px)' }}

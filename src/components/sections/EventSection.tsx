@@ -1,40 +1,12 @@
-import { useRef, useEffect } from 'react'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
 import { MapPin, Clock, Calendar } from 'lucide-react'
 import { weddingData } from '../../data/wedding.data'
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function EventSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const prefersReduced = usePrefersReducedMotion()
-
-  useEffect(() => {
-    if (prefersReduced) return
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.event-card',
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.2,
-          stagger: 0.2,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' },
-        }
-      )
-    }, sectionRef)
-    return () => ctx.revert()
-  }, [prefersReduced])
-
   return (
-    <section id="event" ref={sectionRef} data-section data-theme="light" className="section-padding bg-[#0a0a0a]">
+    <section id="event" data-section data-theme="light" data-global-reveal="true" className="section-padding bg-[#0a0a0a]">
       <div className="container-base">
         {/* Title */}
-        <div className="text-center mb-20">
+        <div data-animate="title" className="text-center mb-20">
           <span className="label-caps text-muted-gray tracking-[0.35em] block mb-4">Save the Date</span>
           <h2
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: 'clamp(36px,5vw,64px)' }}
@@ -46,7 +18,7 @@ export default function EventSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {weddingData.events.map((event) => (
-            <div
+            <div data-animate="card"
               key={event.id}
               className="event-card group relative border border-[rgba(255,255,255,0.08)] p-10 hover:-translate-y-2 transition-transform duration-500 hover:border-[rgba(255,255,255,0.18)]"
               style={{ background: 'linear-gradient(135deg, #111111 0%, #0a0a0a 100%)' }}

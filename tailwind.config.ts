@@ -3,20 +3,37 @@ import type { Config } from 'tailwindcss'
 const config: Config = {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',
+        sm: '1.5rem',
+        lg: '2.5rem',
+      },
+      screens: {
+        xl: '1200px',
+      },
+    },
     extend: {
       colors: {
+        'near-black': '#050505',
+        'deep-black': '#111111',
+        charcoal: '#1A1A1A',
+        'soft-charcoal': '#2A2A2A',
+        'warm-offwhite': '#F5F5F0',
+        'light-gray': '#E8E8E8',
+        'muted-gray': '#A4A4A4',
+        'dark-gray': '#555555',
+        'border-light': 'rgba(255,255,255,0.12)',
+        'border-medium': 'rgba(255,255,255,0.28)',
+        'border-dark': 'rgba(17,17,17,0.16)',
+        // Keeping fallback colors for stability with pre-existing styling classes
         black: '#111111',
-        burgundy: '#3D1E26',
-        taupe: '#C2A990',
-        terracotta: '#D8613C',
-        sage: '#B1C5A4',
         white: '#FFFFFF',
-        'light-gray': '#F9F9F9',
-        'border-gray': '#BDB6AE',
       },
       fontFamily: {
         serif: ['"Instrument Serif"', '"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans: ['"Montserrat"', 'system-ui', 'sans-serif'],
+        sans: ['"Inter"', '"DM Sans"', 'system-ui', 'sans-serif'],
         mono: ['"DM Mono"', 'monospace'],
       },
       fontSize: {
@@ -28,7 +45,9 @@ const config: Config = {
       },
       spacing: {
         'section': 'clamp(80px,10vw,160px)',
-        'section-sm': 'clamp(48px,6vw,96px)',
+        'section-sm': '4rem',
+        'section-md': '5rem',
+        'section-lg': '7rem',
       },
       maxWidth: {
         container: '1200px',

@@ -1,10 +1,4 @@
-import { useRef, useEffect } from 'react'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
 import { weddingData } from '../../data/wedding.data'
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
-
-gsap.registerPlugin(ScrollTrigger)
 
 interface PersonCardProps {
   name: string
@@ -57,50 +51,11 @@ function PersonCard({ name, parents, description, photo, role, animClass }: Pers
 }
 
 export default function CoupleSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const prefersReduced = usePrefersReducedMotion()
-
-  useEffect(() => {
-    if (prefersReduced) return
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.couple-title',
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '.couple-title', start: 'top 80%' } }
-      )
-      gsap.fromTo(
-        '.bride-card',
-        { opacity: 0, x: -80, rotate: -3 },
-        {
-          opacity: 1,
-          x: 0,
-          rotate: 0,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.bride-card', start: 'top 80%' },
-        }
-      )
-      gsap.fromTo(
-        '.groom-card',
-        { opacity: 0, x: 80, rotate: 3 },
-        {
-          opacity: 1,
-          x: 0,
-          rotate: 0,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.groom-card', start: 'top 80%' },
-        }
-      )
-    }, sectionRef)
-    return () => ctx.revert()
-  }, [prefersReduced])
-
   return (
-    <section id="couple" ref={sectionRef} data-section data-theme="burgundy" className="section-padding bg-[#0a0a0a]">
+    <section id="couple" data-section data-theme="burgundy" data-global-reveal="true" className="section-padding bg-[#0a0a0a]">
       <div className="container-base">
         {/* Title */}
-        <div className="couple-title text-center mb-20">
+        <div data-animate="title" className="couple-title text-center mb-20">
           <span className="label-caps text-muted-gray tracking-[0.35em] block mb-4">The Couple</span>
           <h2
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: 'clamp(36px,5vw,64px)' }}
@@ -112,26 +67,30 @@ export default function CoupleSection() {
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 max-w-4xl mx-auto">
-          <PersonCard
-            name={weddingData.bride.fullName}
-            parents={weddingData.bride.parents}
-            description={weddingData.bride.description}
-            photo={weddingData.bride.photo}
-            role="bride"
-            animClass="bride-card"
-          />
-          <PersonCard
-            name={weddingData.groom.fullName}
-            parents={weddingData.groom.parents}
-            description={weddingData.groom.description}
-            photo={weddingData.groom.photo}
-            role="groom"
-            animClass="groom-card"
-          />
+          <div data-animate="card">
+            <PersonCard
+              name={weddingData.bride.fullName}
+              parents={weddingData.bride.parents}
+              description={weddingData.bride.description}
+              photo={weddingData.bride.photo}
+              role="bride"
+              animClass="bride-card"
+            />
+          </div>
+          <div data-animate="card">
+            <PersonCard
+              name={weddingData.groom.fullName}
+              parents={weddingData.groom.parents}
+              description={weddingData.groom.description}
+              photo={weddingData.groom.photo}
+              role="groom"
+              animClass="groom-card"
+            />
+          </div>
         </div>
 
         {/* Ampersand */}
-        <div className="text-center mt-16">
+        <div data-animate="image" className="text-center mt-16">
           <span
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: 'clamp(80px,12vw,160px)' }}
             className="text-[rgba(245,242,236,0.04)] leading-none select-none"

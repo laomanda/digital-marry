@@ -1,10 +1,7 @@
 import { useRef, useEffect } from 'react'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
+import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function ClosingSection() {
   const sectionRef = useRef<HTMLElement>(null)

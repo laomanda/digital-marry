@@ -1,11 +1,6 @@
-import { useRef, useEffect, useState } from 'react'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
+import { useState } from 'react'
 import { Copy, Check } from 'lucide-react'
 import { weddingData } from '../../data/wedding.data'
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
-
-gsap.registerPlugin(ScrollTrigger)
 
 function GiftCard({ bank, accountNumber, accountName }: typeof weddingData.gifts[0]) {
   const [copied, setCopied] = useState(false)
@@ -21,7 +16,7 @@ function GiftCard({ bank, accountNumber, accountName }: typeof weddingData.gifts
   }
 
   return (
-    <div className="gift-card border border-[rgba(255,255,255,0.08)] p-8 hover:border-[rgba(255,255,255,0.16)] transition-all duration-500 group">
+    <div data-animate="card" className="gift-card border border-[rgba(255,255,255,0.08)] p-8 hover:border-[rgba(255,255,255,0.16)] transition-all duration-500 group">
       <span className="label-caps text-muted-gray tracking-[0.3em] block mb-5">{bank}</span>
       <div className="flex items-end justify-between gap-4">
         <div>
@@ -56,32 +51,10 @@ function GiftCard({ bank, accountNumber, accountName }: typeof weddingData.gifts
 }
 
 export default function GiftSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const prefersReduced = usePrefersReducedMotion()
-
-  useEffect(() => {
-    if (prefersReduced) return
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.gift-card',
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' },
-        }
-      )
-    }, sectionRef)
-    return () => ctx.revert()
-  }, [prefersReduced])
-
   return (
-    <section id="gift" ref={sectionRef} data-section data-theme="light" className="section-padding bg-[#0a0a0a]">
+    <section id="gift" data-section data-theme="light" data-global-reveal="true" className="section-padding bg-[#0a0a0a]">
       <div className="container-base max-w-2xl mx-auto">
-        <div className="text-center mb-16">
+        <div data-animate="title" className="text-center mb-16">
           <span className="label-caps text-muted-gray tracking-[0.35em] block mb-4">Hadiah</span>
           <h2
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: 'clamp(36px,5vw,56px)' }}

@@ -4,14 +4,20 @@
 
 @layer base {
   :root {
+    --color-near-black: #050505;
+    --color-deep-black: #111111;
+    --color-warm-offwhite: #F5F5F0;
+    --color-border-light: rgba(255, 255, 255, 0.12);
+    
+    /* Fallback variables for stability with pre-existing styling classes */
     --black: #111111;
-    --burgundy: #3D1E26;
-    --taupe: #C2A990;
-    --terracotta: #D8613C;
-    --sage: #B1C5A4;
+    --burgundy: #111111;
+    --taupe: #A4A4A4;
+    --terracotta: #E8E8E8;
+    --sage: #A4A4A4;
     --white: #ffffff;
-    --light-gray: #f9f9f9;
-    --border: rgba(189, 182, 174, 0.4);
+    --light-gray: #E8E8E8;
+    --border: rgba(255, 255, 255, 0.12);
     --overlay: rgba(17, 17, 17, 0.6);
     --glass: rgba(17, 17, 17, 0.85);
   }
@@ -28,13 +34,19 @@
   }
 
   body {
-    background-color: var(--black);
+    background-color: var(--color-near-black);
     color: var(--light-gray);
-    font-family: 'Montserrat', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     font-weight: 300;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
   }
 
   @media (pointer: coarse) {
@@ -44,7 +56,7 @@
 
   ::selection {
     background: rgba(255, 255, 255, 0.15);
-    color: var(--off-white);
+    color: #FFFFFF;
   }
 
   /* Scrollbar */
@@ -52,10 +64,25 @@
     width: 2px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--black);
+    background: var(--color-near-black);
   }
   ::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Prefers-reduced-motion fallback */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
   }
 }
 
@@ -179,4 +206,9 @@
 
 .mono-img:hover {
   filter: grayscale(80%) contrast(1.05);
+}
+
+/* Global Reveal Baseline */
+[data-global-reveal="true"] [data-animate] {
+  will-change: transform, opacity;
 }
