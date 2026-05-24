@@ -14,6 +14,7 @@ export default function ClosingSection() {
   useEffect(() => {
     if (prefersReduced) return
     const ctx = gsap.context(() => {
+      if (!bgRef.current) return
       // Slow background zoom
       gsap.fromTo(
         bgRef.current,
@@ -64,7 +65,7 @@ export default function ClosingSection() {
   const closingName = 'Alya & Raka'
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="closing" ref={sectionRef} data-section data-theme="dark" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div ref={bgRef} className="absolute inset-0 will-change-transform">
         <img

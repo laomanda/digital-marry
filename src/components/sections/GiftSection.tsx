@@ -79,7 +79,7 @@ export default function GiftSection() {
   }, [prefersReduced])
 
   return (
-    <section id="gift" ref={sectionRef} className="section-padding bg-[#0a0a0a]">
+    <section id="gift" ref={sectionRef} data-section data-theme="light" className="section-padding bg-[#0a0a0a]">
       <div className="container-base max-w-2xl mx-auto">
         <div className="text-center mb-16">
           <span className="label-caps text-muted-gray tracking-[0.35em] block mb-4">Hadiah</span>

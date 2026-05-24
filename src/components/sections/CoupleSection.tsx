@@ -97,7 +97,7 @@ export default function CoupleSection() {
   }, [prefersReduced])
 
   return (
-    <section id="couple" ref={sectionRef} className="section-padding bg-[#0a0a0a]">
+    <section id="couple" ref={sectionRef} data-section data-theme="burgundy" className="section-padding bg-[#0a0a0a]">
       <div className="container-base">
         {/* Title */}
         <div className="couple-title text-center mb-20">

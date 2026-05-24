@@ -31,7 +31,7 @@ export default function EventSection() {
   }, [prefersReduced])
 
   return (
-    <section id="events" ref={sectionRef} className="section-padding bg-[#0a0a0a]">
+    <section id="event" ref={sectionRef} data-section data-theme="light" className="section-padding bg-[#0a0a0a]">
       <div className="container-base">
         {/* Title */}
         <div className="text-center mb-20">

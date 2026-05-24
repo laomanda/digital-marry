@@ -5,16 +5,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        black: '#050505',
-        charcoal: '#111111',
-        'soft-black': '#1A1A1A',
+        black: '#111111',
+        burgundy: '#3D1E26',
+        taupe: '#C2A990',
+        terracotta: '#D8613C',
+        sage: '#B1C5A4',
         white: '#FFFFFF',
-        'off-white': '#F5F2EC',
-        'muted-gray': '#8A8A8A',
+        'light-gray': '#F9F9F9',
+        'border-gray': '#BDB6AE',
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        serif: ['"Instrument Serif"', '"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['"Montserrat"', 'system-ui', 'sans-serif'],
+        mono: ['"DM Mono"', 'monospace'],
       },
       fontSize: {
         'hero-desktop': ['clamp(80px,9vw,140px)', { lineHeight: '0.9', letterSpacing: '-0.03em' }],

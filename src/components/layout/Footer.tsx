@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-[#050505] border-t border-[rgba(255,255,255,0.06)] py-16">
+    <footer id="footer" data-theme="dark" className="bg-[#050505] border-t border-[rgba(255,255,255,0.06)] py-16">
       <div className="container-base flex flex-col items-center gap-6 text-center">
         <h2
           className="text-off-white text-[28px]"

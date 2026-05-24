@@ -30,7 +30,7 @@ export default function WishesSection() {
   }, [prefersReduced])
 
   return (
-    <section id="wishes" ref={sectionRef} className="section-padding bg-[#050505]">
+    <section id="wishes" ref={sectionRef} data-section data-theme="dark" className="section-padding bg-[#050505]">
       <div className="container-base">
         <div className="text-center mb-16">
           <span className="label-caps text-muted-gray tracking-[0.35em] block mb-4">Ucapan</span>

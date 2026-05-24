@@ -4,16 +4,20 @@ import CustomCursor from './components/layout/CustomCursor'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 
+import { CoverSection } from './components/sections/CoverSection'
 import HeroSection from './components/sections/HeroSection'
-import OpeningSection from './components/sections/OpeningSection'
+import { QuoteSection } from './components/sections/QuoteSection'
 import CoupleSection from './components/sections/CoupleSection'
 import LoveStorySection from './components/sections/LoveStorySection'
-import EventSection from './components/sections/EventSection'
 import CountdownSection from './components/sections/CountdownSection'
-import GallerySection from './components/sections/GallerySection'
+import EventSection from './components/sections/EventSection'
+import { DressCodeSection } from './components/sections/DressCodeSection'
+import { LiveStreamingSection } from './components/sections/LiveStreamingSection'
+import { WeddingFrameSection } from './components/sections/WeddingFrameSection'
 import RsvpSection from './components/sections/RsvpSection'
-import GiftSection from './components/sections/GiftSection'
 import WishesSection from './components/sections/WishesSection'
+import GallerySection from './components/sections/GallerySection'
+import GiftSection from './components/sections/GiftSection'
 import ClosingSection from './components/sections/ClosingSection'
 
 export default function App() {
@@ -21,19 +25,23 @@ export default function App() {
     <SmoothScrollProvider>
       <GrainOverlay />
       <CustomCursor />
+      <CoverSection />
       <Navbar />
 
       <main>
         <HeroSection />
-        <OpeningSection />
+        <QuoteSection />
         <CoupleSection />
         <LoveStorySection />
-        <EventSection />
         <CountdownSection />
-        <GallerySection />
+        <EventSection />
+        <DressCodeSection />
+        <LiveStreamingSection />
+        <WeddingFrameSection />
         <RsvpSection />
-        <GiftSection />
         <WishesSection />
+        <GallerySection />
+        <GiftSection />
         <ClosingSection />
       </main>
 

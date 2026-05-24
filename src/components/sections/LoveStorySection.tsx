@@ -77,7 +77,7 @@ export default function LoveStorySection() {
   }, [prefersReduced])
 
   return (
-    <section id="love-story" ref={sectionRef} className="section-padding bg-[#050505]">
+    <section id="love-story" ref={sectionRef} data-section data-theme="dark" className="section-padding bg-[#050505]">
       <div className="container-base">
         {/* Title */}
         <div className="text-center mb-20">

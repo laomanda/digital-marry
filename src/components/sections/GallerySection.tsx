@@ -50,7 +50,7 @@ export default function GallerySection() {
   }, [prefersReduced])
 
   return (
-    <section id="gallery" ref={sectionRef} className="section-padding bg-[#0a0a0a]">
+    <section id="gallery" ref={sectionRef} data-section data-theme="light" className="section-padding bg-[#0a0a0a]">
       <div className="container-base">
         <div className="text-center mb-20">
           <span className="label-caps text-muted-gray tracking-[0.35em] block mb-4">Galeri</span>

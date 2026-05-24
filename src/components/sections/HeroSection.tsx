@@ -16,6 +16,7 @@ export default function HeroSection() {
   useEffect(() => {
     if (prefersReduced) return
     const ctx = gsap.context(() => {
+      if (!bgRef.current || !overlayRef.current) return
       // Entrance
       const tl = gsap.timeline()
       tl.fromTo(bgRef.current, { scale: 1.25 }, { scale: 1, duration: 2.4, ease: 'power3.out' })
@@ -53,7 +54,7 @@ export default function HeroSection() {
   const name = 'Alya & Raka'
 
   return (
-    <section id="hero" ref={sectionRef} className="relative h-screen w-full flex items-center justify-center overflow-hidden vignette">
+    <section id="hero" ref={sectionRef} data-section data-theme="dark" className="relative h-screen w-full flex items-center justify-center overflow-hidden vignette">
       {/* Background image */}
       <div ref={bgRef} className="absolute inset-0 will-change-transform">
         <img

@@ -48,6 +48,28 @@ export const weddingData = {
       mapsUrl: 'https://maps.google.com',
     },
   ],
+  dressCode: {
+    title: 'Dress Code',
+    description: 'Kami memohon kesediaan Bapak/Ibu/Saudara/i untuk hadir mengenakan pakaian dengan sentuhan warna berikut:',
+    colors: [
+      { name: 'Burgundy', hex: '#3D1E26' },
+      { name: 'Warm Taupe', hex: '#C2A990' },
+      { name: 'Terracotta', hex: '#D8613C' },
+      { name: 'Black', hex: '#111111' },
+    ]
+  },
+  liveStreaming: {
+    title: 'Live Streaming',
+    description: 'Bagi keluarga dan kerabat yang tidak dapat hadir secara langsung, kami mengundang Anda untuk bergabung secara virtual dalam momen bahagia kami.',
+    link: 'https://youtube.com',
+    platform: 'YouTube Live',
+  },
+  weddingFrame: {
+    title: 'Wedding Frame',
+    description: 'Abadikan momen spesial ini dengan filter Instagram eksklusif kami.',
+    link: 'https://instagram.com/ar/123456789',
+    image: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800&q=80&fit=crop'
+  },
   loveStory: [
     {
       id: 1,
@@ -150,6 +172,15 @@ export const weddingData = {
     text: 'Pernikahan adalah awal dari sebuah taman yang harus kalian rawat bersama setiap harinya.',
     author: '— Mark Twain',
   },
+  navigation: [
+    { name: 'Home', href: '#hero' },
+    { name: 'Couple', href: '#couple' },
+    { name: 'Story', href: '#love-story' },
+    { name: 'Event', href: '#event' },
+    { name: 'RSVP', href: '#rsvp' },
+    { name: 'Gallery', href: '#gallery' },
+    { name: 'Gift', href: '#gift' },
+  ]
 }
 
 export type WeddingData = typeof weddingData

@@ -15,19 +15,22 @@ export default function CountdownSection() {
   useEffect(() => {
     if (prefersReduced) return
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.countdown-num',
-        { opacity: 0, scale: 0.7, y: 30 },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' },
-        }
-      )
+      const targets = gsap.utils.toArray('.countdown-num')
+      if (targets.length > 0) {
+        gsap.fromTo(
+          targets,
+          { opacity: 0, scale: 0.7, y: 30 },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.12,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' },
+          }
+        )
+      }
     }, sectionRef)
     return () => ctx.revert()
   }, [prefersReduced])
@@ -40,7 +43,7 @@ export default function CountdownSection() {
   ]
 
   return (
-    <section ref={sectionRef} className="section-padding bg-[#050505] relative overflow-hidden">
+    <section id="countdown" ref={sectionRef} data-section data-theme="dark" className="section-padding bg-[#050505] relative overflow-hidden">
       {/* Background texture */}
       <div
         className="absolute inset-0 opacity-[0.02]"

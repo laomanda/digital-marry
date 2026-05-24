@@ -60,7 +60,7 @@ export default function RsvpSection() {
   }
 
   return (
-    <section id="rsvp" ref={sectionRef} className="section-padding bg-[#050505]">
+    <section id="rsvp" ref={sectionRef} data-section data-theme="dark" className="section-padding bg-[#050505]">
       <div className="container-base max-w-2xl mx-auto">
         <div className="rsvp-inner">
           <div className="text-center mb-16">

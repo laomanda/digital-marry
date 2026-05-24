@@ -4,15 +4,16 @@
 
 @layer base {
   :root {
-    --black: #050505;
-    --charcoal: #111111;
-    --soft-black: #1a1a1a;
+    --black: #111111;
+    --burgundy: #3D1E26;
+    --taupe: #C2A990;
+    --terracotta: #D8613C;
+    --sage: #B1C5A4;
     --white: #ffffff;
-    --off-white: #f5f2ec;
-    --muted-gray: #8a8a8a;
-    --border: rgba(255, 255, 255, 0.12);
-    --overlay: rgba(0, 0, 0, 0.45);
-    --glass: rgba(5, 5, 5, 0.55);
+    --light-gray: #f9f9f9;
+    --border: rgba(189, 182, 174, 0.4);
+    --overlay: rgba(17, 17, 17, 0.6);
+    --glass: rgba(17, 17, 17, 0.85);
   }
 
   * {
@@ -28,8 +29,8 @@
 
   body {
     background-color: var(--black);
-    color: var(--off-white);
-    font-family: 'DM Sans', system-ui, sans-serif;
+    color: var(--light-gray);
+    font-family: 'Montserrat', system-ui, sans-serif;
     font-weight: 300;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
