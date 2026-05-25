@@ -5,7 +5,6 @@ import SmoothScrollProvider from './components/layout/SmoothScrollProvider'
 import GrainOverlay from './components/layout/GrainOverlay'
 import CustomCursor from './components/layout/CustomCursor'
 import Navbar from './components/layout/Navbar'
-import Footer from './components/layout/Footer'
 import MusicToggle from './components/layout/MusicToggle'
 import Preloader from './components/layout/Preloader'
 
@@ -104,8 +103,6 @@ export default function App() {
         <GiftSection />
         <ClosingSection />
       </main>
-
-      <Footer />
     </SmoothScrollProvider>
   )
 }

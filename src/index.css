@@ -54,6 +54,18 @@
     body { cursor: auto; }
   }
 
+  @media (hover: hover) and (pointer: fine) {
+    a,
+    button,
+    input,
+    textarea,
+    select,
+    [role="button"],
+    [data-cursor="true"] {
+      cursor: none !important;
+    }
+  }
+
   ::selection {
     background: rgba(255, 255, 255, 0.15);
     color: #FFFFFF;
