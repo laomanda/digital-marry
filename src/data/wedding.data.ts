@@ -18,8 +18,8 @@ export const weddingData = {
     instagram: '@rakapradana',
   },
   wedding: {
-    date: new Date('2024-12-12T10:00:00'),
-    dateFormatted: '12 . 12 . 2024',
+    date: new Date('2026-06-14T00:00:00+07:00'),
+    dateFormatted: '14 . 06 . 2026',
     quote: {
       text: 'Dan aku akan memilihmu; dalam seratus kehidupan, dalam seratus dunia, dalam versi realita mana pun, aku akan menemukan dan memilihmu.',
       author: '— Kiersten White',

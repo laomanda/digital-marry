@@ -212,3 +212,9 @@
 [data-global-reveal="true"] [data-animate] {
   will-change: transform, opacity;
 }
+
+/* Cover letter split */
+.cover-char {
+  display: inline-block;
+  opacity: 0;
+}
