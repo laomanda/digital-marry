@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { animate } from 'animejs'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
@@ -7,175 +8,201 @@ type HeroSectionProps = {
   isInvitationOpen: boolean
 }
 
+type HeroNameLineProps = {
+  text: string
+  className?: string
+}
+
+function HeroNameLine({ text, className }: HeroNameLineProps) {
+  return (
+    <span aria-hidden="true" className={className}>
+      {text.split('').map((char, index) => (
+        <span
+          key={`${char}-${index}`}
+          data-hero-char
+          className="inline-block will-change-transform"
+          style={{ opacity: 0 }}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null)
+  const bgRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const nameRef = useRef<HTMLHeadingElement>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
-  const hasPlayedIntroRef = useRef(false)
+
+  const coupleName = `${weddingData.bride.firstName} & ${weddingData.groom.firstName}`
+  const heroImage =
+    weddingData.gallery?.[1]?.src ||
+    weddingData.gallery?.[0]?.src ||
+    'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=85&fit=crop'
 
   useEffect(() => {
     if (!isInvitationOpen) return
-    if (hasPlayedIntroRef.current) return
-    hasPlayedIntroRef.current = true
-
     if (!sectionRef.current) return
 
     const root = sectionRef.current
-
-    if (shouldReduceMotion) {
-      // Reduced motion: make everything visible immediately
-      gsap.set(root.querySelectorAll('[data-hero-image]'), { scale: 1, opacity: 1 })
-      gsap.set(root.querySelectorAll('[data-hero-overlay]'), { opacity: 0.45 })
-      gsap.set(root.querySelectorAll('[data-hero-label], [data-hero-title], [data-hero-date], [data-hero-line], [data-hero-meta], [data-hero-subtitle]'), {
-        opacity: 1,
-        y: 0,
-        x: 0,
-        scaleY: 1,
-        scaleX: 1,
-      })
-      return
-    }
+    let isActive = true
+    let cleanupPointerDepth: (() => void) | undefined
+    let scrollTimeline: gsap.core.Timeline | undefined
 
     const ctx = gsap.context(() => {
-      // --- INTRO TIMELINE ---
-      const tl = gsap.timeline({ delay: 0.2 })
+      const bgScale = root.querySelector<HTMLElement>('[data-hero-bg-scale]')
+      const chars = nameRef.current?.querySelectorAll<HTMLElement>('[data-hero-char]')
+      const animatedElements = root.querySelectorAll<HTMLElement>('[data-hero-animate]')
+      const lines = root.querySelectorAll<HTMLElement>('[data-hero-line]')
+      const scrollIndicator = root.querySelector<HTMLElement>('[data-hero-scroll]')
 
-      // Image scale reveal
-      tl.fromTo(
-        '[data-hero-image]',
-        { scale: 1.12, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 2.2, ease: 'power3.out' },
-        0
-      )
-
-      // Overlay recedes
-      tl.fromTo(
-        '[data-hero-overlay]',
-        { opacity: 0.9 },
-        { opacity: 0.45, duration: 1.8, ease: 'power2.out' },
-        0.1
-      )
-
-      // Top decorative line draws
-      const topLine = root.querySelector('[data-hero-line="top"]')
-      if (topLine) {
-        tl.fromTo(
-          topLine,
-          { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 0.8, ease: 'power2.out', transformOrigin: 'left center' },
-          0.5
-        )
+      if (shouldReduceMotion) {
+        gsap.set(bgRef.current, { x: 0, y: 0 })
+        gsap.set(bgScale, { opacity: 1, scale: 1, y: 0 })
+        gsap.set(overlayRef.current, { opacity: 0.5 })
+        gsap.set(contentRef.current, { opacity: 1, y: 0 })
+        gsap.set(animatedElements, { opacity: 1, y: 0, x: 0 })
+        gsap.set(lines, { opacity: 1, scaleX: 1, scaleY: 1 })
+        gsap.set(chars || [], { opacity: 1, y: 0 })
+        gsap.set(scrollIndicator, { opacity: 1, y: 0 })
+        return
       }
 
-      // Editorial number
-      const metaNumber = root.querySelector('[data-hero-meta="number"]')
-      if (metaNumber) {
-        tl.fromTo(
-          metaNumber,
-          { opacity: 0, x: -12 },
-          { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' },
-          0.7
-        )
+      gsap.set(bgRef.current, { x: 0, y: 0 })
+      gsap.set(bgScale, { opacity: 1, scale: 1.12, y: 0 })
+      gsap.set(overlayRef.current, { opacity: 0.86 })
+      gsap.set(contentRef.current, { opacity: 1, y: 0 })
+      gsap.set(animatedElements, { opacity: 0, y: 18 })
+      gsap.set(lines, { opacity: 0, scaleX: 0, transformOrigin: 'left center' })
+      gsap.set(chars || [], { opacity: 0, y: 40 })
+      gsap.set(scrollIndicator, { opacity: 0, y: 12 })
+
+      const createScrollTimeline = () => {
+        if (!isActive || !bgScale || !contentRef.current || !overlayRef.current) return
+
+        scrollTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: root,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.9,
+          },
+        })
+
+        scrollTimeline
+          .to(bgScale, { scale: 1.08, y: 72, ease: 'none' }, 0)
+          .to(contentRef.current, { opacity: 0.08, y: -56, ease: 'none' }, 0)
+          .to(overlayRef.current, { opacity: 0.78, ease: 'none' }, 0)
+
+        ScrollTrigger.refresh()
       }
 
-      // Label fades up
-      tl.fromTo(
-        '[data-hero-label]',
-        { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
-        0.8
-      )
-
-      // Bride name — breath reveal
-      tl.fromTo(
-        '[data-hero-title="bride"]',
-        { opacity: 0, y: 40, letterSpacing: '0.06em' },
-        { opacity: 1, y: 0, letterSpacing: '-0.02em', duration: 1.2, ease: 'power3.out' },
-        1.0
-      )
-
-      // Ampersand
-      tl.fromTo(
-        '[data-hero-title="amp"]',
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out' },
-        1.3
-      )
-
-      // Groom name — breath reveal with offset
-      tl.fromTo(
-        '[data-hero-title="groom"]',
-        { opacity: 0, y: 40, letterSpacing: '0.06em' },
-        { opacity: 1, y: 0, letterSpacing: '-0.02em', duration: 1.2, ease: 'power3.out' },
-        1.4
-      )
-
-      // Bottom decorative line
-      tl.fromTo(
-        '[data-hero-line="bottom"]',
-        { scaleX: 0, opacity: 0 },
-        { scaleX: 1, opacity: 1, duration: 0.7, ease: 'power2.out', transformOrigin: 'right center' },
-        1.7
-      )
-
-      // Date
-      tl.fromTo(
-        '[data-hero-date]',
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
-        1.8
-      )
-
-      // Subtitle
-      tl.fromTo(
-        '[data-hero-subtitle]',
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6, ease: 'power2.out' },
-        2.0
-      )
-
-      // Side meta
-      tl.fromTo(
-        '[data-hero-meta="side"]',
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6, ease: 'power2.out' },
-        2.0
-      )
-
-      // --- SCROLL ANIMATION ---
-      ScrollTrigger.create({
-        trigger: root,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.8,
-        onUpdate: (self) => {
-          const p = self.progress
-          // Image slow zoom on scroll
-          const imageEl = root.querySelector('[data-hero-image]') as HTMLElement
-          if (imageEl) {
-            gsap.set(imageEl, { scale: 1 + p * 0.08, y: p * 80 })
-          }
-          // Content fades and shifts up
-          const contentEl = root.querySelector('[data-hero-content]') as HTMLElement
-          if (contentEl) {
-            gsap.set(contentEl, { opacity: 1 - p * 1.5, y: p * -50 })
-          }
-          // Overlay darkens
-          const overlayEl = root.querySelector('[data-hero-overlay]') as HTMLElement
-          if (overlayEl) {
-            gsap.set(overlayEl, { opacity: 0.45 + p * 0.4 })
-          }
-        },
+      const intro = gsap.timeline({
+        delay: 0.16,
+        onComplete: createScrollTimeline,
       })
+
+      intro
+        .to(bgScale, { scale: 1, duration: 2.35, ease: 'power3.out' }, 0)
+        .to(overlayRef.current, { opacity: 0.48, duration: 1.8, ease: 'power2.out' }, 0.08)
+        .to(
+          lines,
+          {
+            opacity: 1,
+            scaleX: 1,
+            duration: 0.9,
+            stagger: 0.12,
+            ease: 'power2.out',
+          },
+          0.48,
+        )
+        .to(
+          animatedElements,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.78,
+            stagger: 0.1,
+            ease: 'power3.out',
+          },
+          0.68,
+        )
+        .call(
+          () => {
+            if (!chars?.length) return
+
+            animate(chars, {
+              opacity: [0, 1],
+              translateY: [40, 0],
+              duration: 950,
+              delay: (_el: Element, index: number) => index * 34,
+              ease: 'outExpo',
+            })
+          },
+          [],
+          0.96,
+        )
+        .to(scrollIndicator, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 2.05)
+
+      const canUsePointerDepth =
+        window.matchMedia('(hover: hover) and (pointer: fine)').matches && bgRef.current
+
+      if (canUsePointerDepth && bgRef.current) {
+        const moveX = gsap.quickTo(bgRef.current, 'x', { duration: 0.75, ease: 'power3.out' })
+        const moveY = gsap.quickTo(bgRef.current, 'y', { duration: 0.75, ease: 'power3.out' })
+        const maxDepth = 12
+
+        const handlePointerMove = (event: PointerEvent) => {
+          const rect = root.getBoundingClientRect()
+          if (rect.bottom < 0 || rect.top > window.innerHeight) return
+
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * maxDepth
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * maxDepth
+
+          moveX(x)
+          moveY(y)
+        }
+
+        const resetPointerDepth = () => {
+          moveX(0)
+          moveY(0)
+        }
+
+        window.addEventListener('pointermove', handlePointerMove)
+        root.addEventListener('pointerleave', resetPointerDepth)
+
+        cleanupPointerDepth = () => {
+          window.removeEventListener('pointermove', handlePointerMove)
+          root.removeEventListener('pointerleave', resetPointerDepth)
+        }
+      }
+
+      if (scrollIndicator) {
+        gsap.to(scrollIndicator.querySelector('[data-hero-scroll-dot]'), {
+          y: 44,
+          opacity: 0.25,
+          repeat: -1,
+          yoyo: true,
+          duration: 1.35,
+          ease: 'power1.inOut',
+        })
+      }
     }, sectionRef)
 
-    // Ensure ScrollTrigger parses coordinates correctly now that cover is hidden
-    ScrollTrigger.refresh()
-
-    return () => ctx.revert()
+    return () => {
+      isActive = false
+      cleanupPointerDepth?.()
+      scrollTimeline?.scrollTrigger?.kill()
+      scrollTimeline?.kill()
+      ctx.revert()
+    }
   }, [isInvitationOpen, shouldReduceMotion])
 
   return (
-    <>
     <section
       ref={sectionRef}
       id="hero"
@@ -184,174 +211,146 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
       data-wow="true"
       className="relative min-h-screen w-full overflow-hidden bg-[#050505]"
     >
-      {/* Background image — uses gallery[1] to differentiate from cover */}
-      <div
-        data-hero-image
-        className="absolute inset-0 will-change-transform"
-        style={{ opacity: 0 }}
-      >
-        <img
-          src={weddingData.gallery?.[1]?.src || weddingData.gallery?.[0]?.src || "https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=85&fit=crop"}
-          alt="Potret editorial pasangan pengantin"
-          className="w-full h-full object-cover grayscale contrast-[1.05]"
-          loading="eager"
-        />
+      <div ref={bgRef} className="absolute inset-0 will-change-transform" aria-hidden="true">
+        <div data-hero-bg-scale className="absolute inset-0 will-change-transform">
+          <img
+            src={heroImage}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full scale-[1.02] object-cover grayscale contrast-[1.12] brightness-[0.82]"
+            loading="eager"
+          />
+        </div>
       </div>
 
-      {/* Dark overlay */}
       <div
+        ref={overlayRef}
         data-hero-overlay
         className="absolute inset-0 bg-[#050505]"
-        style={{ opacity: 0.9 }}
+        style={{ opacity: 0.86 }}
       />
-
-      {/* Left reading gradient for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/80 via-[#050505]/30 to-transparent pointer-events-none" />
-
-      {/* Vignette */}
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 20%, rgba(5,5,5,0.6) 100%)' }} />
-
-      {/* Bottom fade gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-56 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent pointer-events-none" />
-
-      {/* --- CONTENT: Editorial Asymmetric Layout --- */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.92)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.18)_72%,rgba(5,5,5,0.48)_100%)]" />
       <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(circle at 72% 28%, transparent 0%, rgba(5,5,5,0.28) 34%, rgba(5,5,5,0.78) 100%)',
+        }}
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#050505] via-[#050505]/78 to-transparent" />
+
+      <div className="pointer-events-none absolute left-6 right-6 top-8 z-10 md:left-10 md:right-10 lg:left-16 lg:right-16">
+        <div data-hero-line className="h-px w-full bg-[rgba(245,245,240,0.22)]" />
+      </div>
+      <div className="pointer-events-none absolute bottom-8 left-6 right-6 z-10 md:left-10 md:right-10 lg:left-16 lg:right-16">
+        <div data-hero-line className="h-px w-full bg-[rgba(245,245,240,0.14)]" />
+      </div>
+
+      <div
+        ref={contentRef}
         data-hero-content
-        className="relative z-10 min-h-screen flex flex-col justify-end pb-20 md:pb-24 lg:pb-32 px-6 md:px-10 lg:px-16"
+        className="relative z-10 flex min-h-screen flex-col justify-end px-6 pb-20 pt-28 md:px-10 md:pb-24 lg:px-16 lg:pb-28"
       >
-
-        {/* Main title block — bottom-left aligned, editorial offset */}
-        <div className="max-w-4xl">
-          {/* Label */}
-          <p
-            data-hero-label
-            className="label-caps text-[rgba(245,242,236,0.4)] tracking-[0.4em] mb-5 md:mb-6"
-            style={{ opacity: 0 }}
+        <div className="mb-auto grid grid-cols-[auto_1fr] items-start gap-4 pt-2 md:gap-6">
+          <span
+            data-hero-animate
+            className="font-mono text-[11px] tracking-[0.32em] text-[rgba(245,245,240,0.7)]"
           >
-            The Wedding of
-          </p>
-
-          {/* Couple names — stacked, large serif, editorial */}
-          <div className="mb-6 md:mb-8">
-            <h1
-              className="leading-[0.9] md:leading-[0.88]"
-              aria-label={`${weddingData.bride.firstName} & ${weddingData.groom.firstName}`}
+            01
+          </span>
+          <div className="min-w-0">
+            <p
+              data-hero-animate
+              className="font-mono text-[10px] uppercase tracking-[0.36em] text-[rgba(245,245,240,0.5)] md:text-[11px]"
             >
-              <span
-                data-hero-title="bride"
-                className="block text-[#F5F2EC]"
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 300,
-                  fontSize: 'clamp(48px, 11vw, 140px)',
-                  letterSpacing: '-0.02em',
-                  opacity: 0,
-                }}
-              >
-                {weddingData.bride.firstName}
-              </span>
+              The Beginning
+            </p>
+            <div
+              data-hero-line
+              className="mt-4 h-px w-24 bg-[rgba(245,245,240,0.24)] md:w-36"
+            />
+          </div>
+        </div>
 
-              <span className="flex items-baseline gap-3 md:gap-5 lg:gap-6">
+        <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+          <div className="max-w-[1040px]">
+            <p
+              data-hero-animate
+              className="label-caps mb-5 text-[rgba(245,245,240,0.58)] md:mb-6"
+            >
+              The Wedding Of
+            </p>
+
+            <h1
+              ref={nameRef}
+              aria-label={coupleName}
+              className="max-w-[11ch] font-serif text-[clamp(58px,13vw,172px)] font-light leading-[0.82] tracking-normal text-[#F5F5F0] md:max-w-[10.5ch]"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              <HeroNameLine text={weddingData.bride.firstName} className="block" />
+              <span className="block">
                 <span
-                  data-hero-title="amp"
-                  className="text-[rgba(245,242,236,0.2)]"
+                  data-hero-char
                   aria-hidden="true"
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontWeight: 300,
-                    fontStyle: 'italic',
-                    fontSize: 'clamp(32px, 6vw, 72px)',
-                    opacity: 0,
-                  }}
+                  className="mr-4 inline-block italic text-[0.44em] text-[rgba(245,245,240,0.42)] will-change-transform md:mr-6"
+                  style={{ opacity: 0 }}
                 >
                   &amp;
                 </span>
-                <span
-                  data-hero-title="groom"
-                  className="text-[#F5F2EC]"
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontWeight: 300,
-                    fontSize: 'clamp(48px, 11vw, 140px)',
-                    letterSpacing: '-0.02em',
-                    opacity: 0,
-                  }}
-                >
-                  {weddingData.groom.firstName}
-                </span>
+                <HeroNameLine text={weddingData.groom.firstName} className="inline" />
               </span>
             </h1>
+
+            <div className="mt-7 flex flex-col gap-5 md:mt-8 md:flex-row md:items-end md:gap-9">
+              <div
+                data-hero-line
+                className="h-px w-28 bg-[rgba(245,245,240,0.28)] md:w-36"
+              />
+              <div className="max-w-xl">
+                <p
+                  data-hero-animate
+                  className="mb-3 font-mono text-[11px] uppercase tracking-[0.42em] text-[rgba(245,245,240,0.58)] md:text-[12px]"
+                >
+                  {weddingData.wedding.dateFormatted}
+                </p>
+                <p
+                  data-hero-animate
+                  className="max-w-md font-serif text-[17px] italic leading-[1.65] text-[rgba(245,245,240,0.58)] md:text-[20px]"
+                  style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300 }}
+                >
+                  Sebuah undangan untuk merayakan cinta yang telah kami rawat bersama
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* Bottom line */}
-          <div
-            data-hero-line="bottom"
-            className="w-24 md:w-32 h-px bg-[rgba(245,242,236,0.15)] mb-5 md:mb-6"
-            style={{ opacity: 0, transformOrigin: 'right center' }}
-          />
-
-          {/* Date — mono, tracked */}
-          <p
-            data-hero-date
-            className="font-mono text-[11px] md:text-[12px] text-[rgba(245,242,236,0.35)] tracking-[0.5em] mb-4"
-            style={{ opacity: 0 }}
+          <aside
+            data-hero-scroll
+            aria-hidden="true"
+            className="hidden min-h-[180px] lg:flex lg:items-end lg:justify-end"
           >
-            {weddingData.wedding.dateFormatted}
-          </p>
+            <div className="relative flex h-40 w-[11rem] items-end justify-end text-[rgba(245,245,240,0.42)]">
+              <div className="mr-7 flex flex-col items-end gap-3 pb-1">
+                <span className="font-mono text-[10px] uppercase tracking-[0.34em] text-[rgba(245,245,240,0.48)]">
+                  Scroll
+                </span>
+                <span className="h-px w-16 bg-[rgba(245,245,240,0.22)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-[rgba(245,245,240,0.32)]">
+                  Lanjutkan
+                </span>
+              </div>
 
-          {/* Editorial subtitle */}
-          <p
-            data-hero-subtitle
-            className="max-w-md"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 300,
-              fontStyle: 'italic',
-              fontSize: 'clamp(14px, 1.8vw, 18px)',
-              lineHeight: 1.7,
-              color: 'rgba(245,242,236,0.35)',
-              opacity: 0,
-            }}
-          >
-            Sebuah undangan untuk merayakan cinta yang telah kami rawat bersama
-          </p>
-        </div>
-
-        {/* Side metadata — right, vertical on desktop */}
-        <div
-          data-hero-meta="side"
-          className="hidden lg:flex flex-col items-center gap-3 absolute right-16 bottom-24"
-          style={{ opacity: 0 }}
-        >
-          <div className="w-px h-20 bg-[rgba(245,242,236,0.12)]" />
-          <span
-            className="label-caps text-[rgba(245,242,236,0.2)] [writing-mode:vertical-lr] tracking-[0.3em]"
-          >
-            Scroll
-          </span>
-          <div className="w-px h-20 bg-[rgba(245,242,236,0.12)]" />
+              <div className="relative h-28 w-px overflow-hidden bg-[rgba(245,245,240,0.16)]">
+                <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#F5F5F0]/45 to-transparent" />
+                <span
+                  data-hero-scroll-dot
+                  className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full border border-[#F5F5F0]/70 bg-[#050505] shadow-[0_0_16px_rgba(245,245,240,0.18)]"
+                />
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
-
-    {/* Editorial Wave Transition Bridge — sits between Hero and Quote */}
-    <div
-      aria-hidden="true"
-      className="relative w-full h-[80px] sm:h-[120px] md:h-[160px] pointer-events-none -mt-px"
-      style={{ backgroundColor: '#F5F5F0' }}
-    >
-      <svg
-        viewBox="0 0 1440 160"
-        preserveAspectRatio="none"
-        className="absolute top-0 left-0 w-full h-full"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M0,0 L0,100 C240,160 480,40 720,80 C960,120 1200,20 1440,60 L1440,0 Z"
-          fill="#050505"
-        />
-      </svg>
-    </div>
-    </>
   )
 }

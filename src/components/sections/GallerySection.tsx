@@ -100,7 +100,7 @@ export default function GallerySection() {
           
           <div className="flex flex-col gap-4 max-w-[280px] md:text-right md:items-end">
             <p className="font-sans text-[13px] md:text-[14px] text-[#A4A4A4] leading-relaxed">
-              A quiet archive of moments before forever. Kisah yang tersimpan dalam balutan waktu.
+              Momen berharga sebelum hari bahagia. Kisah yang tersimpan dalam balutan waktu.
             </p>
           </div>
         </div>

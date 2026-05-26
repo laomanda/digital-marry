@@ -1,183 +1,219 @@
-import { useEffect, useRef } from 'react';
-import { animate, stagger } from 'animejs';
-import { weddingData } from '../../data/wedding.data';
-import { Container } from '../ui/Container';
-import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
+import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { gsap, ScrollTrigger } from '../../lib/gsap'
+import { weddingData } from '../../data/wedding.data'
+import { Container } from '../ui/Container'
+import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+
+function QuoteWords({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(' ').map((word, index) => (
+        <span
+          key={`${word}-${index}`}
+          aria-hidden="true"
+          className="mr-[0.24em] inline-block"
+        >
+          {word}
+        </span>
+      ))}
+    </>
+  )
+}
 
 export function QuoteSection() {
-  const { shouldReduceMotion } = useReducedMotionSafe();
-  const quoteRef = useRef<HTMLQuoteElement>(null);
-  const markRef = useRef<HTMLSpanElement>(null);
+  const { shouldReduceMotion } = useReducedMotionSafe()
+  const sectionRef = useRef<HTMLElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const markRef = useRef<HTMLSpanElement>(null)
+  const [isQuoteHovered, setIsQuoteHovered] = useState(false)
 
-  const hasAnimatedRef = useRef(false);
-
-  const words = weddingData.wedding.quote.text.split(' ');
+  const quoteText = weddingData.wedding.quote.text
+  const quoteAuthor = weddingData.wedding.quote.author
 
   useEffect(() => {
-    if (shouldReduceMotion) return;
+    const section = sectionRef.current
+    const contentElement = contentRef.current
+    if (!section || !contentElement) return
 
-    const element = quoteRef.current;
-    if (!element) return;
+    const ctx = gsap.context(() => {
+      const partElements = section.querySelectorAll<HTMLElement>('[data-quote-part]')
 
-    let isUnmounted = false;
+      gsap.set(markRef.current, { opacity: 0.04, scale: 1, rotate: 0 })
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        
-        if (entry.isIntersecting && !hasAnimatedRef.current) {
-          hasAnimatedRef.current = true;
-
-          if (isUnmounted) return;
-
-          // Animate line in
-          animate(element.querySelectorAll('[data-quote-elem="line"]'), {
-            opacity: [0, 1],
-            scaleY: [0, 1],
-            duration: 1000,
-            ease: 'outQuart'
-          });
-
-          // Animate labels/author in
-          animate(element.querySelectorAll('[data-quote-elem="text"]'), {
-            opacity: [0, 1],
-            translateY: [12, 0],
-            filter: ['blur(4px)', 'blur(0px)'],
-            duration: 800,
-            delay: stagger(200, { start: 200 }),
-            ease: 'outCubic'
-          });
-
-          // Animate words in
-          animate(element.querySelectorAll('[data-quote-word]'), {
-            opacity: [0, 1],
-            translateY: [12, 0],
-            filter: ['blur(4px)', 'blur(0px)'],
-            duration: 800,
-            delay: stagger(40, { start: 100 }),
-            ease: 'outCubic'
-          });
-
-          // Animate background quote mark in
-          if (markRef.current) {
-            animate(markRef.current, {
-              opacity: [0, 0.03],
-              scale: [0.96, 1],
-              duration: 1200,
-              ease: 'outQuart'
-            });
-          }
-
-          observer.disconnect();
-        }
-      },
-      { 
-        threshold: 0.25,
-        rootMargin: "0px 0px -10% 0px"
+      if (shouldReduceMotion) {
+        gsap.set(contentElement, {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          rotate: 0,
+          scale: 1,
+          transformOrigin: '50% 50%',
+        })
+        gsap.set(partElements, { opacity: 1, y: 0, filter: 'blur(0px)' })
+        return
       }
-    );
 
-    observer.observe(element);
+      gsap.set(contentElement, {
+        opacity: 0.18,
+        y: 28,
+        filter: 'blur(5px)',
+        rotate: 2,
+        scale: 0.985,
+        transformOrigin: '50% 50%',
+        willChange: 'opacity, transform, filter',
+      })
+
+      gsap.set(partElements, {
+        opacity: 0.32,
+        y: 14,
+        filter: 'blur(3px)',
+        willChange: 'opacity, transform, filter',
+      })
+
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom-=12%',
+          end: 'center center',
+          scrub: true,
+        },
+      })
+
+      timeline.to(
+        contentElement,
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          rotate: 0,
+          scale: 1,
+          ease: 'none',
+        },
+        0,
+      )
+
+      timeline.to(
+        partElements,
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          ease: 'none',
+          stagger: 0.05,
+        },
+        0.04,
+      )
+
+      ScrollTrigger.refresh()
+    }, section)
 
     return () => {
-      isUnmounted = true;
-      observer.disconnect();
-      // Reset the ref on unmount so that if React StrictMode remounts the component,
-      // it can animate the newly created DOM elements instead of getting stuck at opacity: 0.
-      hasAnimatedRef.current = false;
-    };
-  }, [shouldReduceMotion]);
+      ctx.revert()
+    }
+  }, [shouldReduceMotion])
 
   return (
-    <section 
-      id="quote" 
-      data-section 
-      data-theme="light" 
-      data-global-reveal="true" 
-      className="bg-[#F5F5F0] py-20 md:py-28 lg:py-32 relative"
-      ref={quoteRef} // Moved ref to section to encapsulate everything
+    <section
+      ref={sectionRef}
+      id="quote"
+      data-section
+      data-theme="dark"
+      data-global-reveal="true"
+      className="relative overflow-hidden bg-[#050505] px-0 py-24 text-[#F5F5F0] md:py-32 lg:py-40"
     >
       <Container>
-        <div className="max-w-[720px] mx-auto flex flex-col items-center text-center px-4 md:px-0">
-          
-          {/* Editorial Label */}
-          <div className="flex flex-col items-center gap-6 mb-10 md:mb-14">
-            <div 
-              data-no-global-reveal="true" 
-              data-quote-elem="line" 
-              className="w-px h-12 md:h-16 bg-[#111111]/10 origin-top" 
-              style={{ 
-                opacity: shouldReduceMotion ? 1 : 0, 
-                transform: shouldReduceMotion ? 'none' : 'scaleY(0)' 
-              }} 
-            />
-            <span 
-              data-no-global-reveal="true" 
-              data-quote-elem="text" 
-              className="font-sans text-[11px] md:text-[12px] tracking-[0.25em] text-[#555555] uppercase inline-block"
-              style={{ 
-                opacity: shouldReduceMotion ? 1 : 0, 
-                transform: shouldReduceMotion ? 'none' : 'translateY(12px)' 
-              }}
+        <div
+          ref={contentRef}
+          className="relative mx-auto flex max-w-[900px] flex-col items-center px-4 text-center md:px-0"
+        >
+          <div
+            data-animate="line"
+            data-quote-part
+            data-no-global-reveal="true"
+            className="mb-8 h-px w-20 origin-center bg-[rgba(245,245,240,0.15)] md:mb-10 md:w-28"
+          />
+
+          <div
+            data-quote-part
+            data-no-global-reveal="true"
+            className="mb-8 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-4 md:mb-10"
+          >
+            <span className="h-px bg-[rgba(245,245,240,0.10)]" aria-hidden="true" />
+            <span
+              data-animate="text"
+              data-no-global-reveal="true"
+              className="font-mono text-[10px] uppercase tracking-[0.32em] text-[rgba(245,245,240,0.58)] md:text-[11px]"
             >
               A Sacred Promise
             </span>
+            <span className="h-px bg-[rgba(245,245,240,0.10)]" aria-hidden="true" />
           </div>
 
-          {/* Main Quote */}
-          <blockquote className="relative" aria-label={weddingData.wedding.quote.text}>
-            {/* Background Quote Mark (Quiet Contrast) */}
-            <span 
+          <motion.blockquote
+            data-quote-part
+            data-no-global-reveal="true"
+            className="relative"
+            aria-label={quoteText}
+            onHoverStart={() => setIsQuoteHovered(true)}
+            onHoverEnd={() => setIsQuoteHovered(false)}
+          >
+            <motion.span
               ref={markRef}
-              aria-hidden="true" 
-              className="absolute -top-12 md:-top-16 left-1/2 -translate-x-1/2 text-[120px] md:text-[180px] font-serif leading-none text-[#111111] select-none"
-              style={{ 
-                opacity: shouldReduceMotion ? 0.03 : 0, 
-                transform: shouldReduceMotion ? 'scale(1) translateX(-50%)' : 'scale(0.96) translateX(-50%)',
-                transformOrigin: 'left center'
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-[-0.52em] select-none font-serif text-[150px] font-light leading-none text-[#F5F5F0] md:text-[220px]"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                x: '-50%',
+                opacity: shouldReduceMotion ? 0.04 : 0,
+                scale: shouldReduceMotion ? 1 : 0.96,
+                rotate: shouldReduceMotion ? 0 : -1.5,
               }}
+              animate={{ opacity: isQuoteHovered ? 0.065 : shouldReduceMotion ? 0.04 : undefined }}
+              transition={{ duration: 0.32, ease: 'easeOut' }}
             >
-              "
-            </span>
-            <p 
+              &ldquo;
+            </motion.span>
+
+            <p
               data-no-global-reveal="true"
               data-quote-text
-              className="font-serif text-[28px] md:text-[40px] lg:text-[48px] text-[#111111] italic leading-[1.3] md:leading-[1.25] font-light tracking-normal relative z-10"
+              className="relative z-10 font-serif text-[clamp(30px,5vw,58px)] font-light italic leading-[1.26] tracking-normal text-[#F5F5F0]"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
             >
-              {words.map((word, index) => (
-                <span 
-                  key={index} 
-                  data-quote-word
-                  aria-hidden="true"
-                  className="inline-block mr-[0.25em]"
-                  style={{ 
-                    opacity: shouldReduceMotion ? 1 : 0, 
-                    transform: shouldReduceMotion ? 'none' : 'translateY(12px)'
-                  }}
-                >
-                  {word}
-                </span>
-              ))}
+              <QuoteWords text={quoteText} />
             </p>
-          </blockquote>
+          </motion.blockquote>
 
-          {/* Author / Source */}
-          <div 
-            data-no-global-reveal="true" 
-            data-quote-elem="text" 
-            className="mt-10 md:mt-12 inline-block"
-            style={{ 
-              opacity: shouldReduceMotion ? 1 : 0, 
-              transform: shouldReduceMotion ? 'none' : 'translateY(12px)' 
-            }}
+          <div
+            data-animate="text"
+            data-quote-part
+            data-no-global-reveal="true"
+            className="mt-10 md:mt-12"
           >
-            <span className="font-mono text-[12px] md:text-[13px] tracking-widest text-[#A4A4A4] uppercase">
-              {weddingData.wedding.quote.author}
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-[rgba(245,245,240,0.48)] md:text-[12px]">
+              {quoteAuthor}
             </span>
           </div>
 
+          <div
+            data-animate="line"
+            data-quote-part
+            data-no-global-reveal="true"
+            className="mt-10 h-px w-20 origin-center bg-[rgba(245,245,240,0.15)] md:mt-12 md:w-28"
+          />
+
+          <div
+            data-animate="text"
+            data-quote-part
+            data-no-global-reveal="true"
+            className="absolute -left-2 top-0 hidden font-mono text-[10px] uppercase tracking-[0.26em] text-[#F5F5F0]/35 lg:block"
+            aria-hidden="true"
+          >
+            02 / Promise
+          </div>
         </div>
       </Container>
     </section>
-  );
+  )
 }

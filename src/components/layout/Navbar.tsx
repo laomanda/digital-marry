@@ -15,13 +15,13 @@ import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 
 const navLinks = [
-  { number: '01', label: 'Home', href: '#hero', subtitle: 'Opening frame', icon: Home },
+  { number: '01', label: 'Home', href: '#hero', subtitle: 'Pembuka', icon: Home },
   { number: '02', label: 'Couple', href: '#couple', subtitle: 'Bride and groom', icon: Heart },
-  { number: '03', label: 'Story', href: '#love-story', subtitle: 'A quiet chronology', icon: BookOpen },
-  { number: '04', label: 'Event', href: '#event', subtitle: 'Date and venue', icon: CalendarDays },
-  { number: '05', label: 'RSVP', href: '#rsvp', subtitle: 'Confirm attendance', icon: MailCheck },
-  { number: '06', label: 'Gallery', href: '#gallery', subtitle: 'Monochrome moments', icon: Images },
-  { number: '07', label: 'Gift', href: '#gift', subtitle: 'Wedding gift', icon: Gift },
+  { number: '03', label: 'Story', href: '#love-story', subtitle: 'Cerita Kami', icon: BookOpen },
+  { number: '04', label: 'Event', href: '#event', subtitle: 'Waktu dan Tempat', icon: CalendarDays },
+  { number: '05', label: 'RSVP', href: '#rsvp', subtitle: 'Konfirmasi Hadir', icon: MailCheck },
+  { number: '06', label: 'Gallery', href: '#gallery', subtitle: 'Momen Berharga', icon: Images },
+  { number: '07', label: 'Gift', href: '#gift', subtitle: 'Tanda Kasih', icon: Gift },
 ]
 
 const palettes = {
@@ -310,7 +310,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
                 <span>{coupleName}</span>
 
                 <div className="flex flex-col gap-2 md:items-end">
-                  <span>Palette</span>
+                  <span>Warna Menu</span>
                   <div className="flex flex-wrap items-center gap-3">
                     {paletteKeys.map((key) => {
                       const paletteOption = palettes[key]
@@ -320,7 +320,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
                         <motion.button
                           key={key}
                           type="button"
-                          aria-label={`Gunakan palette ${paletteOption.label}`}
+                          aria-label={`Gunakan warna ${paletteOption.label}`}
                           aria-pressed={isActive}
                           className="group/palette flex items-center gap-2 rounded-[2px] outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--menu-text)]"
                           onClick={() => selectPalette(key)}

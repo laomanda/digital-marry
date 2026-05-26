@@ -60,7 +60,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
   // Determine current label based on progress for a dynamic storytelling feel
   let loadingLabel = 'Initializing';
-  if (progress > 15) loadingLabel = 'Accessing Archive';
+  if (progress > 15) loadingLabel = 'Menyiapkan Undangan';
   if (progress > 45) loadingLabel = 'Curating Memories';
   if (progress > 75) loadingLabel = 'Opening Invitation';
   if (progress === 100) loadingLabel = 'Ready';
