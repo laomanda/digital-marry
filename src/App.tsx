@@ -85,7 +85,11 @@ export default function App() {
         <Preloader onComplete={() => setIsPreloaderDone(true)} />
       )}
 
-      <CoverSection onOpened={() => setIsInvitationOpen(true)} isPreloaderDone={isPreloaderDone} />
+      <CoverSection
+        onOpen={() => setIsInvitationOpen(true)}
+        onOpened={() => setIsInvitationOpen(true)}
+        isPreloaderDone={isPreloaderDone}
+      />
       <MusicToggle visible={isInvitationOpen} />
       <Navbar visible={isInvitationOpen} />
 

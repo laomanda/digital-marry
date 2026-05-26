@@ -21,6 +21,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     const duration = shouldReduceMotion ? 1000 : 4000; // 4 seconds for a slow, luxurious reveal
     let startTime: number | null = null;
     let animationFrameId: number;
+    let timeout1: any;
+    let timeout2: any;
 
     const animateLoader = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
@@ -38,11 +40,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         animationFrameId = requestAnimationFrame(animateLoader);
       } else {
         // Wait a brief moment at 100% to let user savor the completed logo
-        setTimeout(() => {
+        timeout1 = setTimeout(() => {
           setIsVisible(false);
           
           // Wait for exit animation to finish before notifying parent to unmount
-          setTimeout(() => {
+          timeout2 = setTimeout(() => {
             document.body.style.overflow = '';
             onComplete();
           }, shouldReduceMotion ? 400 : 1200); 
@@ -54,6 +56,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
       document.body.style.overflow = '';
     };
   }, [onComplete, shouldReduceMotion]);

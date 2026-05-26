@@ -9,7 +9,7 @@ export const weddingData = {
     instagram: '@alyasafira',
   },
   groom: {
-    firstName: 'Raka',
+    firstName: 'Raihan',
     lastName: 'Pradana',
     fullName: 'Raka Pradana',
     parents: 'Putra dari Bpk. Agus Wahyudi & Ibu Dewi Wahyudi',
@@ -72,31 +72,27 @@ export const weddingData = {
   },
   loveStory: [
     {
-      id: 1,
       date: 'Oktober 2018',
       title: 'Pertemuan Pertama',
       description: 'Sebuah pertemuan tak terduga di sebuah galeri seni lokal. Tatapan yang bertemu di atas lukisan kontemporer memicu percakapan yang berlangsung hingga larut malam.',
     },
     {
-      id: 2,
+      
       date: 'Desember 2018',
       title: 'Kencan Pertama',
       description: 'Kopi dan hujan. Kami menghabiskan sore di sudut kafe yang sunyi, menemukan cinta bersama atas arsitektur vintage dan jazz.',
     },
     {
-      id: 3,
       date: 'Maret 2020',
       title: 'Melewati Badai Bersama',
       description: 'Pandemi datang dan memisahkan jarak, namun justru mendekatkan hati. Ribuan pesan dan panggilan video menjadi saksi bisu cinta yang tumbuh.',
     },
     {
-      id: 4,
       date: 'Agustus 2023',
       title: 'Lamaran',
       description: 'Di bawah langit penuh bintang dalam perjalanan singkat ke pegunungan. Sebuah pertanyaan sederhana namun mendalam, dan "Ya" yang penuh kebahagiaan.',
     },
     {
-      id: 5,
       date: 'Desember 2024',
       title: 'Hari Pernikahan',
       description: 'Dan hari ini, kami berdiri di sini bersama kalian semua — para saksi dari cinta yang telah kami rawat selama bertahun-tahun.',

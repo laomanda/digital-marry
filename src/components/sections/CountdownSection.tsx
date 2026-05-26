@@ -1,163 +1,227 @@
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { weddingData } from '../../data/wedding.data';
 import { useCountdown } from '../../hooks/useCountdown';
+import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
 import { Container } from '../ui/Container';
 
-function AnimatedValue({ value }: { value: string | number }) {
-  const shouldReduceMotion = useReducedMotion();
-  const stringValue = String(value).padStart(2, '0');
+const tickMarks = Array.from({ length: 60 }, (_, index) => ({
+  index,
+  isMajor: index % 5 === 0,
+}));
+
+type AnimatedDigitsProps = {
+  value: number;
+  pad?: boolean;
+  shouldReduceMotion: boolean;
+};
+
+function AnimatedDigits({ value, pad = true, shouldReduceMotion }: AnimatedDigitsProps) {
+  const stringValue = pad ? String(value).padStart(2, '0') : String(value);
+  const digits = stringValue.split('');
 
   if (shouldReduceMotion) {
-    return <span>{stringValue}</span>;
+    return <span aria-label={stringValue}>{stringValue}</span>;
   }
 
   return (
-    <span className="relative inline-flex justify-center items-center">
-      <AnimatePresence mode="popLayout">
-        <motion.span
-          key={stringValue}
-          initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, y: -8, filter: 'blur(4px)', position: 'absolute' }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="inline-block"
+    <span
+      aria-label={stringValue}
+      className="inline-flex items-center justify-center tabular-nums lining-nums"
+    >
+      {digits.map((digit, index) => (
+        <span
+          key={index}
+          className="relative inline-flex w-[0.68em] items-center justify-center overflow-hidden"
+          aria-hidden="true"
         >
-          {stringValue}
-        </motion.span>
-      </AnimatePresence>
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={`${digit}-${index}`}
+              initial={{ opacity: 0, y: -18 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 18, position: 'absolute' }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-block"
+            >
+              {digit}
+            </motion.span>
+          </AnimatePresence>
+        </span>
+      ))}
     </span>
   );
 }
 
 export default function CountdownSection() {
   const { days, hours, minutes, seconds, isPast } = useCountdown(weddingData.wedding.date);
+  const { shouldReduceMotion } = useReducedMotionSafe();
 
   const timeUnits = [
-    { index: '01', label: 'Hours', value: hours },
-    { index: '02', label: 'Minutes', value: minutes },
-    { index: '03', label: 'Seconds', value: seconds },
+    { label: 'Jam', value: hours },
+    { label: 'Menit', value: minutes },
+    { label: 'Detik', value: seconds },
   ];
 
+  const timerAriaLabel = isPast
+    ? 'Hari bahagia telah tiba.'
+    : `Sisa waktu menuju hari pernikahan: ${days} hari, ${hours} jam, ${minutes} menit, ${seconds} detik.`;
+
   return (
-    <section 
-      id="countdown" 
-      data-section 
-      data-theme="dark" 
-      data-global-reveal="true" 
-      className="bg-[#050505] py-24 md:py-32 lg:py-48 relative overflow-hidden"
+    <section
+      id="countdown"
+      data-section
+      data-theme="dark"
+      data-global-reveal="true"
+      className="relative overflow-hidden bg-[#050505] py-20 md:py-32 lg:py-40"
     >
       <Container>
-        <div className="flex flex-col items-center">
-          
-          {/* Header */}
-          <div className="text-center mb-16 md:mb-24 relative z-10 w-full flex flex-col items-center">
-            <span data-animate="text" className="font-mono text-[10px] md:text-[11px] tracking-[0.3em] text-[#A4A4A4] uppercase mb-6 block">
-              Time Until The Day
+        <div className="relative mx-auto flex w-full max-w-[1080px] flex-col items-center">
+          <div className="mb-10 flex w-full max-w-[720px] flex-col items-center text-center md:mb-16">
+            <span
+              data-animate="text"
+              className="mb-5 block font-mono text-[10px] uppercase text-[#A4A4A4]"
+            >
+              Menuju Hari Bahagia
             </span>
-            <h2 data-animate="title" className="font-serif text-[36px] md:text-[56px] lg:text-[72px] text-[#F5F5F0] leading-[1.1] font-light max-w-2xl mx-auto">
-              Counting Down to Forever
+            <h2
+              data-animate="title"
+              className="font-serif text-[40px] font-light leading-[1.05] text-[#F5F5F0] md:text-[64px] lg:text-[76px]"
+            >
+              {isPast ? 'Hari Bahagia Telah Tiba' : 'Menghitung Hari'}
             </h2>
+            <p
+              data-animate="text"
+              className="mt-5 max-w-[520px] font-sans text-[15px] leading-7 text-[#A4A4A4] md:mt-6 md:text-[16px]"
+            >
+              {isPast
+                ? 'Dengan penuh sukacita, hari yang dinantikan telah datang.'
+                : 'Setiap detik membawa kami semakin dekat pada hari yang dinantikan.'}
+            </p>
           </div>
 
-          {/* Cinematic Instrument Panel */}
-          <div 
-            className="relative w-full max-w-[1200px] mx-auto min-h-[500px] flex flex-col md:flex-row items-center md:items-stretch group cursor-default" 
+          <div
             data-animate="card"
             role="timer"
-            aria-label={`Countdown to wedding: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`}
+            aria-label={timerAriaLabel}
+            className="relative flex w-full flex-col items-center"
           >
-            
-            {/* Top/Bottom Editorial Hairlines */}
-            <div className="hidden md:block absolute inset-0 border-y border-[#F5F5F0]/10 pointer-events-none opacity-40 transition-opacity duration-700 group-hover:opacity-80" aria-hidden="true" />
-            
-            {/* Corner Marks */}
-            <div className="hidden md:block absolute top-0 left-0 w-6 h-6 border-t border-l border-[#F5F5F0]/30 opacity-30 transition-opacity duration-700 group-hover:opacity-60" aria-hidden="true" />
-            <div className="hidden md:block absolute top-0 right-0 w-6 h-6 border-t border-r border-[#F5F5F0]/30 opacity-30 transition-opacity duration-700 group-hover:opacity-60" aria-hidden="true" />
-            <div className="hidden md:block absolute bottom-0 left-0 w-6 h-6 border-b border-l border-[#F5F5F0]/30 opacity-30 transition-opacity duration-700 group-hover:opacity-60" aria-hidden="true" />
-            <div className="hidden md:block absolute bottom-0 right-0 w-6 h-6 border-b border-r border-[#F5F5F0]/30 opacity-30 transition-opacity duration-700 group-hover:opacity-60" aria-hidden="true" />
+            <div
+              className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-[#F5F5F0]/[0.08] md:block"
+              aria-hidden="true"
+            />
 
             {isPast ? (
-              <div className="flex items-center justify-center w-full h-[400px] md:h-[500px]">
-                <p className="font-serif text-[28px] md:text-[40px] lg:text-[56px] text-[#F5F5F0] italic text-center px-8 leading-snug font-light opacity-90">
-                  Today,<br/>Forever Begins.
-                </p>
+              <div className="group/days relative flex aspect-square w-full max-w-[520px] items-center justify-center">
+                <div
+                  className="absolute inset-0 rounded-full border border-[rgba(245,245,240,0.12)] transition-colors duration-700 group-hover/days:border-[rgba(245,245,240,0.28)]"
+                  aria-hidden="true"
+                />
+                <div
+                  className="absolute inset-6 rounded-full border border-[rgba(245,245,240,0.08)] transition-colors duration-700 group-hover/days:border-[rgba(245,245,240,0.18)]"
+                  aria-hidden="true"
+                />
+                <motion.div
+                  className="absolute inset-3 rounded-full opacity-40 transition-opacity duration-700 group-hover/days:opacity-70"
+                  animate={shouldReduceMotion ? undefined : { rotate: 360 }}
+                  transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
+                  aria-hidden="true"
+                >
+                  {tickMarks.map((tick) => (
+                    <span
+                      key={tick.index}
+                      className="absolute inset-0"
+                      style={{ transform: `rotate(${tick.index * 6}deg)` }}
+                    >
+                      <span
+                        className={`absolute left-1/2 top-0 w-px -translate-x-1/2 bg-[#F5F5F0]/35 ${
+                          tick.isMajor ? 'h-4 md:h-5' : 'h-2 md:h-3'
+                        }`}
+                      />
+                    </span>
+                  ))}
+                </motion.div>
+
+                <div className="relative z-10 flex max-w-[300px] flex-col items-center px-8 text-center">
+                  <span className="mb-5 h-px w-20 bg-[#F5F5F0]/20" aria-hidden="true" />
+                  <span className="font-serif text-[52px] font-light leading-none text-[#F5F5F0] md:text-[72px]">
+                    Telah Tiba
+                  </span>
+                  <span className="mt-6 font-mono text-[10px] uppercase text-[#A4A4A4]">
+                    {weddingData.wedding.dateFormatted}
+                  </span>
+                </div>
               </div>
             ) : (
               <>
-                {/* Left: DAYS Monument */}
-                <div className="flex-1 flex flex-col justify-center items-center md:items-end py-12 md:py-24 md:pr-16 lg:pr-24 relative w-full md:w-auto">
-                   
-                   {/* Background Decorative Arc (Partial Circle) */}
-                   <div 
-                     className="absolute top-1/2 left-1/2 md:left-auto md:right-0 -translate-x-1/2 md:translate-x-[20%] -translate-y-1/2 w-[320px] h-[320px] md:w-[480px] md:h-[480px] border border-[#F5F5F0]/15 rounded-full opacity-30 group-hover:opacity-50 group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none" 
-                     style={{ clipPath: 'polygon(0 0, 50% 0, 50% 100%, 0 100%)' }} 
-                     aria-hidden="true" 
-                   />
+                <div className="group/days relative flex aspect-square w-full max-w-[540px] items-center justify-center">
+                  <div
+                    className="absolute left-10 right-10 top-1/2 h-px -translate-y-1/2 bg-[#F5F5F0]/10 transition-colors duration-700 group-hover/days:bg-[#F5F5F0]/20"
+                    aria-hidden="true"
+                  />
+                  <div
+                    className="absolute inset-0 rounded-full border border-[rgba(245,245,240,0.12)] transition-colors duration-700 group-hover/days:border-[rgba(245,245,240,0.30)]"
+                    aria-hidden="true"
+                  />
+                  <div
+                    className="absolute inset-6 rounded-full border border-[rgba(245,245,240,0.08)] transition-colors duration-700 group-hover/days:border-[rgba(245,245,240,0.18)]"
+                    aria-hidden="true"
+                  />
+                  <motion.div
+                    className="absolute inset-3 rounded-full opacity-35 transition-opacity duration-700 group-hover/days:opacity-70"
+                    animate={shouldReduceMotion ? undefined : { rotate: 360 }}
+                    transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
+                    aria-hidden="true"
+                  >
+                    {tickMarks.map((tick) => (
+                      <span
+                        key={tick.index}
+                        className="absolute inset-0"
+                        style={{ transform: `rotate(${tick.index * 6}deg)` }}
+                      >
+                        <span
+                          className={`absolute left-1/2 top-0 w-px -translate-x-1/2 bg-[#F5F5F0]/35 ${
+                            tick.isMajor ? 'h-4 md:h-5' : 'h-2 md:h-3'
+                          }`}
+                        />
+                      </span>
+                    ))}
+                  </motion.div>
 
-                   <div className="relative z-10 flex flex-col items-center md:items-end">
-                     <span className="font-serif text-[120px] md:text-[180px] lg:text-[220px] text-[#F5F5F0] tabular-nums lining-nums font-light leading-none tracking-tight mb-4 md:mb-8 group-hover:brightness-110 transition-all duration-500">
-                       <AnimatedValue value={days} />
-                     </span>
-                     
-                     <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
-                       <div className="hidden md:block w-12 h-px bg-[#F5F5F0]/20" aria-hidden="true" />
-                       <span className="font-mono text-[11px] md:text-[12px] tracking-[0.4em] text-[#A4A4A4] uppercase">
-                         Days
-                       </span>
-                     </div>
-                     
-                     {/* Date anchor positioned under DAYS on desktop */}
-                     <p className="hidden md:block font-mono text-[10px] tracking-[0.3em] text-[#A4A4A4]/50 uppercase mt-16 group-hover:text-[#A4A4A4]/80 transition-colors duration-500">
-                       {weddingData.wedding.dateFormatted}
-                     </p>
-                   </div>
+                  <div className="relative z-10 flex flex-col items-center px-8 text-center">
+                    <span className="font-serif text-[clamp(96px,16vw,180px)] font-light leading-none text-[#F5F5F0] opacity-95 tabular-nums lining-nums transition duration-700 group-hover/days:scale-[1.02] group-hover/days:opacity-100">
+                      <AnimatedDigits value={days} pad={false} shouldReduceMotion={shouldReduceMotion} />
+                    </span>
+                    <span className="mt-4 font-mono text-[11px] uppercase text-[#A4A4A4] transition-colors duration-500 group-hover/days:text-[#F5F5F0]">
+                      Hari
+                    </span>
+                  </div>
                 </div>
 
-                {/* Center Axis (Desktop only) */}
-                <div className="hidden md:flex flex-col items-center justify-center relative px-4 lg:px-8" aria-hidden="true">
-                   <div className="w-px h-full bg-gradient-to-b from-transparent via-[#F5F5F0]/20 to-transparent" />
-                   
-                   {/* Measurement ticks along the axis */}
-                   <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-12 py-8">
-                      {Array.from({length: 5}).map((_, i) => (
-                        <div key={i} className="w-3 h-px bg-[#F5F5F0]/20" />
-                      ))}
-                   </div>
-                </div>
+                <div className="mt-6 h-10 w-px bg-gradient-to-b from-[#F5F5F0]/20 to-transparent md:mt-8 md:h-12" aria-hidden="true" />
 
-                {/* Mobile Divider */}
-                <div className="md:hidden w-px h-16 bg-gradient-to-b from-transparent via-[#F5F5F0]/20 to-transparent my-4" aria-hidden="true" />
-
-                {/* Right: Precision Modules */}
-                <div className="flex-1 flex flex-col justify-center gap-4 md:gap-6 lg:gap-8 relative w-full max-w-[400px] px-4 md:px-0 md:pl-12 lg:pl-16 py-8 md:py-24">
-                  {timeUnits.map((unit, index) => (
-                    <div 
-                      key={unit.label} 
-                      className={`
-                        group/row flex items-center justify-between py-5 md:py-6 px-6 md:px-8 
-                        border border-[#F5F5F0]/5 hover:border-[#F5F5F0]/20 hover:bg-[#F5F5F0]/[0.02] 
-                        transition-all duration-500 rounded-[1px]
-                        ${index === 2 ? 'opacity-80 hover:opacity-100' : ''}
-                      `}
+                <div className="grid w-full max-w-[720px] grid-cols-3 gap-3 md:gap-5">
+                  {timeUnits.map((unit) => (
+                    <div
+                      key={unit.label}
+                      className="group/unit relative min-w-0 border border-[rgba(245,245,240,0.12)] px-3 py-4 text-center transition-colors duration-500 hover:border-[rgba(245,245,240,0.32)] hover:bg-[#F5F5F0]/[0.02] md:px-6 md:py-7"
                     >
-                      <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-6">
-                        <span className="font-mono text-[8px] md:text-[9px] text-[#A4A4A4]/40">{unit.index}</span>
-                        <span className="font-mono text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.25em] text-[#A4A4A4] uppercase">{unit.label}</span>
-                      </div>
-                      
-                      <span className="font-serif text-[48px] md:text-[56px] lg:text-[72px] text-[#F5F5F0] tabular-nums lining-nums font-light leading-none opacity-90 group-hover/row:opacity-100 group-hover/row:brightness-110 group-hover/row:-translate-y-1 transition-all duration-500">
-                        <AnimatedValue value={unit.value} />
+                      <span
+                        className="absolute left-4 top-0 h-px w-7 origin-left bg-[#F5F5F0]/30 transition-all duration-500 group-hover/unit:w-14 group-hover/unit:bg-[#F5F5F0]/60"
+                        aria-hidden="true"
+                      />
+                      <span className="block font-serif text-[42px] font-light leading-none text-[#F5F5F0] opacity-85 tabular-nums lining-nums transition-opacity duration-500 group-hover/unit:opacity-100 md:text-[64px]">
+                        <AnimatedDigits value={unit.value} shouldReduceMotion={shouldReduceMotion} />
+                      </span>
+                      <span className="mt-4 block font-mono text-[10px] uppercase text-[#A4A4A4] transition-colors duration-500 group-hover/unit:text-[#F5F5F0] md:text-[11px]">
+                        {unit.label}
                       </span>
                     </div>
                   ))}
-
-                  {/* Mobile Date Anchor */}
-                  <div className="md:hidden flex flex-col items-center mt-12 mb-4">
-                     <p className="font-mono text-[10px] tracking-[0.3em] text-[#A4A4A4]/60 uppercase">
-                       {weddingData.wedding.dateFormatted}
-                     </p>
-                  </div>
                 </div>
+
+                <p className="mt-7 font-mono text-[10px] uppercase text-[#A4A4A4] md:mt-12">
+                  {weddingData.wedding.dateFormatted}
+                </p>
               </>
             )}
           </div>

@@ -251,27 +251,6 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
         data-hero-content
         className="relative z-10 flex min-h-screen flex-col justify-end px-6 pb-20 pt-28 md:px-10 md:pb-24 lg:px-16 lg:pb-28"
       >
-        <div className="mb-auto grid grid-cols-[auto_1fr] items-start gap-4 pt-2 md:gap-6">
-          <span
-            data-hero-animate
-            className="font-mono text-[11px] tracking-[0.32em] text-[rgba(245,245,240,0.7)]"
-          >
-            01
-          </span>
-          <div className="min-w-0">
-            <p
-              data-hero-animate
-              className="font-mono text-[10px] uppercase tracking-[0.36em] text-[rgba(245,245,240,0.5)] md:text-[11px]"
-            >
-              The Beginning
-            </p>
-            <div
-              data-hero-line
-              className="mt-4 h-px w-24 bg-[rgba(245,245,240,0.24)] md:w-36"
-            />
-          </div>
-        </div>
-
         <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
           <div className="max-w-[1040px]">
             <p

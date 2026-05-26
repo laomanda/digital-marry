@@ -171,8 +171,10 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
     const fallbackTimer = window.setTimeout(() => {
       setIsOpened(true)
       setIsAnimating(false)
-      scrollToHero()
-      onOpened?.()
+      setTimeout(() => {
+        scrollToHero()
+        onOpened?.()
+      }, 50)
     }, 5000)
 
     const ctx = gsap.context(() => {
@@ -181,8 +183,10 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
           window.clearTimeout(fallbackTimer)
           setIsOpened(true)
           setIsAnimating(false)
-          scrollToHero()
-          onOpened?.()
+          setTimeout(() => {
+            scrollToHero()
+            onOpened?.()
+          }, 50)
         },
       })
       exitTlRef.current = exitTl
