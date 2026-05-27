@@ -1,211 +1,148 @@
-import { useRef, useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
-import { gsap } from '../../lib/gsap'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import { cn } from '../../lib/utils'
+import DomeGallery from '../ui/DomeGallery'
 
 export default function GallerySection() {
-  const sectionRef = useRef<HTMLElement>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
-  const [selectedImage, setSelectedImage] = useState<typeof weddingData.gallery[0] | null>(null)
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
+  const entranceButtonRef = useRef<HTMLButtonElement | null>(null)
 
-  // GSAP Scroll Animations
+  const images = useMemo(
+    () =>
+      weddingData.gallery.map((img) => ({
+        src: img.src,
+        alt: img.alt || 'Wedding gallery photo',
+      })),
+    []
+  )
+
+  const closeGallery = useCallback(() => {
+    setIsGalleryOpen(false)
+    window.setTimeout(() => entranceButtonRef.current?.focus(), 0)
+  }, [])
+
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>('.gallery-item').forEach((item, i) => {
-        // Safe Reveal Animation
-        gsap.fromTo(
-          item,
-          { opacity: 0, scale: shouldReduceMotion ? 1 : 1.08, y: shouldReduceMotion ? 0 : 48 },
-          {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power3.out',
-            delay: shouldReduceMotion ? 0 : (i % 3) * 0.1,
-            scrollTrigger: { trigger: item, start: 'top 90%' },
-          }
-        )
+    if (!isGalleryOpen) return undefined
 
-        // Parallax Effect (Only for non-reduced motion on screens >= 768px)
-        if (!shouldReduceMotion && window.innerWidth >= 768) {
-          const img = item.querySelector('img')
-          if (img) {
-            const speed = i % 3 === 0 ? -30 : i % 3 === 1 ? 25 : -15
-            gsap.fromTo(
-              img,
-              { yPercent: speed * -1 },
-              {
-                yPercent: speed,
-                ease: 'none',
-                scrollTrigger: {
-                  trigger: item,
-                  start: 'top bottom',
-                  end: 'bottom top',
-                  scrub: 1.5,
-                },
-              }
-            )
-          }
-        }
-      })
-    }, sectionRef)
-    
-    return () => ctx.revert()
-  }, [shouldReduceMotion])
-
-  // Body Scroll Lock & Escape Key for Lightbox
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedImage(null)
-    }
-
-    if (selectedImage) {
-      document.body.style.overflow = 'hidden'
-      window.addEventListener('keydown', handleKeyDown)
-    } else {
-      document.body.style.overflow = ''
-    }
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
 
     return () => {
-      document.body.style.overflow = ''
-      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = previousOverflow
     }
-  }, [selectedImage])
+  }, [isGalleryOpen])
 
   return (
-    <section 
-      id="gallery" 
-      ref={sectionRef} 
-      data-section 
+    <section
+      id="gallery"
+      data-section
       data-theme="dark"
-      data-wow="true" 
-      className="py-24 md:py-32 bg-[#050505] overflow-hidden"
+      data-wow="true"
+      className="relative overflow-hidden bg-[#050505] py-24 text-[#F5F5F0] md:py-32"
     >
-      <div className="container-base max-w-[1200px] mx-auto">
-        
-        {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row items-start justify-between gap-8 md:gap-12 mb-16 md:mb-24">
-          <div className="flex flex-col gap-4 max-w-md">
-            <span className="font-mono text-[9px] md:text-[10px] tracking-[0.4em] uppercase text-[#A4A4A4]">
-              06 / MEMORY WALL
-            </span>
-            <h2 className="font-serif text-[40px] md:text-[56px] text-[#F5F5F0] font-light leading-[1.1]">
-              Momen <span className="italic text-[#A4A4A4]">Berharga</span>
-            </h2>
-          </div>
-          
-          <div className="flex flex-col gap-4 max-w-[280px] md:text-right md:items-end">
-            <p className="font-sans text-[13px] md:text-[14px] text-[#A4A4A4] leading-relaxed">
-              Momen berharga sebelum hari bahagia. Kisah yang tersimpan dalam balutan waktu.
-            </p>
-          </div>
-        </div>
+      <div className="pointer-events-none absolute inset-0 opacity-45" aria-hidden="true">
+        <div className="absolute left-1/2 top-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#F5F5F0]/[0.055]" />
+        <div className="absolute inset-x-0 top-1/2 h-px bg-[#F5F5F0]/[0.055]" />
+      </div>
 
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 lg:gap-6">
-          {weddingData.gallery.length > 0 ? (
-            weddingData.gallery.map((img, idx) => {
-              // Numbering formatting
-              const itemNumber = (idx + 1).toString().padStart(2, '0')
-              
-              return (
-                <button
-                  key={img.id}
-                  type="button"
-                  onClick={() => setSelectedImage(img)}
-                  aria-label={`Lihat gambar: ${img.alt}`}
-                  className={cn(
-                    "gallery-item relative overflow-hidden group w-full border border-[rgba(245,245,240,0.05)] bg-[rgba(245,245,240,0.01)] text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5F5F0]",
-                    img.span === 'tall' ? 'sm:row-span-2' : img.span === 'wide' ? 'sm:col-span-2' : ''
-                  )}
-                  style={{ aspectRatio: img.span === 'tall' ? '3/4' : img.span === 'wide' ? '16/9' : '4/5' }}
+      <div className="container-base relative z-10">
+        <div className="relative mx-auto flex min-h-[520px] max-w-5xl items-center justify-center overflow-hidden border border-[#F5F5F0]/10 bg-[#F5F5F0]/[0.018] px-6 py-20 text-center md:px-12">
+          {images.length > 0 && (
+            <div className="pointer-events-none absolute inset-x-[-8%] top-1/2 hidden -translate-y-1/2 gap-4 opacity-20 md:flex" aria-hidden="true">
+              {images.slice(0, 5).map((image, index) => (
+                <div
+                  key={`${image.src}-${index}`}
+                  className="h-[250px] flex-1 overflow-hidden border border-[#F5F5F0]/10"
+                  style={{ transform: `translateY(${index % 2 === 0 ? -24 : 24}px)` }}
                 >
                   <img
-                    src={img.src}
-                    alt={img.alt}
-                    className={cn(
-                      "w-full h-full object-cover grayscale transition-all duration-700 ease-out",
-                      "group-hover:scale-[1.04] group-hover:brightness-110"
-                    )}
+                    src={image.src}
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover grayscale"
                   />
-                  
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex flex-col justify-between p-5 md:p-6">
-                    {/* Top Meta */}
-                    <span className="font-mono text-[9px] tracking-[0.2em] text-[#F5F5F0]/60 transform -translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                      {itemNumber}
-                    </span>
-                    
-                    {/* Bottom Caption */}
-                    <span className="font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-[#F5F5F0] transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                      {img.alt}
-                    </span>
-                  </div>
-                </button>
-              )
-            })
-          ) : (
-            <div className="col-span-full py-20 text-center border border-[rgba(245,245,240,0.05)]">
-              <p className="font-sans text-[14px] text-[#A4A4A4] italic">Gallery will be available soon.</p>
+                </div>
+              ))}
             </div>
           )}
+
+          <div className="absolute inset-0 bg-[#050505]/72" aria-hidden="true" />
+          <div className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t border-[#F5F5F0]/30" aria-hidden="true" />
+          <div className="pointer-events-none absolute right-0 top-0 h-3 w-3 border-r border-t border-[#F5F5F0]/30" aria-hidden="true" />
+          <div className="pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b border-l border-[#F5F5F0]/20" aria-hidden="true" />
+          <div className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[#F5F5F0]/20" aria-hidden="true" />
+
+          <div className="relative z-10 mx-auto flex max-w-[620px] flex-col items-center">
+            <span className="mb-5 font-mono text-[10px] uppercase text-[#A4A4A4]">
+              Galeri
+            </span>
+            <h2 className="mb-6 font-serif text-[48px] font-light leading-[1.02] text-[#F5F5F0] md:text-[78px]">
+              Momen Berharga
+            </h2>
+            <p className="mb-9 max-w-md text-[15px] leading-7 text-[#A4A4A4]">
+              Beberapa potongan cerita yang kami simpan sebagai kenangan.
+            </p>
+            <button
+              ref={entranceButtonRef}
+              type="button"
+              onClick={() => setIsGalleryOpen(true)}
+              className="group inline-flex items-center gap-4 border border-[#F5F5F0]/16 px-6 py-4 font-mono text-[10px] uppercase text-[#F5F5F0] transition-colors duration-300 hover:border-[#F5F5F0]/45 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0]"
+            >
+              <span>Masuk Galeri</span>
+              <ArrowRight size={15} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Lightbox / Preview Modal */}
       <AnimatePresence>
-        {selectedImage && (
-          <div 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12"
+        {isGalleryOpen && (
+          <motion.div
+            key="gallery-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: shouldReduceMotion ? 0.1 : 0.35 }}
+            className="fixed inset-0 z-[120] overflow-hidden bg-[#050505] text-[#F5F5F0]"
             role="dialog"
             aria-modal="true"
-            aria-label={`Preview: ${selectedImage.alt}`}
+            aria-label="Galeri foto pernikahan"
           >
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              className="absolute inset-0 bg-[#050505]/95 backdrop-blur-sm cursor-pointer"
-              onClick={() => setSelectedImage(null)}
-              aria-hidden="true"
-            />
-            
-            {/* Content Container */}
-            <motion.div
-              initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.98, y: shouldReduceMotion ? 0 : 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.98, y: shouldReduceMotion ? 0 : 20 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} // smooth apple-like ease
-              className="relative w-full h-full max-w-5xl flex flex-col items-center justify-center pointer-events-none"
-            >
-              <img 
-                src={selectedImage.src} 
-                alt={selectedImage.alt}
-                className="w-full h-full max-h-[85vh] object-contain grayscale pointer-events-auto shadow-2xl"
-              />
-              <div className="absolute bottom-4 md:bottom-0 left-0 right-0 text-center pointer-events-none">
-                <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#F5F5F0]/70 bg-[#050505]/50 px-4 py-2 backdrop-blur-md">
-                  {selectedImage.alt}
-                </span>
-              </div>
-            </motion.div>
+            <header className="pointer-events-none absolute left-5 top-5 z-[130] flex items-center gap-4 md:left-8 md:top-8">
+              <button
+                type="button"
+                onClick={closeGallery}
+                aria-label="Kembali dari galeri"
+                className="pointer-events-auto border border-[#F5F5F0]/16 bg-[#050505]/72 px-5 py-3 font-mono text-[10px] uppercase text-[#F5F5F0] transition-colors duration-300 hover:border-[#F5F5F0]/45 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0]"
+              >
+                Kembali
+              </button>
+              <span className="pointer-events-auto hidden font-mono text-[10px] uppercase text-[#A4A4A4] sm:inline">
+                Galeri
+              </span>
+            </header>
 
-            {/* Close Button */}
-            <button
-              type="button"
-              onClick={() => setSelectedImage(null)}
-              aria-label="Tutup galeri"
-              className="absolute top-6 right-6 p-4 text-[#A4A4A4] hover:text-[#F5F5F0] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5F5F0] z-[101]"
-            >
-              <X size={24} strokeWidth={1.5} />
-            </button>
-          </div>
+            <DomeGallery
+              images={images}
+              grayscale
+              fit={0.56}
+              minRadius={520}
+              maxRadius={900}
+              segments={35}
+              dragSensitivity={22}
+              dragDampening={0.75}
+              overlayBlurColor="#050505"
+              imageBorderRadius="18px"
+              openedImageBorderRadius="18px"
+              openedImageWidth="min(78vw, 520px)"
+              openedImageHeight="min(78vh, 620px)"
+              shouldReduceMotion={shouldReduceMotion}
+              onRequestClose={closeGallery}
+            />
+          </motion.div>
         )}
       </AnimatePresence>
     </section>
