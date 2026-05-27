@@ -471,10 +471,10 @@ export default function EventSection() {
           src={eventBg}
           alt=""
           aria-hidden="true"
-          className="absolute left-1/2 top-0 h-full w-[140vw] max-w-none -translate-x-1/2 object-cover object-center grayscale opacity-[0.30] will-change-transform lg:translate-x-0 lg:opacity-[0.38]"
-          style={{ filter: 'grayscale(1) contrast(1.08) brightness(0.72)' }}
+          className="absolute left-1/2 top-0 h-full max-w-none object-cover object-center grayscale will-change-transform max-lg:w-[115vw] max-lg:-translate-x-1/2 max-lg:opacity-[0.34] lg:w-[140vw] lg:opacity-[0.52]"
+          style={{ filter: 'grayscale(1) contrast(1.04) brightness(0.82)' }}
         />
-        <div className="absolute inset-0 bg-[#050505]/82 md:bg-[#050505]/75" />
+        <div className="absolute inset-0 bg-[#050505]/72 md:bg-[#050505]/62" />
         <div
           className="absolute inset-0"
           style={{
