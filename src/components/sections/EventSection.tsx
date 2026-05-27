@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Calendar, Clock, MapPin } from 'lucide-react'
+import eventBg from '../../assets/lainnya/bg-event.webp'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
@@ -61,13 +62,13 @@ function EventCard({
         y: shouldReduceMotion ? 0 : isActive ? -4 : 0,
         opacity: isActive ? 1 : 0.84,
         borderColor: isActive ? 'rgba(245,245,240,0.35)' : 'rgba(245,245,240,0.12)',
-        backgroundColor: isActive ? 'rgba(245,245,240,0.045)' : 'rgba(245,245,240,0.028)',
+        backgroundColor: isActive ? 'rgba(5,5,5,0.62)' : 'rgba(5,5,5,0.50)',
       }}
       whileHover={shouldReduceMotion ? undefined : { y: -4, opacity: 1 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={onSelect}
       onClick={onSelect}
-      className={`group/card relative h-full overflow-hidden border text-left outline-none transition-colors duration-500 ${
+      className={`group/card relative h-full overflow-hidden border text-left outline-none backdrop-blur-[2px] transition-colors duration-500 ${
         compact ? 'p-6 md:p-8' : 'p-8 lg:p-10 [@media(max-height:650px)]:p-6'
       }`}
     >
@@ -357,6 +358,7 @@ export default function EventSection() {
   const events = weddingData.events ?? []
   const { shouldReduceMotion } = useReducedMotionSafe()
   const sectionRef = useRef<HTMLElement | null>(null)
+  const bgImgRef = useRef<HTMLImageElement | null>(null)
   const stageRef = useRef<HTMLDivElement | null>(null)
   const trackRef = useRef<HTMLDivElement | null>(null)
   const [activeEventId, setActiveEventId] = useState(events[0]?.id || '')
@@ -371,10 +373,11 @@ export default function EventSection() {
 
       media.add('(min-width: 1024px)', () => {
         const root = sectionRef.current
+        const bgImg = bgImgRef.current
         const stage = stageRef.current
         const track = trackRef.current
 
-        if (!root || !stage || !track) return undefined
+        if (!root || !bgImg || !stage || !track) return undefined
 
         const header = root.querySelector<HTMLElement>('[data-route-header]')
         const routeBase = track.querySelector<SVGPathElement>('[data-route-base]')
@@ -428,6 +431,12 @@ export default function EventSection() {
 
         timeline
           .to(track, { x: () => -getDistance(), duration: 1, ease: 'none' }, 0)
+          .fromTo(
+            bgImg,
+            { xPercent: -57, scale: 1.02 },
+            { xPercent: -43, scale: 1.02, duration: 1, ease: 'none' },
+            0
+          )
           .to(routeProgress, { opacity: 1, duration: 0.08, ease: 'none' }, 0)
           .to(routeProgress, { strokeDashoffset: 0, duration: 1, ease: 'none' }, 0)
           .to(dateMarker, { opacity: 1, y: 0, duration: 0.24, ease: 'none' }, 0.34)
@@ -454,42 +463,65 @@ export default function EventSection() {
       data-section
       data-theme="dark"
       data-global-reveal="true"
-      className="overflow-hidden bg-[#050505] py-24 text-[#F5F5F0] md:py-32 lg:py-24 [@media(max-height:650px)]:py-8"
+      className="relative overflow-hidden bg-[#050505] py-24 text-[#F5F5F0] md:py-32 lg:py-24 [@media(max-height:650px)]:py-8"
     >
-      <div className="container-base">
-        <div data-route-header className="mx-auto mb-12 flex max-w-[720px] flex-col items-center text-center md:mb-14 lg:mb-0 [@media(max-height:650px)]:max-w-[600px]">
-          <span className="mb-5 block font-mono text-[10px] uppercase text-[#A4A4A4] [@media(max-height:650px)]:mb-2 [@media(max-height:650px)]:text-[9px]">
-            Rangkaian Acara
-          </span>
-          <h2 className="font-serif text-[44px] font-light leading-[1.02] text-[#F5F5F0] md:text-[68px] lg:text-[82px] [@media(max-height:650px)]:text-[50px]">
-            Detail Acara
-          </h2>
-          <p className="mt-6 max-w-[560px] text-[15px] leading-7 text-[#A4A4A4] md:text-[16px] [@media(max-height:650px)]:mt-3 [@media(max-height:650px)]:max-w-[480px] [@media(max-height:650px)]:text-[13px] [@media(max-height:650px)]:leading-5">
-            Dengan penuh sukacita, kami mengundang Anda untuk hadir dan memberikan doa restu.
-          </p>
-          <span className="mt-8 hidden h-12 w-px bg-[#F5F5F0]/12 lg:block [@media(max-height:650px)]:mt-5 [@media(max-height:650px)]:h-7" aria-hidden="true" />
-        </div>
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <img
+          ref={bgImgRef}
+          src={eventBg}
+          alt=""
+          aria-hidden="true"
+          className="absolute left-1/2 top-0 h-full w-[140vw] max-w-none -translate-x-1/2 object-cover object-center grayscale opacity-[0.30] will-change-transform lg:translate-x-0 lg:opacity-[0.38]"
+          style={{ filter: 'grayscale(1) contrast(1.08) brightness(0.72)' }}
+        />
+        <div className="absolute inset-0 bg-[#050505]/82 md:bg-[#050505]/75" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgba(5,5,5,0.18) 0%, rgba(5,5,5,0.78) 72%, #050505 100%)',
+          }}
+        />
       </div>
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[3] h-36 bg-gradient-to-b from-[#050505] via-[#050505]/70 to-transparent md:h-48" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-36 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-transparent md:h-48" aria-hidden="true" />
 
-      {!shouldReduceMotion && (
-        <HorizontalStage
-          events={events}
-          activeEventId={activeEventId}
-          setActiveEventId={setActiveEventId}
-          shouldReduceMotion={shouldReduceMotion}
-          stageRef={stageRef}
-          trackRef={trackRef}
-        />
-      )}
+      <div className="relative z-10">
+        <div className="container-base">
+          <div data-route-header className="mx-auto mb-12 flex max-w-[720px] flex-col items-center text-center md:mb-14 lg:mb-0 [@media(max-height:650px)]:max-w-[600px]">
+            <span className="mb-5 block font-mono text-[10px] uppercase text-[#A4A4A4] [@media(max-height:650px)]:mb-2 [@media(max-height:650px)]:text-[9px]">
+              Rangkaian Acara
+            </span>
+            <h2 className="font-serif text-[44px] font-light leading-[1.02] text-[#F5F5F0] md:text-[68px] lg:text-[82px] [@media(max-height:650px)]:text-[50px]">
+              Detail Acara
+            </h2>
+            <p className="mt-6 max-w-[560px] text-[15px] leading-7 text-[#A4A4A4] md:text-[16px] [@media(max-height:650px)]:mt-3 [@media(max-height:650px)]:max-w-[480px] [@media(max-height:650px)]:text-[13px] [@media(max-height:650px)]:leading-5">
+              Dengan penuh sukacita, kami mengundang Anda untuk hadir dan memberikan doa restu.
+            </p>
+            <span className="mt-8 hidden h-12 w-px bg-[#F5F5F0]/12 lg:block [@media(max-height:650px)]:mt-5 [@media(max-height:650px)]:h-7" aria-hidden="true" />
+          </div>
+        </div>
 
-      <div className="container-base">
-        <StaticTimeline
-          events={events}
-          activeEventId={activeEventId}
-          setActiveEventId={setActiveEventId}
-          shouldReduceMotion={shouldReduceMotion}
-          className={shouldReduceMotion ? 'block' : 'lg:hidden'}
-        />
+        {!shouldReduceMotion && (
+          <HorizontalStage
+            events={events}
+            activeEventId={activeEventId}
+            setActiveEventId={setActiveEventId}
+            shouldReduceMotion={shouldReduceMotion}
+            stageRef={stageRef}
+            trackRef={trackRef}
+          />
+        )}
+
+        <div className="container-base">
+          <StaticTimeline
+            events={events}
+            activeEventId={activeEventId}
+            setActiveEventId={setActiveEventId}
+            shouldReduceMotion={shouldReduceMotion}
+            className={shouldReduceMotion ? 'block' : 'lg:hidden'}
+          />
+        </div>
       </div>
     </section>
   )

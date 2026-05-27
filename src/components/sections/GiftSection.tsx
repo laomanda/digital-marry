@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { AlertCircle, Check, Copy, HeartHandshake } from 'lucide-react'
+import { animate } from 'animejs'
+import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import { cn } from '../../lib/utils'
@@ -40,6 +42,8 @@ export default function GiftSection() {
   const [selectedGiftId, setSelectedGiftId] = useState(gifts[0]?.id ?? '')
   const { shouldReduceMotion, isMobile } = useReducedMotionSafe()
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const detailRef = useRef<HTMLElement | null>(null)
+  const copyButtonRef = useRef<HTMLButtonElement | null>(null)
 
   const selectedGift = useMemo(
     () => gifts.find((gift) => gift.id === selectedGiftId) ?? gifts[0],
@@ -134,6 +138,72 @@ export default function GiftSection() {
     }
   }, [])
 
+  useEffect(() => {
+    const detail = detailRef.current
+    if (!detail || !selectedGift) return
+
+    const parts = detail.querySelectorAll('[data-gift-reveal]')
+    const chars = detail.querySelectorAll('[data-account-char]')
+
+    if (shouldReduceMotion) {
+      parts.forEach((part) => {
+        const element = part as HTMLElement
+        element.style.opacity = '1'
+        element.style.transform = 'translateY(0)'
+      })
+      chars.forEach((char) => {
+        const element = char as HTMLElement
+        element.style.opacity = '1'
+        element.style.transform = 'translateY(0)'
+      })
+      return
+    }
+
+    const partAnimation = animate(parts, {
+      opacity: [0, 1],
+      translateY: [10, 0],
+      duration: 520,
+      delay: (_el: Element, index: number) => index * 55,
+      ease: 'outCubic',
+    })
+
+    const digitAnimation = animate(chars, {
+      opacity: [0, 1],
+      translateY: [8, 0],
+      duration: 560,
+      delay: (_el: Element, index: number) => 110 + index * 22,
+      ease: 'outExpo',
+    })
+
+    return () => {
+      partAnimation.pause()
+      digitAnimation.pause()
+    }
+  }, [selectedGift, shouldReduceMotion])
+
+  useEffect(() => {
+    if (!copiedId || copyError || shouldReduceMotion || copiedId !== selectedGift?.id) return
+
+    const button = copyButtonRef.current
+    if (!button) return
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        button,
+        { scale: 1 },
+        {
+          scale: 1.03,
+          duration: 0.16,
+          repeat: 1,
+          yoyo: true,
+          ease: 'power2.out',
+        }
+      )
+    }, button)
+
+    return () => ctx.revert()
+  }, [copiedId, copyError, selectedGift?.id, shouldReduceMotion])
+
   return (
     <section
       id="gift"
@@ -192,6 +262,7 @@ export default function GiftSection() {
             <AnimatePresence mode="wait">
               {selectedGift ? (
                 <motion.article
+                  ref={detailRef}
                   key={selectedGift.id}
                   initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 14 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -205,7 +276,7 @@ export default function GiftSection() {
                   <div className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[#F5F5F0]/18" aria-hidden="true" />
 
                   <div className="relative z-10">
-                    <div className="mb-6 flex items-start justify-between gap-5">
+                    <div data-gift-reveal className="mb-6 flex items-start justify-between gap-5">
                       <div>
                         <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.3em] text-[#A4A4A4]">
                           Amplop Digital
@@ -217,20 +288,33 @@ export default function GiftSection() {
                       <span className="mt-1 h-2 w-2 rounded-full border border-[#F5F5F0]/30" aria-hidden="true" />
                     </div>
 
-                    <div className="border-y border-[#F5F5F0]/10 py-5">
+                    <div data-gift-reveal className="border-y border-[#F5F5F0]/10 py-5">
                       <span className="mb-4 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#A4A4A4]">
                         Nomor Rekening
                       </span>
                       <p
+                        aria-label={selectedGift.accountNumber}
                         className="font-mono text-[22px] leading-tight tracking-[0.16em] text-[#F5F5F0] md:text-[26px]"
                         style={{ fontVariantNumeric: 'tabular-nums' }}
                       >
-                        {formatAccountNumber(selectedGift.accountNumber)}
+                        <span aria-hidden="true">
+                          {formatAccountNumber(selectedGift.accountNumber)
+                            .split('')
+                            .map((char, index) => (
+                              <span
+                                key={`${selectedGift.id}-${index}`}
+                                data-account-char
+                                className="inline-block"
+                              >
+                                {char === ' ' ? '\u00A0' : char}
+                              </span>
+                            ))}
+                        </span>
                       </p>
                     </div>
 
                     <div className="mt-5 grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-                      <div className="border border-[#F5F5F0]/8 bg-[#050505]/18 p-4">
+                      <div data-gift-reveal className="border border-[#F5F5F0]/8 bg-[#050505]/18 p-4">
                         <span className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#A4A4A4]">
                           Atas Nama
                         </span>
@@ -240,7 +324,9 @@ export default function GiftSection() {
                       </div>
 
                       <button
+                        ref={copyButtonRef}
                         type="button"
+                        data-gift-reveal
                         onClick={() => handleCopy(selectedGift.id, selectedGift.accountNumber)}
                         aria-label={`Salin nomor rekening ${selectedGift.bank}`}
                         className={cn(
@@ -311,6 +397,11 @@ export default function GiftSection() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-44 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505] md:h-56"
+        aria-hidden="true"
+      />
     </section>
   )
 }

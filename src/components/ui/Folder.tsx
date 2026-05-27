@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { gsap } from '../../lib/gsap'
 
 interface FolderProps {
   color?: string
@@ -51,6 +52,7 @@ const Folder: React.FC<FolderProps> = ({
   const [paperOffsets, setPaperOffsets] = useState<{ x: number; y: number }[]>(
     Array.from({ length: maxItems }, () => ({ x: 0, y: 0 }))
   )
+  const folderRef = useRef<HTMLDivElement>(null)
   const isControlled = typeof open === 'boolean'
   const isOpen = isControlled ? open : internalOpen
 
@@ -97,8 +99,8 @@ const Folder: React.FC<FolderProps> = ({
     const rect = event.currentTarget.getBoundingClientRect()
     const centerX = rect.left + rect.width / 2
     const centerY = rect.top + rect.height / 2
-    const offsetX = (event.clientX - centerX) * 0.15
-    const offsetY = (event.clientY - centerY) * 0.15
+    const offsetX = (event.clientX - centerX) * 0.06
+    const offsetY = (event.clientY - centerY) * 0.06
 
     setPaperOffsets((prev) => {
       const newOffsets = [...prev]
@@ -140,15 +142,73 @@ const Folder: React.FC<FolderProps> = ({
     return ''
   }
 
+  useEffect(() => {
+    const root = folderRef.current
+    if (!root) return
+
+    const paperInners = root.querySelectorAll('[data-folder-paper-inner]')
+    const iconEl = root.querySelector('[data-folder-icon]')
+
+    if (prefersReducedMotion) {
+      gsap.set(root, { y: isOpen ? -8 : 0 })
+      gsap.set(paperInners, { opacity: 1, y: 0, scale: 1 })
+      if (iconEl) gsap.set(iconEl, { opacity: isOpen ? 0.35 : 0.55, scale: 1 })
+      return
+    }
+
+    const ctx = gsap.context(() => {
+      gsap.to(root, {
+        y: isOpen ? -8 : 0,
+        duration: 0.46,
+        ease: 'power3.out',
+      })
+
+      if (isOpen) {
+        gsap.fromTo(
+          paperInners,
+          { opacity: 0.76, y: 5, scale: 0.975 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.42,
+            stagger: 0.05,
+            delay: 0.04,
+            ease: 'power3.out',
+          }
+        )
+      } else {
+        gsap.to(paperInners, {
+          opacity: 0.86,
+          y: 0,
+          scale: 1,
+          duration: 0.18,
+          ease: 'power2.out',
+        })
+      }
+
+      if (iconEl) {
+        gsap.to(iconEl, {
+          opacity: isOpen ? 0.34 : 0.55,
+          scale: isOpen ? 0.98 : 1,
+          duration: 0.32,
+          ease: 'power2.out',
+        })
+      }
+    }, root)
+
+    return () => ctx.revert()
+  }, [isOpen, papers.length, prefersReducedMotion])
+
   return (
     <div style={scaleStyle} className={className}>
       <div
+        ref={folderRef}
         className={`group relative cursor-pointer transition-all duration-200 ease-in motion-reduce:transition-none ${
           !isOpen ? 'hover:-translate-y-2' : ''
         }`}
         style={{
           ...folderStyle,
-          transform: isOpen ? 'translateY(-8px)' : undefined,
         }}
       >
         <div
@@ -208,7 +268,9 @@ const Folder: React.FC<FolderProps> = ({
                   borderRadius: '5px',
                 }}
               >
-                {item}
+                <div data-folder-paper-inner className="h-full w-full">
+                  {item}
+                </div>
               </div>
             )
           })}
@@ -238,6 +300,7 @@ const Folder: React.FC<FolderProps> = ({
 
           {icon && (
             <div
+              data-folder-icon
               className={`pointer-events-none absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 group-hover:scale-[1.04] ${
                 isOpen ? 'opacity-35' : 'opacity-55'
               }`}
