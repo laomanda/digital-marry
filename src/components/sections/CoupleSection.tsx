@@ -309,7 +309,7 @@ function PersonCard({
       </div>
 
       {/* Info */}
-      <div className={`mt-6 ${side === 'groom' ? 'text-right' : 'text-left'}`}>
+      <div className={`mt-6 ${side === 'groom' ? 'text-left md:text-right' : 'text-left'}`}>
         <h3
           className="font-serif text-[clamp(36px,5vw,64px)] font-light leading-[0.9] text-[#F5F5F0]"
           aria-label={person.fullName}
@@ -321,7 +321,7 @@ function PersonCard({
           {person.fullName}
         </p>
 
-        <div className={`my-4 h-px w-10 bg-[#F5F5F0]/15 ${side === 'groom' ? 'ml-auto' : ''}`} />
+        <div className={`my-4 h-px w-10 bg-[#F5F5F0]/15 ${side === 'groom' ? 'md:ml-auto' : ''}`} />
 
         <p className="font-sans text-[11px] uppercase leading-relaxed tracking-[0.16em] text-[#F5F5F0]/55">
           {person.parents}

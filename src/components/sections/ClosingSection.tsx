@@ -43,7 +43,7 @@ export default function ClosingSection() {
       }
 
       const revealTl = gsap.timeline({
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 65%' },
+        scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
       })
 
       revealTl
@@ -75,12 +75,12 @@ export default function ClosingSection() {
           duration: 0.9,
           stagger: 0.04,
           ease: 'expo.out',
-          scrollTrigger: { trigger: '.closing-signature', start: 'top 85%' },
+          scrollTrigger: { trigger: '.closing-signature', start: 'top 95%' },
         }
       )
 
       const bottomTl = gsap.timeline({
-        scrollTrigger: { trigger: '.closing-signature', start: 'top 75%' },
+        scrollTrigger: { trigger: '.closing-signature', start: 'top 95%' },
       })
 
       bottomTl
@@ -186,6 +186,8 @@ export default function ClosingSection() {
               fontSize: 'clamp(56px, 12vw, 160px)',
               lineHeight: 0.85,
               letterSpacing: '-0.03em',
+              maxWidth: '100%',
+              overflowWrap: 'break-word',
             }}
             aria-label={closingName}
           >

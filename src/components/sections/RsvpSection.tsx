@@ -180,7 +180,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                             onClick={handleDecreaseGuest}
                             disabled={guestCountValue <= 1}
                             aria-label="Kurangi jumlah tamu"
-                            className="p-2 text-[#A4A4A4] transition-colors hover:text-[#F5F5F0] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0] disabled:opacity-30"
+                            className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 text-[#A4A4A4] transition-colors hover:text-[#F5F5F0] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0] disabled:opacity-30"
                           >
                             <Minus size={16} strokeWidth={1.5} aria-hidden="true" />
                           </button>
@@ -200,7 +200,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                             onClick={handleIncreaseGuest}
                             disabled={guestCountValue >= 10}
                             aria-label="Tambah jumlah tamu"
-                            className="p-2 text-[#A4A4A4] transition-colors hover:text-[#F5F5F0] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0] disabled:opacity-30"
+                            className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 text-[#A4A4A4] transition-colors hover:text-[#F5F5F0] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0] disabled:opacity-30"
                           >
                             <Plus size={16} strokeWidth={1.5} aria-hidden="true" />
                           </button>

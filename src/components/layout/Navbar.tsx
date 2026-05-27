@@ -182,7 +182,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
         aria-hidden={!visible}
         {...(!visible && { inert: 'true' })}
         className={cn(
-          'fixed right-6 top-6 z-[9000] h-12 w-12 transition-all duration-500 md:right-10 md:top-8',
+          'fixed right-[max(1.5rem,env(safe-area-inset-right,0px))] top-[max(1.5rem,env(safe-area-inset-top,0px))] z-[9000] h-12 w-12 transition-all duration-500 md:right-10 md:top-8',
           visible
             ? 'pointer-events-auto translate-y-0 scale-100 opacity-100'
             : 'pointer-events-none -translate-y-2 scale-95 opacity-0',
@@ -283,7 +283,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
                         <a
                           href={link.href}
                           data-cursor-label={link.label.toUpperCase()}
-                          className="group grid grid-cols-[2.25rem_2.75rem_minmax(0,1fr)] items-center gap-3 border-b border-[color:var(--menu-border)] py-0 transition-colors duration-300 hover:border-[color:var(--menu-text)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--menu-text)] sm:grid-cols-[3.5rem_3rem_minmax(0,1fr)_auto] sm:gap-5 md:py-0.5"
+                          className="group grid grid-cols-[2.25rem_2.75rem_minmax(0,1fr)] items-center gap-3 border-b border-[color:var(--menu-border)] py-3 transition-colors duration-300 hover:border-[color:var(--menu-text)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--menu-text)] sm:grid-cols-[3.5rem_3rem_minmax(0,1fr)_auto] sm:gap-5 md:py-3"
                           onClick={closeMenu}
                         >
                           <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[color:var(--menu-muted)] transition-colors duration-300 group-hover:text-[color:var(--menu-text)]">

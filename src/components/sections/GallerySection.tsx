@@ -111,7 +111,7 @@ export default function GallerySection() {
             aria-modal="true"
             aria-label="Galeri foto pernikahan"
           >
-            <header className="pointer-events-none absolute left-5 top-5 z-[130] flex items-center gap-4 md:left-8 md:top-8">
+            <header className="pointer-events-none absolute left-[max(1.25rem,env(safe-area-inset-left,0px))] top-[max(1.25rem,env(safe-area-inset-top,0px))] z-[130] flex items-center gap-4 md:left-8 md:top-8">
               <button
                 type="button"
                 onClick={closeGallery}

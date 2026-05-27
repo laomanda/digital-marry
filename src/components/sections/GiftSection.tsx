@@ -381,7 +381,7 @@ export default function GiftSection() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
             transition={{ duration: shouldReduceMotion ? 0.1 : 0.28, ease: 'easeOut' }}
-            className="pointer-events-none fixed bottom-8 left-1/2 z-[100] -translate-x-1/2"
+            className="pointer-events-none fixed bottom-[max(1.5rem,env(safe-area-inset-bottom,0px))] left-[max(1.5rem,env(safe-area-inset-left,0px))] z-[100]"
             role="status"
           >
             <div className="flex items-center gap-3 border border-[#F5F5F0]/14 bg-[#050505]/90 px-5 py-3 text-[#F5F5F0] shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-md">

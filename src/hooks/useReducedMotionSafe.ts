@@ -26,8 +26,8 @@ export function useReducedMotionSafe(): ReducedMotionSafeState {
       setState({
         prefersReducedMotion: prefersReduced,
         isMobile: mobile,
-        // Reduce motions if user prefers reduced motion OR on mobile layout to maintain high performance
-        shouldReduceMotion: prefersReduced || mobile,
+        // Only reduce motions if user specifically requests it via OS preference
+        shouldReduceMotion: prefersReduced,
       });
     };
 

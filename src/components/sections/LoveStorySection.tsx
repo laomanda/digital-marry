@@ -833,7 +833,7 @@ export function LoveStorySection() {
         {/* MOBILE FALLBACK TIMELINE (< lg) */}
         <div className="lg:hidden relative w-full mt-16 max-w-[500px] mx-auto px-4" ref={mobileContainerRef}>
           {/* Vertical Path Line */}
-          <div className="absolute left-[36px] md:left-[48px] top-0 bottom-0 w-[2px] -translate-x-1/2 z-0">
+          <div className="absolute left-[28px] md:left-[48px] top-0 bottom-0 w-[2px] -translate-x-1/2 z-0">
             <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" aria-hidden="true" focusable="false">
               <line x1="1" y1="0" x2="1" y2="100%" stroke="rgba(245,245,240,0.14)" strokeWidth="1.6" />
               <line 
@@ -863,7 +863,7 @@ export function LoveStorySection() {
               return (
                 <div key={story.id || i} className="relative w-full flex items-start group mobile-item">
                   {/* Timeline Dot */}
-                  <div className="absolute left-[36px] md:left-[48px] top-6 -translate-x-1/2 z-10">
+                  <div className="absolute left-[28px] md:left-[48px] top-6 -translate-x-1/2 z-10">
                     <div 
                       className={[
                         'w-[9px] h-[9px] rounded-full transition-all duration-500 mobile-dot shadow-[0_0_0_4px_#111111]',
@@ -878,15 +878,15 @@ export function LoveStorySection() {
                   </div>
                   
                   {/* Content Container */}
-                  <div className="w-full pl-[72px] md:pl-[96px]">
+                  <div className="w-full pl-[56px] md:pl-[96px]">
                     <div 
                       className={[
-                        'w-full border p-8 transition-all duration-[600ms] ease-out backdrop-blur-sm mobile-card flex flex-col justify-center rounded-[2px] overflow-hidden group/card cursor-pointer relative',
+                        'w-full p-5 sm:p-8 border transition-all duration-[600ms] ease-out mobile-card flex flex-col justify-center rounded-[2px] overflow-hidden group/card cursor-pointer relative backdrop-blur-sm',
                         isActive 
-                          ? 'bg-[#0B0B0B]/95 border-[#F5F5F0]/36 opacity-100 -translate-y-1 shadow-[0_12px_32px_rgba(0,0,0,0.45)]'
+                          ? 'bg-[#0B0B0B]/95 border-[#F5F5F0]/36 opacity-100 -translate-y-1 shadow-[0_12px_32px_rgba(0,0,0,0.5)]'
                           : isVisited 
-                            ? 'bg-[#080808]/85 border-[#F5F5F0]/20 opacity-[0.88] hover:opacity-[0.95] hover:border-[#F5F5F0]/28 hover:-translate-y-1 shadow-[0_6px_20px_rgba(0,0,0,0.25)]'
-                            : 'bg-[#080808]/70 border-[#F5F5F0]/10 opacity-[0.45] hover:opacity-[0.72] hover:border-[#F5F5F0]/20 hover:-translate-y-0.5 shadow-none pointer-events-none'
+                            ? 'bg-[#080808]/90 border-[#F5F5F0]/20 opacity-[0.95] hover:-translate-y-1 shadow-[0_6px_20px_rgba(0,0,0,0.3)]'
+                            : 'bg-[#080808]/80 border-[#F5F5F0]/10 opacity-[0.80] hover:-translate-y-0.5 shadow-none pointer-events-none'
                       ].join(' ')}
                     >
                       {/* Top Hairline */}
@@ -919,10 +919,10 @@ export function LoveStorySection() {
                         className={[
                           'absolute top-5 right-5 font-serif text-[60px] leading-none select-none pointer-events-none transition-all duration-700 ease-out font-light',
                           isActive 
-                            ? 'opacity-[0.065] translate-y-0 scale-100' 
+                            ? 'opacity-[0.08] translate-y-0 scale-100 text-[#F5F5F0]' 
                             : isVisited 
-                              ? 'opacity-[0.04] translate-y-0 scale-98' 
-                              : 'opacity-[0.015] translate-y-1 scale-95'
+                              ? 'opacity-[0.05] translate-y-0 scale-98 text-[#F5F5F0]' 
+                              : 'opacity-[0.02] translate-y-1 scale-95 text-[#F5F5F0]'
                         ].join(' ')}
                         aria-hidden="true"
                       >
@@ -941,10 +941,10 @@ export function LoveStorySection() {
                         ].join(' ')}
                         aria-hidden="true"
                       >
-                        <div className={['absolute top-0 left-0 w-2 h-2 border-t border-l transition-colors duration-500', isActive ? 'border-[#F5F5F0]/30' : isVisited ? 'border-[#F5F5F0]/20' : 'border-[#F5F5F0]/10'].join(' ')} />
-                        <div className={['absolute top-0 right-0 w-2 h-2 border-t border-r transition-colors duration-500', isActive ? 'border-[#F5F5F0]/30' : isVisited ? 'border-[#F5F5F0]/20' : 'border-[#F5F5F0]/10'].join(' ')} />
-                        <div className={['absolute bottom-0 left-0 w-2 h-2 border-b border-l transition-colors duration-500', isActive ? 'border-[#F5F5F0]/30' : isVisited ? 'border-[#F5F5F0]/20' : 'border-[#F5F5F0]/10'].join(' ')} />
-                        <div className={['absolute bottom-0 right-0 w-2 h-2 border-b border-r transition-colors duration-500', isActive ? 'border-[#F5F5F0]/30' : isVisited ? 'border-[#F5F5F0]/20' : 'border-[#F5F5F0]/10'].join(' ')} />
+                        <div className={['absolute top-0 left-0 w-2 h-2 border-t border-l transition-colors duration-500', isActive ? 'border-[#F5F5F0]/30' : isVisited ? 'border-[#F5F5F0]/15' : 'border-[#F5F5F0]/5'].join(' ')} />
+                        <div className={['absolute top-0 right-0 w-2 h-2 border-t border-r transition-colors duration-500', isActive ? 'border-[#F5F5F0]/30' : isVisited ? 'border-[#F5F5F0]/15' : 'border-[#F5F5F0]/5'].join(' ')} />
+                        <div className={['absolute bottom-0 left-0 w-2 h-2 border-b border-l transition-colors duration-500', isActive ? 'border-[#F5F5F0]/30' : isVisited ? 'border-[#F5F5F0]/15' : 'border-[#F5F5F0]/5'].join(' ')} />
+                        <div className={['absolute bottom-0 right-0 w-2 h-2 border-b border-r transition-colors duration-500', isActive ? 'border-[#F5F5F0]/30' : isVisited ? 'border-[#F5F5F0]/15' : 'border-[#F5F5F0]/5'].join(' ')} />
                       </div>
 
                       <div className="relative z-10">
@@ -969,7 +969,16 @@ export function LoveStorySection() {
 
                         {/* Date Block with Context Icon and line */}
                         <div className="flex items-center gap-3 mb-2.5">
-                          <span className="text-[#F5F5F0]/50 group-hover/card:text-[#F5F5F0]/90 transition-colors duration-500">
+                          <span 
+                            className={[
+                              'transition-colors duration-500',
+                              isActive 
+                                ? 'text-white' 
+                                : isVisited 
+                                  ? 'text-[#F5F5F0]/70' 
+                                  : 'text-[#A4A4A4]/40'
+                            ].join(' ')}
+                          >
                             {i === 0 && <Palette size={13} strokeWidth={1.5} />}
                             {i === 1 && <Coffee size={13} strokeWidth={1.5} />}
                             {i === 2 && <MessageCircle size={13} strokeWidth={1.5} />}
@@ -979,18 +988,35 @@ export function LoveStorySection() {
                           <span 
                             className={[
                               'font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] transition-colors duration-500',
-                              isActive ? 'text-[#F5F5F0]/90' : isVisited ? 'text-[#A4A4A4]/80' : 'text-[#A4A4A4]/40'
+                              isActive 
+                                ? 'text-white' 
+                                : isVisited 
+                                  ? 'text-[#F5F5F0]/80' 
+                                  : 'text-[#A4A4A4]/50'
                             ].join(' ')}
                           >
                             {story.date}
                           </span>
-                          <div className="w-6 h-px bg-gradient-to-r from-[#F5F5F0]/15 to-transparent" />
+                          <div 
+                            className={[
+                              'w-6 h-px transition-colors duration-500',
+                              isActive
+                                ? 'bg-[#F5F5F0]/40'
+                                : isVisited
+                                  ? 'bg-[#F5F5F0]/20'
+                                  : 'bg-[#F5F5F0]/10'
+                            ].join(' ')}
+                          />
                         </div>
 
                         <h3 
                           className={[
                             'font-serif text-[22px] md:text-[26px] mb-3 leading-[1.25] font-light transition-colors duration-500',
-                            isActive ? 'text-[#F5F5F0]' : isVisited ? 'text-[#F5F5F0]/85' : 'text-[#F5F5F0]/50'
+                            isActive 
+                              ? 'text-white font-medium' 
+                              : isVisited 
+                                ? 'text-[#F5F5F0]/85' 
+                                : 'text-[#F5F5F0]/50'
                           ].join(' ')}
                         >
                           {story.title}
@@ -998,7 +1024,11 @@ export function LoveStorySection() {
                         <p 
                           className={[
                             'font-sans text-[13px] md:text-[14px] leading-[1.85] transition-colors duration-500 max-w-prose',
-                            isActive ? 'text-[#A4A4A4]' : isVisited ? 'text-[#A4A4A4]/80' : 'text-[#A4A4A4]/50'
+                            isActive 
+                              ? 'text-white' 
+                              : isVisited 
+                                ? 'text-[#A4A4A4]/80' 
+                                : 'text-[#A4A4A4]/40'
                           ].join(' ')}
                         >
                           {story.description}

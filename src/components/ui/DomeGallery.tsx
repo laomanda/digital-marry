@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useGesture } from '@use-gesture/react'
+import { X } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 type ImageItem = string | { src: string; alt?: string }
 
@@ -759,6 +761,10 @@ export default function DomeGallery({
       opacity: 1 !important;
       pointer-events: all !important;
     }
+    .sphere-root[data-enlarging="true"] #desktop-gallery-close {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
     body.dg-scroll-lock {
       overflow: hidden !important;
       touch-action: none !important;
@@ -811,32 +817,63 @@ export default function DomeGallery({
           </div>
         </div>
 
-        {staticOpenedImage && (
-          <div
-            className="fixed inset-0 z-[150] flex items-center justify-center p-5"
-            role="dialog"
-            aria-modal="true"
-            aria-label={staticOpenedImage.alt}
-          >
-            <button
-              type="button"
-              className="absolute inset-0 cursor-default"
-              style={{ backgroundColor: `${overlayBlurColor}F2` }}
+        <AnimatePresence>
+          {staticOpenedImage && (
+            <motion.div
+              key="static-lightbox"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 z-[150] flex items-center justify-center p-5 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
+              aria-label={staticOpenedImage.alt}
               onClick={() => setStaticOpenedImage(null)}
-              aria-label="Tutup foto"
-            />
-            <img
-              src={staticOpenedImage.src}
-              alt={staticOpenedImage.alt}
-              className={`relative z-10 object-contain ${grayscale ? 'grayscale' : ''}`}
-              style={{
-                width: openedImageWidth,
-                height: openedImageHeight,
-                borderRadius: openedImageBorderRadius,
-              }}
-            />
-          </div>
-        )}
+            >
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 cursor-default"
+                style={{ backgroundColor: `${overlayBlurColor}E6` }}
+              />
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8, rotate: -90 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.8, rotate: 45 }}
+                transition={{ type: 'spring', damping: 20, stiffness: 300, delay: 0.05 }}
+                type="button"
+                className="absolute right-6 top-6 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-[#F5F5F0]/16 bg-[#050505]/60 text-[#F5F5F0] transition-all duration-300 hover:bg-[#F5F5F0] hover:text-[#050505] hover:border-transparent active:scale-95 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0]"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setStaticOpenedImage(null)
+                }}
+                aria-label="Tutup foto"
+              >
+                <X size={18} strokeWidth={1.5} />
+              </motion.button>
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.92, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+                className="relative z-10 overflow-hidden shadow-[0_24px_50px_rgba(0,0,0,0.6)]"
+                style={{ borderRadius: openedImageBorderRadius }}
+              >
+                <img
+                  src={staticOpenedImage.src}
+                  alt={staticOpenedImage.alt}
+                  className={`max-h-[80vh] max-w-[90vw] object-contain ${grayscale ? 'grayscale' : ''}`}
+                  style={{
+                    width: openedImageWidth,
+                    height: openedImageHeight,
+                  }}
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     )
   }
@@ -975,6 +1012,21 @@ export default function DomeGallery({
               style={{ background: 'rgba(0, 0, 0, 0.4)', backdropFilter: 'blur(3px)' }}
               aria-hidden="true"
             />
+            <button
+              type="button"
+              className="absolute right-8 top-8 z-30 flex h-10 w-10 items-center justify-center rounded-full border border-[#F5F5F0]/16 bg-[#050505]/60 text-[#F5F5F0] opacity-0 transition-all duration-500 hover:bg-[#F5F5F0] hover:text-[#050505] hover:border-transparent active:scale-95 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0] pointer-events-none"
+              style={{
+                transitionProperty: 'opacity, transform, background-color, color, border-color'
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
+                closeEnlargedImage()
+              }}
+              id="desktop-gallery-close"
+              aria-label="Tutup foto"
+            >
+              <X size={18} strokeWidth={1.5} />
+            </button>
             <div
               ref={frameRef}
               className="viewer-frame flex aspect-square h-full"
