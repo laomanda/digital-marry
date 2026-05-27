@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { animate } from 'animejs'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
@@ -37,6 +37,25 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
   const nameRef = useRef<HTMLHeadingElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
+
+  const [palette, setPalette] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.localStorage.getItem('navbar_palette') || 'black'
+    }
+    return 'black'
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const current = window.localStorage.getItem('navbar_palette') || 'black'
+      if (current !== palette) {
+        setPalette(current)
+      }
+    }, 250)
+    return () => clearInterval(interval)
+  }, [palette])
+
+  const isBurgundy = palette === 'burgundy'
 
   const coupleName = `${weddingData.bride.firstName} & ${weddingData.groom.firstName}`
   const heroImage =
@@ -209,7 +228,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
       data-section
       data-theme="dark"
       data-wow="true"
-      className="relative min-h-screen w-full overflow-hidden bg-[#050505]"
+      className={`relative min-h-screen w-full overflow-hidden ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'}`}
     >
       <div ref={bgRef} className="absolute inset-0 will-change-transform" aria-hidden="true">
         <div data-hero-bg-scale className="absolute inset-0 will-change-transform">
@@ -226,18 +245,25 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
       <div
         ref={overlayRef}
         data-hero-overlay
-        className="absolute inset-0 bg-[#050505]"
+        className={`absolute inset-0 ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'}`}
         style={{ opacity: 0.86 }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.92)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.18)_72%,rgba(5,5,5,0.48)_100%)]" />
+      <div className={`pointer-events-none absolute inset-0 ${
+        isBurgundy 
+          ? 'bg-[linear-gradient(90deg,rgba(74,31,42,0.92)_0%,rgba(74,31,42,0.62)_34%,rgba(74,31,42,0.18)_72%,rgba(74,31,42,0.48)_100%)]'
+          : 'bg-[linear-gradient(90deg,rgba(5,5,5,0.92)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.18)_72%,rgba(5,5,5,0.48)_100%)]'
+      }`} />
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            'radial-gradient(circle at 72% 28%, transparent 0%, rgba(5,5,5,0.28) 34%, rgba(5,5,5,0.78) 100%)',
+          background: isBurgundy
+            ? 'radial-gradient(circle at 72% 28%, transparent 0%, rgba(74,31,42,0.28) 34%, rgba(74,31,42,0.78) 100%)'
+            : 'radial-gradient(circle at 72% 28%, transparent 0%, rgba(5,5,5,0.28) 34%, rgba(5,5,5,0.78) 100%)',
         }}
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#050505] via-[#050505]/78 to-transparent" />
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t ${
+        isBurgundy ? 'from-[#4A1F2A] via-[#4A1F2A]/78' : 'from-[#050505] via-[#050505]/78'
+      } to-transparent`} />
 
       <div className="pointer-events-none absolute left-6 right-6 top-8 z-10 md:left-10 md:right-10 lg:left-16 lg:right-16">
         <div data-hero-line className="h-px w-full bg-[rgba(245,245,240,0.22)]" />
@@ -323,7 +349,9 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
                 <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#F5F5F0]/45 to-transparent" />
                 <span
                   data-hero-scroll-dot
-                  className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full border border-[#F5F5F0]/70 bg-[#050505] shadow-[0_0_16px_rgba(245,245,240,0.18)]"
+                  className={`absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full border border-[#F5F5F0]/70 shadow-[0_0_16px_rgba(245,245,240,0.18)] ${
+                    isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'
+                  }`}
                 />
               </div>
             </div>

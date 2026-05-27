@@ -237,8 +237,8 @@ export default function Navbar({ visible = true }: NavbarProps) {
             <span className="pointer-events-none absolute left-5 top-24 h-12 w-12 border-l border-t border-[color:var(--menu-border)] md:left-10 md:top-28" />
             <span className="pointer-events-none absolute bottom-8 right-5 h-12 w-12 border-b border-r border-[color:var(--menu-border)] md:bottom-10 md:right-10" />
 
-            <div className="container-base relative flex min-h-dvh flex-col justify-center pb-5 pt-20 md:pt-20">
-              <div className="mb-3 flex items-end justify-between gap-6 border-b border-[color:var(--menu-border)] pb-3 md:mb-4">
+            <div className="container-base relative flex min-h-dvh flex-col justify-center py-[4vh] md:py-[4vh]">
+              <div className="mb-3 flex items-end justify-between gap-6 border-b border-[color:var(--menu-border)] pb-3 md:mb-[3vh] md:pb-[1.5vh]">
                 <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-[color:var(--menu-muted)]">
                   Navigation
                 </p>
@@ -283,7 +283,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
                         <a
                           href={link.href}
                           data-cursor-label={link.label.toUpperCase()}
-                          className="group grid grid-cols-[2.25rem_2.75rem_minmax(0,1fr)] items-center gap-3 border-b border-[color:var(--menu-border)] py-3 transition-colors duration-300 hover:border-[color:var(--menu-text)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--menu-text)] sm:grid-cols-[3.5rem_3rem_minmax(0,1fr)_auto] sm:gap-5 md:py-3"
+                          className="group grid grid-cols-[2.25rem_2.75rem_minmax(0,1fr)] items-center gap-3 border-b border-[color:var(--menu-border)] py-3 transition-colors duration-300 hover:border-[color:var(--menu-text)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--menu-text)] sm:grid-cols-[3.5rem_3rem_minmax(0,1fr)_auto] sm:gap-5 md:py-[calc(1.1vh+4px)] lg:py-[calc(1.3vh+4px)]"
                           onClick={closeMenu}
                         >
                           <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[color:var(--menu-muted)] transition-colors duration-300 group-hover:text-[color:var(--menu-text)]">
@@ -291,7 +291,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
                           </span>
                           <MenuIconMark Icon={Icon} />
                           <span
-                            className="font-serif text-[clamp(32px,4.8vw,58px)] leading-[0.9] tracking-normal text-[color:var(--menu-text)] opacity-75 transition-all duration-500 group-hover:translate-x-2 group-hover:opacity-100"
+                            className="font-serif text-[clamp(28px,4.5vh,48px)] leading-[0.9] tracking-normal text-[color:var(--menu-text)] opacity-75 transition-all duration-500 group-hover:translate-x-2 group-hover:opacity-100"
                             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
                           >
                             {link.label}
@@ -306,7 +306,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
                 </ul>
               </motion.nav>
 
-              <div className="mt-3 flex flex-col gap-3 border-t border-[color:var(--menu-border)] pt-3 font-mono text-[10px] uppercase tracking-[0.28em] text-[color:var(--menu-muted)] md:flex-row md:items-end md:justify-between">
+              <div className="mt-3 flex flex-col gap-3 border-t border-[color:var(--menu-border)] pt-3 font-mono text-[10px] uppercase tracking-[0.28em] text-[color:var(--menu-muted)] md:mt-[3vh] md:pt-[1.5vh] md:flex-row md:items-end md:justify-between">
                 <span>{coupleName}</span>
 
                 <div className="flex flex-col gap-2 md:items-end">

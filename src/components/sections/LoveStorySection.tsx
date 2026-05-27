@@ -27,6 +27,25 @@ export function LoveStorySection() {
   const [videoError, setVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  const [palette, setPalette] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.localStorage.getItem('navbar_palette') || 'black';
+    }
+    return 'black';
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const current = window.localStorage.getItem('navbar_palette') || 'black';
+      if (current !== palette) {
+        setPalette(current);
+      }
+    }, 250);
+    return () => clearInterval(interval);
+  }, [palette]);
+
+  const isBurgundy = palette === 'burgundy';
+
   const fallbackImage = 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&fit=crop';
 
   useEffect(() => {
@@ -577,7 +596,7 @@ export function LoveStorySection() {
       data-section 
       data-theme="dark" 
       data-wow="true" 
-      className="bg-[#111111] py-24 md:py-32 lg:py-48 relative overflow-hidden"
+      className={`py-24 md:py-32 lg:py-48 relative overflow-hidden transition-colors duration-500 ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#111111]'}`}
       ref={sectionRef}
     >
       {/* Fallback Static Background Image (always present behind video, or fully active when video is absent/disabled) */}
@@ -609,20 +628,22 @@ export function LoveStorySection() {
       <div 
         className="absolute inset-0 pointer-events-none z-[1] transition-colors duration-1000" 
         style={{
-          background: 'radial-gradient(circle at center, rgba(5,5,5,0.74) 0%, rgba(5,5,5,0.82) 100%)'
+          background: isBurgundy 
+            ? 'radial-gradient(circle at center, rgba(74,31,42,0.72) 0%, rgba(35,12,20,0.88) 100%)'
+            : 'radial-gradient(circle at center, rgba(5,5,5,0.74) 0%, rgba(5,5,5,0.82) 100%)'
         }}
       />
 
       <Container>
         {/* Intro Header */}
         <div className="flex flex-col items-center text-center mb-16 lg:mb-32 relative z-10">
-          <span className="intro-anim font-mono text-[11px] md:text-[12px] tracking-[0.25em] text-[#A4A4A4] uppercase mb-6">
+          <span className={`intro-anim font-mono text-[11px] md:text-[12px] tracking-[0.25em] uppercase mb-6 transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
             Cerita Kami
           </span>
           <h2 className="intro-anim font-serif text-[36px] md:text-[56px] lg:text-[72px] text-[#F5F5F0] leading-[1.1] font-light max-w-2xl">
             Awal Kisah Kami
           </h2>
-          <p className="intro-anim mt-6 text-[14px] md:text-[16px] text-[#A4A4A4] font-sans max-w-md px-4">
+          <p className={`intro-anim mt-6 text-[14px] md:text-[16px] font-sans max-w-md px-4 transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
             Setiap cerita memiliki awal, dan inilah bagian kecil dari perjalanan kami.
           </p>
         </div>
@@ -635,22 +656,23 @@ export function LoveStorySection() {
             <path 
               d="M 15 5 C 50 5, 85 15, 85 25 C 85 35, 15 35, 15 45 C 15 55, 85 55, 85 65 C 85 75, 25 75, 25 85 C 25 93, 50 93, 50 100" 
               fill="none" 
-              stroke="rgba(245,245,240,0.15)" 
+              stroke={isBurgundy ? 'rgba(245,245,240,0.18)' : 'rgba(245,245,240,0.15)'} 
               strokeWidth="2.0" 
               vectorEffect="non-scaling-stroke"
+              className="transition-colors duration-500"
             />
             {/* Animated Draw Progress Path */}
             <path 
               ref={desktopPathRef}
               d="M 15 5 C 50 5, 85 15, 85 25 C 85 35, 15 35, 15 45 C 15 55, 85 55, 85 65 C 85 75, 25 75, 25 85 C 25 93, 50 93, 50 100" 
               fill="none" 
-              stroke="rgba(245,245,240,0.42)" 
+              stroke={isBurgundy ? 'rgba(245,245,240,0.45)' : 'rgba(245,245,240,0.42)'} 
               strokeWidth="2.0" 
               vectorEffect="non-scaling-stroke"
               pathLength="1"
               strokeDasharray="1"
               style={{ strokeDashoffset: shouldReduceMotion ? 0 : 1 }}
-              className="transition-opacity duration-300"
+              className="transition-all duration-300"
             />
           </svg>
 
@@ -689,7 +711,7 @@ export function LoveStorySection() {
                       ? 'bg-[#F5F5F0] scale-150 border-[#F5F5F0] shadow-[0_0_14px_rgba(245,245,240,0.65)] z-20'
                       : isVisited 
                         ? 'bg-[#F5F5F0]/80 scale-100 border-[#F5F5F0]/40 shadow-[0_0_8px_rgba(245,245,240,0.25)]'
-                        : 'bg-[#111111] border-[#A4A4A4]/40 shadow-none z-0'
+                        : (isBurgundy ? 'bg-[#2B1018] border-[#A4A4A4]/40 shadow-none z-0' : 'bg-[#111111] border-[#A4A4A4]/40 shadow-none z-0')
                   ].join(' ')}
                   aria-hidden="true" 
                 />
@@ -699,10 +721,10 @@ export function LoveStorySection() {
                   className={[
                     'absolute top-1/2 w-[330px] xl:w-[400px] p-8 xl:p-10 border transition-all duration-[600ms] ease-out backdrop-blur-sm desktop-card flex flex-col justify-center rounded-[2px] overflow-hidden group/card cursor-pointer',
                     isActive 
-                      ? 'bg-[#0B0B0B]/95 border-[#F5F5F0]/36 opacity-100 -translate-y-[calc(50%_+_6px)] shadow-[0_16px_40px_rgba(0,0,0,0.45)]'
+                      ? (isBurgundy ? 'bg-[rgba(35,12,20,0.95)] border-[#F5F5F0]/36 opacity-100 -translate-y-[calc(50%_+_6px)] shadow-[0_16px_40px_rgba(0,0,0,0.45)]' : 'bg-[#0B0B0B]/95 border-[#F5F5F0]/36 opacity-100 -translate-y-[calc(50%_+_6px)] shadow-[0_16px_40px_rgba(0,0,0,0.45)]')
                       : isVisited
-                        ? 'bg-[#080808]/85 border-[#F5F5F0]/20 opacity-[0.88] hover:opacity-[0.95] hover:border-[#F5F5F0]/28 hover:-translate-y-[calc(50%_+_4px)] -translate-y-1/2 shadow-[0_8px_24px_rgba(0,0,0,0.25)]'
-                        : 'bg-[#080808]/70 border-[#F5F5F0]/10 opacity-[0.45] hover:opacity-[0.72] hover:border-[#F5F5F0]/20 hover:-translate-y-[calc(50%_+_2px)] -translate-y-1/2 shadow-none pointer-events-none',
+                        ? (isBurgundy ? 'bg-[rgba(35,12,20,0.84)] border-[#F5F5F0]/20 opacity-[0.88] hover:opacity-[0.95] hover:border-[#F5F5F0]/28 hover:-translate-y-[calc(50%_+_4px)] -translate-y-1/2 shadow-[0_8px_24px_rgba(0,0,0,0.25)]' : 'bg-[#080808]/85 border-[#F5F5F0]/20 opacity-[0.88] hover:opacity-[0.95] hover:border-[#F5F5F0]/28 hover:-translate-y-[calc(50%_+_4px)] -translate-y-1/2 shadow-[0_8px_24px_rgba(0,0,0,0.25)]')
+                        : (isBurgundy ? 'bg-[rgba(35,12,20,0.70)] border-[#F5F5F0]/10 opacity-[0.45] hover:opacity-[0.72] hover:border-[#F5F5F0]/20 hover:-translate-y-[calc(50%_+_2px)] -translate-y-1/2 shadow-none pointer-events-none' : 'bg-[#080808]/70 border-[#F5F5F0]/10 opacity-[0.45] hover:opacity-[0.72] hover:border-[#F5F5F0]/20 hover:-translate-y-[calc(50%_+_2px)] -translate-y-1/2 shadow-none pointer-events-none'),
                     node.align === 'right' ? 'left-6 xl:left-10' : 'right-6 xl:right-10 text-right'
                   ].join(' ')}
                 >
@@ -797,7 +819,7 @@ export function LoveStorySection() {
                       <span 
                         className={[
                           'font-mono text-[10px] xl:text-[11px] uppercase tracking-[0.25em] transition-colors duration-500',
-                          isActive ? 'text-[#F5F5F0]/90' : isVisited ? 'text-[#A4A4A4]/80' : 'text-[#A4A4A4]/40'
+                          isActive ? 'text-[#F5F5F0]/90' : isVisited ? (isBurgundy ? 'text-[rgba(245,245,240,0.80)]' : 'text-[#A4A4A4]/80') : (isBurgundy ? 'text-[rgba(245,245,240,0.45)]' : 'text-[#A4A4A4]/40')
                         ].join(' ')}
                       >
                         {story.date}
@@ -808,7 +830,7 @@ export function LoveStorySection() {
                     <h3 
                       className={[
                         'font-serif text-[22px] xl:text-[28px] mb-3 leading-[1.25] font-light transition-colors duration-500',
-                        isActive ? 'text-[#F5F5F0]' : isVisited ? 'text-[#F5F5F0]/85' : 'text-[#F5F5F0]/50'
+                        isActive ? 'text-[#F5F5F0]' : isVisited ? 'text-[#F5F5F0]/85' : (isBurgundy ? 'text-[rgba(245,245,240,0.50)]' : 'text-[#F5F5F0]/50')
                       ].join(' ')}
                     >
                       {story.title}
@@ -816,7 +838,7 @@ export function LoveStorySection() {
                     <p 
                       className={[
                         'font-sans text-[13px] xl:text-[14px] leading-[1.85] transition-colors duration-500 max-w-prose',
-                        isActive ? 'text-[#A4A4A4]' : isVisited ? 'text-[#A4A4A4]/80' : 'text-[#A4A4A4]/50'
+                        isActive ? (isBurgundy ? 'text-[rgba(245,245,240,0.72)]' : 'text-[#A4A4A4]') : isVisited ? (isBurgundy ? 'text-[rgba(245,245,240,0.60)]' : 'text-[#A4A4A4]/80') : (isBurgundy ? 'text-[rgba(245,245,240,0.45)]' : 'text-[#A4A4A4]/50')
                       ].join(' ')}
                     >
                       {story.description}
@@ -835,19 +857,19 @@ export function LoveStorySection() {
           {/* Vertical Path Line */}
           <div className="absolute left-[28px] md:left-[48px] top-0 bottom-0 w-[2px] -translate-x-1/2 z-0">
             <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-              <line x1="1" y1="0" x2="1" y2="100%" stroke="rgba(245,245,240,0.14)" strokeWidth="1.6" />
+              <line x1="1" y1="0" x2="1" y2="100%" stroke={isBurgundy ? "rgba(245,245,240,0.18)" : "rgba(245,245,240,0.14)"} strokeWidth="1.6" className="transition-colors duration-500" />
               <line 
                 ref={mobilePathRef}
                 x1="1" 
                 y1="0" 
                 x2="1" 
                 y2="100%" 
-                stroke="rgba(245,245,240,0.45)" 
+                stroke={isBurgundy ? "rgba(245,245,240,0.45)" : "rgba(245,245,240,0.45)"} 
                 strokeWidth="1.8" 
                 pathLength="1" 
                 strokeDasharray="1" 
                 style={{ strokeDashoffset: shouldReduceMotion ? 0 : 1 }}
-                className="transition-opacity duration-300"
+                className="transition-all duration-300"
               />
             </svg>
           </div>
@@ -866,12 +888,13 @@ export function LoveStorySection() {
                   <div className="absolute left-[28px] md:left-[48px] top-6 -translate-x-1/2 z-10">
                     <div 
                       className={[
-                        'w-[9px] h-[9px] rounded-full transition-all duration-500 mobile-dot shadow-[0_0_0_4px_#111111]',
+                        'w-[9px] h-[9px] rounded-full transition-all duration-500 mobile-dot',
+                        isBurgundy ? 'shadow-[0_0_0_4px_#4A1F2A]' : 'shadow-[0_0_0_4px_#111111]',
                         isActive 
                           ? 'bg-[#F5F5F0] scale-125 border-[#F5F5F0] shadow-[0_0_10px_rgba(245,245,240,0.5)]'
                           : isVisited 
                             ? 'bg-[#F5F5F0]/80 border-[#F5F5F0]/40 shadow-[0_0_6px_rgba(245,245,240,0.15)]'
-                            : 'bg-[#111111] border-[#A4A4A4]/40 shadow-none'
+                            : (isBurgundy ? 'bg-[#2B1018] border-[#A4A4A4]/40 shadow-none' : 'bg-[#111111] border-[#A4A4A4]/40 shadow-none')
                       ].join(' ')}
                       aria-hidden="true" 
                     />
@@ -883,10 +906,10 @@ export function LoveStorySection() {
                       className={[
                         'w-full p-5 sm:p-8 border transition-all duration-[600ms] ease-out mobile-card flex flex-col justify-center rounded-[2px] overflow-hidden group/card cursor-pointer relative backdrop-blur-sm',
                         isActive 
-                          ? 'bg-[#0B0B0B]/95 border-[#F5F5F0]/36 opacity-100 -translate-y-1 shadow-[0_12px_32px_rgba(0,0,0,0.5)]'
+                          ? (isBurgundy ? 'bg-[rgba(35,12,20,0.96)] border-[#F5F5F0]/36 opacity-100 -translate-y-1 shadow-[0_12px_32px_rgba(0,0,0,0.5)]' : 'bg-[#0B0B0B]/95 border-[#F5F5F0]/36 opacity-100 -translate-y-1 shadow-[0_12px_32px_rgba(0,0,0,0.5)]')
                           : isVisited 
-                            ? 'bg-[#080808]/90 border-[#F5F5F0]/20 opacity-[0.95] hover:-translate-y-1 shadow-[0_6px_20px_rgba(0,0,0,0.3)]'
-                            : 'bg-[#080808]/80 border-[#F5F5F0]/10 opacity-[0.80] hover:-translate-y-0.5 shadow-none pointer-events-none'
+                            ? (isBurgundy ? 'bg-[rgba(35,12,20,0.88)] border-[#F5F5F0]/20 opacity-[0.95] hover:-translate-y-1 shadow-[0_6px_20px_rgba(0,0,0,0.3)]' : 'bg-[#080808]/90 border-[#F5F5F0]/20 opacity-[0.95] hover:-translate-y-1 shadow-[0_6px_20px_rgba(0,0,0,0.3)]')
+                            : (isBurgundy ? 'bg-[rgba(35,12,20,0.78)] border-[#F5F5F0]/10 opacity-[0.80] hover:-translate-y-0.5 shadow-none pointer-events-none' : 'bg-[#080808]/80 border-[#F5F5F0]/10 opacity-[0.80] hover:-translate-y-0.5 shadow-none pointer-events-none')
                       ].join(' ')}
                     >
                       {/* Top Hairline */}
@@ -992,7 +1015,7 @@ export function LoveStorySection() {
                                 ? 'text-white' 
                                 : isVisited 
                                   ? 'text-[#F5F5F0]/80' 
-                                  : 'text-[#A4A4A4]/50'
+                                  : (isBurgundy ? 'text-[rgba(245,245,240,0.45)]' : 'text-[#A4A4A4]/50')
                             ].join(' ')}
                           >
                             {story.date}
@@ -1025,10 +1048,10 @@ export function LoveStorySection() {
                           className={[
                             'font-sans text-[13px] md:text-[14px] leading-[1.85] transition-colors duration-500 max-w-prose',
                             isActive 
-                              ? 'text-white' 
+                              ? (isBurgundy ? 'text-[rgba(245,245,240,0.72)]' : 'text-white')
                               : isVisited 
-                                ? 'text-[#A4A4A4]/80' 
-                                : 'text-[#A4A4A4]/40'
+                                ? (isBurgundy ? 'text-[rgba(245,245,240,0.60)]' : 'text-[#A4A4A4]/80') 
+                                : (isBurgundy ? 'text-[rgba(245,245,240,0.45)]' : 'text-[#A4A4A4]/40')
                           ].join(' ')}
                         >
                           {story.description}
@@ -1049,7 +1072,7 @@ export function LoveStorySection() {
             <div className="relative flex items-center justify-center h-16 w-px">
               <div 
                 data-final-decor 
-                className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-[#F5F5F0]/30 to-transparent" 
+                className={`absolute top-0 bottom-0 w-px transition-colors duration-500 ${isBurgundy ? 'bg-gradient-to-b from-[rgba(245,245,240,0.34)] to-transparent' : 'bg-gradient-to-b from-[#F5F5F0]/30 to-transparent'}`} 
                 style={{ opacity: shouldReduceMotion ? 0.4 : 0, transform: shouldReduceMotion ? 'none' : 'scaleY(0)' }} 
               />
               <div 
@@ -1059,7 +1082,7 @@ export function LoveStorySection() {
               />
             </div>
             <span 
-              className="font-serif italic text-[18px] md:text-[22px] text-[#A4A4A4] px-4 block tracking-wide transition-opacity duration-700" 
+              className={`font-serif italic text-[18px] md:text-[22px] px-4 block tracking-wide transition-opacity transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`} 
               style={{ opacity: shouldReduceMotion ? 1 : 0 }}
             >
               Kini, kami melangkah bersama.
