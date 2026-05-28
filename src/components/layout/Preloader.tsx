@@ -14,6 +14,25 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const [isVisible, setIsVisible] = useState(true);
   const { shouldReduceMotion } = useReducedMotionSafe();
 
+  const [palette, setPalette] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.localStorage.getItem('navbar_palette') || 'black';
+    }
+    return 'black';
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const current = window.localStorage.getItem('navbar_palette') || 'black';
+      if (current !== palette) {
+        setPalette(current);
+      }
+    }, 250);
+    return () => clearInterval(interval);
+  }, [palette]);
+
+  const isBurgundy = palette === 'burgundy';
+
   useEffect(() => {
     // Prevent scrolling while preloader is active
     document.body.style.overflow = 'hidden';
@@ -73,14 +92,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-[9999] bg-[#050505] text-[#F5F5F0] flex flex-col items-center justify-center overflow-hidden"
+          className={`fixed inset-0 z-[9999] text-[#F5F5F0] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'}`}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: shouldReduceMotion ? 0.3 : 1.2, ease: [0.22, 1, 0.36, 1] } }}
           role="status"
           aria-label="Loading wedding invitation"
         >
           {/* Subtle Film Grain / Vignette */}
-          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.95)_100%)] opacity-90 z-0" aria-hidden="true" />
+          <div className={`absolute inset-0 pointer-events-none opacity-90 z-0 transition-colors duration-500 ${isBurgundy ? 'bg-[radial-gradient(circle_at_center,rgba(74,31,42,0.10)_0%,#2B1018_100%)]' : 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.95)_100%)]'}`} aria-hidden="true" />
           
           {/* Top Left Editorial Mark */}
           <div className="absolute top-8 left-8 md:top-12 md:left-12 overflow-hidden z-10">
@@ -99,7 +118,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               initial={{ y: '100%', opacity: 0 }} 
               animate={{ y: 0, opacity: 1 }} 
               transition={{ delay: 0.3, duration: 1, ease: 'easeOut' }}
-              className="font-mono text-[9px] md:text-[10px] tracking-[0.4em] text-[#A4A4A4] uppercase"
+              className={`font-mono text-[9px] md:text-[10px] tracking-[0.4em] uppercase transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}
             >
               {weddingData.wedding.dateFormatted}
             </motion.div>
@@ -147,7 +166,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                 <span className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#F5F5F0] font-light italic tabular-nums lining-nums tracking-widest">
                   {String(progress).padStart(3, '0')}
                 </span>
-                <span className="font-serif text-lg md:text-xl text-[#A4A4A4] italic">%</span>
+                <span className={`font-serif text-lg md:text-xl italic transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>%</span>
               </div>
             </motion.div>
 
@@ -164,7 +183,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  className="block font-mono text-[8px] md:text-[9px] tracking-[0.5em] text-[#A4A4A4] uppercase whitespace-nowrap"
+                  className={`block font-mono text-[8px] md:text-[9px] tracking-[0.5em] uppercase whitespace-nowrap transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}
                 >
                   {loadingLabel}
                 </motion.span>

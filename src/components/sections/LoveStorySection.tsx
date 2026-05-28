@@ -5,6 +5,7 @@ import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
 import { Container } from '../ui/Container';
 import { animate } from 'animejs';
 import { Palette, Coffee, MessageCircle, Gem, Heart } from 'lucide-react';
+import loveStoryVideo from '../../assets/video/love-story.mp4';
 
 export function LoveStorySection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -596,7 +597,7 @@ export function LoveStorySection() {
       data-section 
       data-theme="dark" 
       data-wow="true" 
-      className={`py-24 md:py-32 lg:py-48 relative overflow-hidden transition-colors duration-500 ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#111111]'}`}
+      className={`py-24 md:py-32 lg:py-48 relative -mt-px overflow-hidden transition-colors duration-500 ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#111111]'}`}
       ref={sectionRef}
     >
       {/* Fallback Static Background Image (always present behind video, or fully active when video is absent/disabled) */}
@@ -617,10 +618,10 @@ export function LoveStorySection() {
           playsInline
           preload="metadata"
           onError={() => setVideoError(true)}
-          className="absolute inset-0 w-full h-full object-cover grayscale opacity-[0.24] pointer-events-none mix-blend-luminosity hidden lg:block"
+          className="absolute inset-0 w-full h-full object-cover grayscale opacity-[0.6] pointer-events-none hidden lg:block"
           aria-hidden="true"
         >
-          <source src="/assets/lovestory-bg.mp4" type="video/mp4" />
+          <source src={loveStoryVideo} type="video/mp4" />
         </video>
       )}
 
@@ -629,9 +630,19 @@ export function LoveStorySection() {
         className="absolute inset-0 pointer-events-none z-[1] transition-colors duration-1000" 
         style={{
           background: isBurgundy 
-            ? 'radial-gradient(circle at center, rgba(74,31,42,0.72) 0%, rgba(35,12,20,0.88) 100%)'
-            : 'radial-gradient(circle at center, rgba(5,5,5,0.74) 0%, rgba(5,5,5,0.82) 100%)'
+            ? 'radial-gradient(circle at center, rgba(74,31,42,0.3) 0%, rgba(35,12,20,0.95) 100%)'
+            : 'radial-gradient(circle at center, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.95) 100%)'
         }}
+      />
+
+      {/* Top Gradient Fade to blend with CoupleSection */}
+      <div 
+        className={`absolute top-0 left-0 right-0 h-40 md:h-64 z-[2] bg-gradient-to-b transition-colors duration-1000 pointer-events-none ${isBurgundy ? 'from-[#4A1F2A] to-[#4A1F2A]/0' : 'from-[#050505] to-[#050505]/0'}`} 
+      />
+
+      {/* Bottom Gradient Fade to blend with CountdownSection */}
+      <div 
+        className={`absolute bottom-0 left-0 right-0 h-40 md:h-64 z-[2] bg-gradient-to-t transition-colors duration-1000 pointer-events-none ${isBurgundy ? 'from-[#4A1F2A] to-[#4A1F2A]/0' : 'from-[#050505] to-[#050505]/0'}`} 
       />
 
       <Container>
