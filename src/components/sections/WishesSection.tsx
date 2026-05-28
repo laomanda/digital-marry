@@ -1,11 +1,13 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { Quote } from 'lucide-react'
 import { weddingData } from '../../data/wedding.data'
 import { GuestWish } from '../../types/wish'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette'
 
 interface WishesSectionProps {
   guestWishes?: GuestWish[]
+  palette?: 'default' | 'burgundy' | 'taupe'
 }
 
 function getInitials(name: string) {
@@ -160,23 +162,7 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
   const { shouldReduceMotion } = useReducedMotionSafe()
   const [pausedRowIndex, setPausedRowIndex] = useState<number | null>(null)
 
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
-      }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
-
+  const { palette } = usePalette();
   const isBurgundy = palette === 'burgundy';
   const isTaupe = palette === 'taupe';
 

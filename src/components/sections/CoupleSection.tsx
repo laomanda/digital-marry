@@ -4,6 +4,7 @@ import { animate } from 'animejs'
 import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette'
 import { Container } from '../ui/Container'
 
 type Person = typeof weddingData.bride
@@ -372,23 +373,7 @@ export function CoupleSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeSide, setActiveSide] = useState<'bride' | 'groom' | null>(null)
   const heartIsActive = activeSide !== null
-
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black'
-    }
-    return 'black'
-  })
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black'
-      if (current !== palette) {
-        setPalette(current)
-      }
-    }, 250)
-    return () => clearInterval(interval)
-  }, [palette])
+  const { palette } = usePalette()
 
   const isBurgundy = palette === 'burgundy'
   const isTaupe = palette === 'taupe'

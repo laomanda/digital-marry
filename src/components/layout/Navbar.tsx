@@ -13,6 +13,7 @@ import {
 import { cn } from '../../lib/utils'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette'
 
 const navLinks = [
   { number: '01', label: 'Home', href: '#hero', subtitle: 'Pembuka', icon: Home },
@@ -56,16 +57,7 @@ interface NavbarProps {
   visible?: boolean
 }
 
-function getStoredPalette(): PaletteKey {
-  if (typeof window === 'undefined') return 'black'
-
-  try {
-    const storedPalette = window.localStorage.getItem(PALETTE_STORAGE_KEY)
-    return storedPalette && storedPalette in palettes ? (storedPalette as PaletteKey) : 'black'
-  } catch {
-    return 'black'
-  }
-}
+// Removed getStoredPalette as it is handled by usePalette hook
 
 function MenuIconMark({ Icon }: { Icon: LucideIcon }) {
   return (
@@ -83,7 +75,7 @@ function MenuIconMark({ Icon }: { Icon: LucideIcon }) {
 
 export default function Navbar({ visible = true }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [palette, setPalette] = useState<PaletteKey>(getStoredPalette)
+  const { palette } = usePalette()
   const { shouldReduceMotion } = useReducedMotionSafe()
   const coupleName = `${weddingData.bride.firstName} & ${weddingData.groom.firstName}`
   const activePalette = palettes[palette]
@@ -167,12 +159,12 @@ export default function Navbar({ visible = true }: NavbarProps) {
   const closeMenu = () => setMenuOpen(false)
 
   const selectPalette = (key: PaletteKey) => {
-    setPalette(key)
-
     try {
       window.localStorage.setItem(PALETTE_STORAGE_KEY, key)
+      window.dispatchEvent(new CustomEvent('navbar-palette-change', { detail: key }))
     } catch {
       // Palette persistence is optional; the menu should keep working without storage.
+      window.dispatchEvent(new CustomEvent('navbar-palette-change', { detail: key }))
     }
   }
 

@@ -4,6 +4,7 @@ import { ArrowUpRight, Calendar, Clock, MapPin } from 'lucide-react'
 import eventBg from '../../assets/lainnya/bg-event.webp'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 
 type EventItem = (typeof weddingData.events)[number]
@@ -144,28 +145,28 @@ function EventCard({
           </button>
         </div>
 
-        <dl className={`grid gap-6 border-t pt-7 [@media(max-height:650px)]:grid-cols-2 [@media(max-height:650px)]:gap-4 [@media(max-height:650px)]:pt-5 ${isTaupe ? 'border-[rgba(17,17,17,0.12)]' : 'border-[#F5F5F0]/10'}`}>
+        <div className="mt-8 flex flex-col gap-6 border-t pt-7 [@media(max-height:650px)]:mt-5 [@media(max-height:650px)]:gap-4 [@media(max-height:650px)]:pt-5">
           <div className="grid grid-cols-[18px_1fr] gap-4">
             <Calendar size={16} strokeWidth={1.5} className={`mt-0.5 transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`} aria-hidden="true" />
-            <div>
+            <dl>
               <dt className={`mb-1 font-mono text-[9px] uppercase transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>Tanggal &amp; Waktu</dt>
               <dd className={`text-[14px] leading-6 ${isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]'}`}>{event.date}</dd>
               <dd className={`mt-1 flex items-center gap-2 text-[14px] leading-6 transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
                 <Clock size={14} strokeWidth={1.5} aria-hidden="true" />
                 <span>{event.time}</span>
               </dd>
-            </div>
+            </dl>
           </div>
 
           <div className="grid grid-cols-[18px_1fr] gap-4">
             <MapPin size={16} strokeWidth={1.5} className={`mt-0.5 transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`} aria-hidden="true" />
-            <div>
+            <dl>
               <dt className={`mb-1 font-mono text-[9px] uppercase transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>Lokasi</dt>
               <dd className={`text-[14px] font-medium leading-6 ${isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]'}`}>{event.venue}</dd>
               <dd className={`mt-1 text-[13px] leading-6 transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>{event.address}</dd>
-            </div>
+            </dl>
           </div>
-        </dl>
+        </div>
 
         <div className="mt-8 pt-2 [@media(max-height:650px)]:mt-5">
           <a
@@ -403,23 +404,7 @@ export default function EventSection() {
   const trackRef = useRef<HTMLDivElement | null>(null)
   const [activeEventId, setActiveEventId] = useState(events[0]?.id || '')
 
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
-      }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
-
+  const { palette } = usePalette();
   const isBurgundy = palette === 'burgundy';
   const isTaupe = palette === 'taupe';
 

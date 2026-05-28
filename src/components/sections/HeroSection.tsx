@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { animate } from 'animejs'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette'
 
 type HeroSectionProps = {
   isInvitationOpen: boolean
@@ -37,23 +38,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
   const nameRef = useRef<HTMLHeadingElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
-
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black'
-    }
-    return 'black'
-  })
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black'
-      if (current !== palette) {
-        setPalette(current)
-      }
-    }, 250)
-    return () => clearInterval(interval)
-  }, [palette])
+  const { palette } = usePalette()
 
   const isBurgundy = palette === 'burgundy'
   const isTaupe = palette === 'taupe'

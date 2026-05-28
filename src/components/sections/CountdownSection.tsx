@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { weddingData } from '../../data/wedding.data';
 import { useCountdown } from '../../hooks/useCountdown';
-import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
+import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette';
 import { Container } from '../ui/Container';
 
 const tickMarks = Array.from({ length: 60 }, (_, index) => ({
@@ -63,24 +63,8 @@ export default function CountdownSection() {
     { label: 'Detik', value: seconds },
   ];
 
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
-      }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
-
-  const isBurgundy = palette === 'burgundy';
+  const { palette } = usePalette()
+  const isBurgundy = palette === 'burgundy'
   const isTaupe = palette === 'taupe';
 
   const sectionBgClass = isTaupe

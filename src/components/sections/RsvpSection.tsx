@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, X, HelpCircle, ArrowRight, Minus, Plus, LoaderCircle } from 'lucide-react'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette'
 import { cn } from '../../lib/utils'
 import { GuestWish } from '../../types/wish'
 
@@ -23,23 +24,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
   const [submitted, setSubmitted] = useState(false)
   const { shouldReduceMotion } = useReducedMotionSafe()
 
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
-      }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
-
+  const { palette } = usePalette();
   const isBurgundy = palette === 'burgundy';
   const isTaupe = palette === 'taupe';
 

@@ -5,6 +5,7 @@ import { animate } from 'animejs'
 import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette'
 import { cn } from '../../lib/utils'
 import Folder from '../ui/Folder'
 
@@ -45,24 +46,8 @@ export default function GiftSection() {
   const detailRef = useRef<HTMLElement | null>(null)
   const copyButtonRef = useRef<HTMLButtonElement | null>(null)
 
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
-      }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
-
-  const isBurgundy = palette === 'burgundy';
+  const { palette } = usePalette()
+  const isBurgundy = palette === 'burgundy'
   const isTaupe = palette === 'taupe';
 
   const sectionClass = isTaupe

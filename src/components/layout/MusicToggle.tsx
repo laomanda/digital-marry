@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
+import { usePalette } from '../../hooks/usePalette'
 import { gsap } from '../../lib/gsap'
 import { Volume2, VolumeX } from 'lucide-react'
 
@@ -12,23 +13,7 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [hasError, setHasError] = useState(false)
   const hasInitialized = useRef(false)
-
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
-      }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
+  const { palette } = usePalette()
 
   const isBurgundy = palette === 'burgundy';
   const isTaupe = palette === 'taupe';

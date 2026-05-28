@@ -258,7 +258,7 @@ export default function DomeGallery({
       applyTransform(rotationRef.current.x, rotationRef.current.y)
 
       const enlargedOverlay = viewerRef.current?.querySelector('.enlarge') as HTMLElement | null
-      if (enlargedOverlay && frameRef.current && mainRef.current) {
+      if (enlargedOverlay && root.getAttribute('data-enlarging') === 'true' && frameRef.current && mainRef.current) {
         const frameR = frameRef.current.getBoundingClientRect()
         const mainR = mainRef.current.getBoundingClientRect()
 

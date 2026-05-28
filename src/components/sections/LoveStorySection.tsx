@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { gsap, ScrollTrigger } from '../../lib/gsap';
 import { weddingData } from '../../data/wedding.data';
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
+import { usePalette } from '../../hooks/usePalette';
 import { Container } from '../ui/Container';
 import { animate } from 'animejs';
 import { Palette, Coffee, MessageCircle, Gem, Heart } from 'lucide-react';
@@ -27,24 +28,25 @@ export function LoveStorySection() {
   const hasFinalTriggeredRef = useRef(false);
   const [videoError, setVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
+  const [isVideoInView, setIsVideoInView] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
+    if (shouldReduceMotion || isMobile || videoError) return;
+    
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVideoInView(true);
+        observer.disconnect();
       }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
+    }, { rootMargin: '800px 0px' });
 
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    return () => observer.disconnect();
+  }, [shouldReduceMotion, isMobile, videoError]);
+
+  const { palette } = usePalette();
   const isBurgundy = palette === 'burgundy';
   const isTaupe = palette === 'taupe';
 
@@ -626,13 +628,13 @@ export function LoveStorySection() {
       />
 
       {/* Ambient Video Background Layer */}
-      {!shouldReduceMotion && !videoError && !isMobile && (
+      {!shouldReduceMotion && !videoError && !isMobile && isVideoInView && (
         <video
           autoPlay
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="none"
           onError={() => setVideoError(true)}
           className={`absolute inset-0 w-full h-full object-cover grayscale transition-opacity duration-1000 pointer-events-none hidden lg:block ${isTaupe ? 'opacity-[0.28]' : 'opacity-[0.6]'}`}
           aria-hidden="true"

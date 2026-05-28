@@ -4,6 +4,7 @@ import { animate } from 'animejs'
 import { weddingData } from '../../data/wedding.data'
 import { useScrollLock } from '../../hooks/useScrollLock'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette'
 
 interface CoverSectionProps {
   onOpen?: () => void
@@ -37,24 +38,8 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
   const [isAnimating, setIsAnimating] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
-      }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
-
-  const isBurgundy = palette === 'burgundy';
+  const { palette } = usePalette()
+  const isBurgundy = palette === 'burgundy'
   const isTaupe = palette === 'taupe';
 
   const rootClass = isTaupe

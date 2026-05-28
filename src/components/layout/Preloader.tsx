@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { weddingData } from '../../data/wedding.data';
-import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
+import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import { usePalette } from '../../hooks/usePalette';
 import logo from '../../assets/logo.webp';
 
 interface PreloaderProps {
@@ -14,24 +15,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const [isVisible, setIsVisible] = useState(true);
   const { shouldReduceMotion } = useReducedMotionSafe();
 
-  const [palette, setPalette] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.localStorage.getItem('navbar_palette') || 'black';
-    }
-    return 'black';
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const current = window.localStorage.getItem('navbar_palette') || 'black';
-      if (current !== palette) {
-        setPalette(current);
-      }
-    }, 250);
-    return () => clearInterval(interval);
-  }, [palette]);
-
-  const isBurgundy = palette === 'burgundy';
+  const { palette } = usePalette()
+  const isBurgundy = palette === 'burgundy'
   const isTaupe = palette === 'taupe';
 
   const rootClasses = isTaupe
@@ -160,6 +145,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               <img 
                 src={logo} 
                 alt="" 
+                width="400"
+                height="400"
+                fetchPriority="high"
                 className="absolute w-full h-full object-contain pointer-events-none select-none opacity-15 filter blur-[2px] grayscale"
                 aria-hidden="true"
               />
@@ -168,6 +156,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               <img 
                 src={logo} 
                 alt="Wedding logo" 
+                width="400"
+                height="400"
+                fetchPriority="high"
                 className="relative w-full h-full object-contain pointer-events-none select-none opacity-100 will-change-[clip-path]"
                 style={{ 
                   clipPath: shouldReduceMotion ? 'none' : `inset(${100 - rawProgress}% 0 0 0)`,
