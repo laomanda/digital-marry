@@ -32,6 +32,29 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   }, [palette]);
 
   const isBurgundy = palette === 'burgundy';
+  const isTaupe = palette === 'taupe';
+
+  const rootClasses = isTaupe
+    ? 'bg-[#C9AD8F] text-[#111111]'
+    : isBurgundy
+      ? 'bg-[#4A1F2A] text-[#F5F5F0]'
+      : 'bg-[#050505] text-[#F5F5F0]';
+
+  const mutedTextClass = isTaupe
+    ? 'text-[rgba(17,17,17,0.58)]'
+    : isBurgundy
+      ? 'text-[rgba(245,245,240,0.65)]'
+      : 'text-[#A4A4A4]';
+
+  const progressTextClass = isTaupe
+    ? 'text-[#111111]'
+    : 'text-[#F5F5F0]';
+
+  const vignetteClass = isTaupe
+    ? 'bg-[radial-gradient(circle_at_center,rgba(201,173,143,0.05)_0%,rgba(111,82,58,0.34)_100%)]'
+    : isBurgundy
+      ? 'bg-[radial-gradient(circle_at_center,rgba(74,31,42,0.10)_0%,#2B1018_100%)]'
+      : 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.95)_100%)]';
 
   useEffect(() => {
     // Prevent scrolling while preloader is active
@@ -92,14 +115,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className={`fixed inset-0 z-[9999] text-[#F5F5F0] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'}`}
+          className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${rootClasses}`}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: shouldReduceMotion ? 0.3 : 1.2, ease: [0.22, 1, 0.36, 1] } }}
           role="status"
           aria-label="Loading wedding invitation"
         >
           {/* Subtle Film Grain / Vignette */}
-          <div className={`absolute inset-0 pointer-events-none opacity-90 z-0 transition-colors duration-500 ${isBurgundy ? 'bg-[radial-gradient(circle_at_center,rgba(74,31,42,0.10)_0%,#2B1018_100%)]' : 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.95)_100%)]'}`} aria-hidden="true" />
+          <div className={`absolute inset-0 pointer-events-none opacity-90 z-0 transition-colors duration-500 ${vignetteClass}`} aria-hidden="true" />
           
           {/* Top Left Editorial Mark */}
           <div className="absolute top-8 left-8 md:top-12 md:left-12 overflow-hidden z-10">
@@ -118,7 +141,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               initial={{ y: '100%', opacity: 0 }} 
               animate={{ y: 0, opacity: 1 }} 
               transition={{ delay: 0.3, duration: 1, ease: 'easeOut' }}
-              className={`font-mono text-[9px] md:text-[10px] tracking-[0.4em] uppercase transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}
+              className={`font-mono text-[9px] md:text-[10px] tracking-[0.4em] uppercase transition-colors duration-500 ${mutedTextClass}`}
             >
               {weddingData.wedding.dateFormatted}
             </motion.div>
@@ -163,10 +186,10 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               transition={{ delay: 0.5, duration: 1, ease: 'easeOut' }}
             >
               <div className="flex items-baseline gap-2">
-                <span className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#F5F5F0] font-light italic tabular-nums lining-nums tracking-widest">
+                <span className={`font-serif text-4xl md:text-5xl lg:text-6xl font-light italic tabular-nums lining-nums tracking-widest transition-colors duration-500 ${progressTextClass}`}>
                   {String(progress).padStart(3, '0')}
                 </span>
-                <span className={`font-serif text-lg md:text-xl italic transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>%</span>
+                <span className={`font-serif text-lg md:text-xl italic transition-colors duration-500 ${mutedTextClass}`}>%</span>
               </div>
             </motion.div>
 
@@ -183,7 +206,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  className={`block font-mono text-[8px] md:text-[9px] tracking-[0.5em] uppercase whitespace-nowrap transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}
+                  className={`block font-mono text-[8px] md:text-[9px] tracking-[0.5em] uppercase whitespace-nowrap transition-colors duration-500 ${mutedTextClass}`}
                 >
                   {loadingLabel}
                 </motion.span>

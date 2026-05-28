@@ -46,6 +46,45 @@ export function QuoteSection() {
   }, [palette])
 
   const isBurgundy = palette === 'burgundy'
+  const isTaupe = palette === 'taupe'
+
+  const sectionClass = isTaupe
+    ? 'bg-[#C9AD8F] text-[#111111]'
+    : isBurgundy
+      ? 'bg-[#4A1F2A] text-[#F5F5F0]'
+      : 'bg-[#050505] text-[#F5F5F0]'
+
+  const textClass = isTaupe
+    ? 'text-[#111111]'
+    : 'text-[#F5F5F0]'
+
+  const mutedClass = isTaupe
+    ? 'text-[rgba(17,17,17,0.58)]'
+    : isBurgundy
+      ? 'text-[rgba(245,245,240,0.65)]'
+      : 'text-[rgba(245,245,240,0.58)]'
+
+  const lineStrongClass = isTaupe
+    ? 'bg-[rgba(17,17,17,0.18)]'
+    : isBurgundy
+      ? 'bg-[rgba(245,245,240,0.18)]'
+      : 'bg-[rgba(245,245,240,0.15)]'
+
+  const lineSoftClass = isTaupe
+    ? 'bg-[rgba(17,17,17,0.14)]'
+    : isBurgundy
+      ? 'bg-[rgba(245,245,240,0.14)]'
+      : 'bg-[rgba(245,245,240,0.10)]'
+
+  const decorClass = isTaupe
+    ? 'text-[rgba(17,17,17,0.38)]'
+    : isBurgundy
+      ? 'text-[rgba(245,245,240,0.42)]'
+      : 'text-[#F5F5F0]/35'
+
+  const quoteMarkClass = isTaupe
+    ? 'text-[#111111]'
+    : 'text-[#F5F5F0]'
 
   const quoteText = weddingData.wedding.quote.text
   const quoteAuthor = weddingData.wedding.quote.author
@@ -139,9 +178,7 @@ export function QuoteSection() {
       data-section
       data-theme="dark"
       data-global-reveal="true"
-      className={`relative overflow-hidden px-0 py-24 md:py-32 lg:py-40 transition-colors duration-500 ${
-        isBurgundy ? 'bg-[#4A1F2A] text-[#F5F5F0]' : 'bg-[#050505] text-[#F5F5F0]'
-      }`}
+      className={`relative overflow-hidden px-0 py-24 md:py-32 lg:py-40 transition-colors duration-500 ${sectionClass}`}
     >
       <Container>
         <div
@@ -152,9 +189,7 @@ export function QuoteSection() {
             data-animate="line"
             data-quote-part
             data-no-global-reveal="true"
-            className={`mb-8 h-px w-20 origin-center transition-colors duration-500 md:mb-10 md:w-28 ${
-              isBurgundy ? 'bg-[rgba(245,245,240,0.18)]' : 'bg-[rgba(245,245,240,0.15)]'
-            }`}
+            className={`mb-8 h-px w-20 origin-center transition-colors duration-500 md:mb-10 md:w-28 ${lineStrongClass}`}
           />
 
           <div
@@ -162,17 +197,15 @@ export function QuoteSection() {
             data-no-global-reveal="true"
             className="mb-8 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-4 md:mb-10"
           >
-            <span className={`h-px transition-colors duration-500 ${isBurgundy ? 'bg-[rgba(245,245,240,0.14)]' : 'bg-[rgba(245,245,240,0.10)]'}`} aria-hidden="true" />
+            <span className={`h-px transition-colors duration-500 ${lineSoftClass}`} aria-hidden="true" />
             <span
               data-animate="text"
               data-no-global-reveal="true"
-              className={`font-mono text-[10px] uppercase tracking-[0.32em] transition-colors duration-500 md:text-[11px] ${
-                isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[rgba(245,245,240,0.58)]'
-              }`}
+              className={`font-mono text-[10px] uppercase tracking-[0.32em] transition-colors duration-500 md:text-[11px] ${mutedClass}`}
             >
               A Sacred Promise
             </span>
-            <span className={`h-px transition-colors duration-500 ${isBurgundy ? 'bg-[rgba(245,245,240,0.14)]' : 'bg-[rgba(245,245,240,0.10)]'}`} aria-hidden="true" />
+            <span className={`h-px transition-colors duration-500 ${lineSoftClass}`} aria-hidden="true" />
           </div>
 
           <motion.blockquote
@@ -186,7 +219,7 @@ export function QuoteSection() {
             <motion.span
               ref={markRef}
               aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-[-0.52em] select-none font-serif text-[150px] font-light leading-none text-[#F5F5F0] transition-colors duration-500 md:text-[220px]"
+              className={`pointer-events-none absolute left-1/2 top-[-0.52em] select-none font-serif text-[150px] font-light leading-none transition-colors duration-500 md:text-[220px] ${quoteMarkClass}`}
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 x: '-50%',
@@ -194,7 +227,7 @@ export function QuoteSection() {
                 scale: shouldReduceMotion ? 1 : 0.96,
                 rotate: shouldReduceMotion ? 0 : -1.5,
               }}
-              animate={{ opacity: isQuoteHovered ? 0.065 : shouldReduceMotion ? 0.04 : undefined }}
+              animate={{ opacity: isQuoteHovered ? (isTaupe ? 0.07 : 0.065) : shouldReduceMotion ? 0.04 : undefined }}
               transition={{ duration: 0.32, ease: 'easeOut' }}
             >
               &ldquo;
@@ -203,7 +236,7 @@ export function QuoteSection() {
             <p
               data-no-global-reveal="true"
               data-quote-text
-              className="relative z-10 font-serif text-[clamp(30px,5vw,58px)] font-light italic leading-[1.26] tracking-normal text-[#F5F5F0] transition-colors duration-500"
+              className={`relative z-10 font-serif text-[clamp(30px,5vw,58px)] font-light italic leading-[1.26] tracking-normal transition-colors duration-500 ${textClass}`}
               style={{ fontFamily: "'Cormorant Garamond', serif" }}
             >
               <QuoteWords text={quoteText} />
@@ -216,9 +249,7 @@ export function QuoteSection() {
             data-no-global-reveal="true"
             className="mt-10 md:mt-12"
           >
-            <span className={`font-mono text-[11px] uppercase tracking-[0.28em] transition-colors duration-500 md:text-[12px] ${
-              isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[rgba(245,245,240,0.48)]'
-            }`}>
+            <span className={`font-mono text-[11px] uppercase tracking-[0.28em] transition-colors duration-500 md:text-[12px] ${mutedClass}`}>
               {quoteAuthor}
             </span>
           </div>
@@ -227,18 +258,14 @@ export function QuoteSection() {
             data-animate="line"
             data-quote-part
             data-no-global-reveal="true"
-            className={`mt-10 h-px w-20 origin-center transition-colors duration-500 md:mt-12 md:w-28 ${
-              isBurgundy ? 'bg-[rgba(245,245,240,0.18)]' : 'bg-[rgba(245,245,240,0.15)]'
-            }`}
+            className={`mt-10 h-px w-20 origin-center transition-colors duration-500 md:mt-12 md:w-28 ${lineStrongClass}`}
           />
 
           <div
             data-animate="text"
             data-quote-part
             data-no-global-reveal="true"
-            className={`absolute -left-2 top-0 hidden font-mono text-[10px] uppercase tracking-[0.26em] transition-colors duration-500 lg:block ${
-              isBurgundy ? 'text-[rgba(245,245,240,0.42)]' : 'text-[#F5F5F0]/35'
-            }`}
+            className={`absolute -left-2 top-0 hidden font-mono text-[10px] uppercase tracking-[0.26em] transition-colors duration-500 lg:block ${decorClass}`}
             aria-hidden="true"
           >
             02 / Promise

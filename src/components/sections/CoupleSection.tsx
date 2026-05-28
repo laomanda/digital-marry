@@ -29,11 +29,13 @@ function EditorialHeart({
   isActive,
   shouldReduceMotion,
   isBurgundy,
+  isTaupe,
   className = '',
 }: {
   isActive: boolean
   shouldReduceMotion: boolean
   isBurgundy: boolean
+  isTaupe: boolean
   className?: string
 }) {
   const strokeRef = useRef<SVGPathElement>(null)
@@ -77,8 +79,8 @@ function EditorialHeart({
       className={[
         'pointer-events-none relative select-none transition-transform duration-600',
         isActive 
-          ? (isBurgundy ? 'scale-[1.12] text-[rgba(245,245,240,0.65)]' : 'scale-[1.12] text-[rgba(245,245,240,0.55)]') 
-          : (isBurgundy ? 'scale-100 text-[rgba(245,245,240,0.35)]' : 'scale-100 text-[rgba(245,245,240,0.28)]'),
+          ? (isTaupe ? 'scale-[1.12] text-[rgba(17,17,17,0.66)]' : isBurgundy ? 'scale-[1.12] text-[rgba(245,245,240,0.65)]' : 'scale-[1.12] text-[rgba(245,245,240,0.55)]') 
+          : (isTaupe ? 'scale-100 text-[rgba(17,17,17,0.38)]' : isBurgundy ? 'scale-100 text-[rgba(245,245,240,0.35)]' : 'scale-100 text-[rgba(245,245,240,0.28)]'),
         className,
       ].join(' ')}
       aria-hidden="true"
@@ -87,7 +89,7 @@ function EditorialHeart({
       {!shouldReduceMotion && (
         <>
           <span
-            className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.08)]' : 'border-[#F5F5F0]/[0.06]'}`}
+            className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.06)]' : isBurgundy ? 'border-[rgba(245,245,240,0.08)]' : 'border-[#F5F5F0]/[0.06]'}`}
             style={{
               width: '140%',
               height: '140%',
@@ -95,7 +97,7 @@ function EditorialHeart({
             }}
           />
           <span
-            className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.06)]' : 'border-[#F5F5F0]/[0.04]'}`}
+            className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.05)]' : isBurgundy ? 'border-[rgba(245,245,240,0.06)]' : 'border-[#F5F5F0]/[0.04]'}`}
             style={{
               width: '180%',
               height: '180%',
@@ -103,7 +105,7 @@ function EditorialHeart({
             }}
           />
           <span
-            className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.04)]' : 'border-[#F5F5F0]/[0.025]'}`}
+            className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.04)]' : isBurgundy ? 'border-[rgba(245,245,240,0.04)]' : 'border-[#F5F5F0]/[0.025]'}`}
             style={{
               width: '220%',
               height: '220%',
@@ -126,8 +128,8 @@ function EditorialHeart({
         <defs>
           {/* Radial gradient for subtle inner fill */}
           <radialGradient id="heart-fill-glow" cx="50%" cy="45%" r="50%">
-            <stop offset="0%" stopColor="rgba(245,245,240,0.09)" />
-            <stop offset="100%" stopColor="rgba(245,245,240,0)" />
+            <stop offset="0%" stopColor={isTaupe ? 'rgba(17,17,17,0.08)' : 'rgba(245,245,240,0.09)'} />
+            <stop offset="100%" stopColor={isTaupe ? 'rgba(17,17,17,0)' : 'rgba(245,245,240,0)'} />
           </radialGradient>
           {/* Glow filter */}
           <filter id="heart-glow" x="-30%" y="-30%" width="160%" height="160%">
@@ -148,7 +150,7 @@ function EditorialHeart({
         {/* Layer 2: Outer glow stroke (monochrome) */}
         <path
           d={HEART_D}
-          stroke="rgba(245,245,240,0.08)"
+          stroke={isTaupe ? 'rgba(17,17,17,0.08)' : 'rgba(245,245,240,0.08)'}
           strokeWidth="4"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -162,7 +164,7 @@ function EditorialHeart({
         {/* Layer 3: Fine outer stroke (monochrome static) */}
         <path
           d={HEART_D}
-          stroke="rgba(245,245,240,0.12)"
+          stroke={isTaupe ? 'rgba(17,17,17,0.12)' : 'rgba(245,245,240,0.12)'}
           strokeWidth="0.6"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -191,7 +193,7 @@ function EditorialHeart({
               cx={s.cx}
               cy={s.cy}
               r="1"
-              fill="rgba(245,245,240,0.25)"
+              fill={isTaupe ? 'rgba(17,17,17,0.22)' : 'rgba(245,245,240,0.25)'}
               style={{
                 animation: `couple-sparkle 3.5s ease-in-out ${s.delay}s infinite`,
               }}
@@ -258,6 +260,7 @@ function PersonCard({
   onEnter,
   onLeave,
   isBurgundy,
+  isTaupe,
 }: {
   person: Person
   side: 'bride' | 'groom'
@@ -266,6 +269,7 @@ function PersonCard({
   onEnter: () => void
   onLeave: () => void
   isBurgundy: boolean
+  isTaupe: boolean
 }) {
   const handle = person.instagram?.replace('@', '')
 
@@ -284,11 +288,11 @@ function PersonCard({
       <div
         className={[
           'relative aspect-[4/5] w-full overflow-hidden transition-colors duration-500',
-          isBurgundy ? 'bg-[rgba(245,245,240,0.035)]' : 'bg-[#1a1a1a]',
+          isTaupe ? 'bg-[rgba(245,245,240,0.28)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.035)]' : 'bg-[#1a1a1a]',
           'border',
           active 
-            ? (isBurgundy ? 'border-[rgba(245,245,240,0.50)]' : 'border-[#F5F5F0]/50') 
-            : (isBurgundy ? 'border-[rgba(245,245,240,0.18)]' : 'border-[#F5F5F0]/15'),
+            ? (isTaupe ? 'border-[rgba(17,17,17,0.46)]' : isBurgundy ? 'border-[rgba(245,245,240,0.50)]' : 'border-[#F5F5F0]/50') 
+            : (isTaupe ? 'border-[rgba(17,17,17,0.18)]' : isBurgundy ? 'border-[rgba(245,245,240,0.18)]' : 'border-[#F5F5F0]/15'),
         ].join(' ')}
       >
         <img
@@ -298,21 +302,21 @@ function PersonCard({
           decoding="async"
           className={[
             'absolute inset-0 h-full w-full object-cover grayscale',
-            'brightness-[0.88] contrast-[1.05]',
+            isTaupe ? 'brightness-[1.0] contrast-[1.0]' : 'brightness-[0.88] contrast-[1.05]',
             'transition-transform duration-700 ease-out',
             active ? 'scale-[1.04]' : 'scale-100',
           ].join(' ')}
         />
-        <div className={`pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent to-transparent transition-colors duration-500 ${isBurgundy ? 'from-[rgba(74,31,42,0.42)]' : 'from-[#050505]/40'}`} />
+        <div className={`pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent to-transparent transition-colors duration-500 ${isTaupe ? 'from-[rgba(201,173,143,0.42)]' : isBurgundy ? 'from-[rgba(74,31,42,0.42)]' : 'from-[#050505]/40'}`} />
 
         {/* Corner marks */}
-        <span className={`absolute left-3 top-3 h-6 w-6 border-l border-t transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.30)]' : 'border-[#F5F5F0]/30'}`} aria-hidden="true" />
-        <span className={`absolute right-3 top-3 h-6 w-6 border-r border-t transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.30)]' : 'border-[#F5F5F0]/30'}`} aria-hidden="true" />
-        <span className={`absolute bottom-3 left-3 h-6 w-6 border-b border-l transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.30)]' : 'border-[#F5F5F0]/30'}`} aria-hidden="true" />
-        <span className={`absolute bottom-3 right-3 h-6 w-6 border-b border-r transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.30)]' : 'border-[#F5F5F0]/30'}`} aria-hidden="true" />
+        <span className={`absolute left-3 top-3 h-6 w-6 border-l border-t transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.26)]' : isBurgundy ? 'border-[rgba(245,245,240,0.30)]' : 'border-[#F5F5F0]/30'}`} aria-hidden="true" />
+        <span className={`absolute right-3 top-3 h-6 w-6 border-r border-t transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.26)]' : isBurgundy ? 'border-[rgba(245,245,240,0.30)]' : 'border-[#F5F5F0]/30'}`} aria-hidden="true" />
+        <span className={`absolute bottom-3 left-3 h-6 w-6 border-b border-l transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.26)]' : isBurgundy ? 'border-[rgba(245,245,240,0.30)]' : 'border-[#F5F5F0]/30'}`} aria-hidden="true" />
+        <span className={`absolute bottom-3 right-3 h-6 w-6 border-b border-r transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.26)]' : isBurgundy ? 'border-[rgba(245,245,240,0.30)]' : 'border-[#F5F5F0]/30'}`} aria-hidden="true" />
 
         {/* Role badge */}
-        <span className={`absolute left-4 top-4 font-mono text-[9px] uppercase tracking-[0.3em] transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.50)]' : 'text-[#F5F5F0]/50'}`}>
+        <span className={`absolute left-4 top-4 font-mono text-[9px] uppercase tracking-[0.3em] transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.54)]' : isBurgundy ? 'text-[rgba(245,245,240,0.50)]' : 'text-[#F5F5F0]/50'}`}>
           {side === 'bride' ? 'Bride' : 'Groom'}
         </span>
       </div>
@@ -320,19 +324,19 @@ function PersonCard({
       {/* Info */}
       <div className={`mt-6 ${side === 'groom' ? 'text-left md:text-right' : 'text-left'}`}>
         <h3
-          className="font-serif text-[clamp(36px,5vw,64px)] font-light leading-[0.9] text-[#F5F5F0]"
+          className={`font-serif text-[clamp(36px,5vw,64px)] font-light leading-[0.9] transition-colors duration-500 ${isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]'}`}
           aria-label={person.fullName}
         >
           <SplitName name={person.firstName} />
         </h3>
 
-        <p className={`mt-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.45)]' : 'text-[#F5F5F0]/45'}`}>
+        <p className={`mt-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.50)]' : isBurgundy ? 'text-[rgba(245,245,240,0.45)]' : 'text-[#F5F5F0]/45'}`}>
           {person.fullName}
         </p>
 
-        <div className={`my-4 h-px w-10 transition-colors duration-500 ${isBurgundy ? 'bg-[rgba(245,245,240,0.15)]' : 'bg-[#F5F5F0]/15'} ${side === 'groom' ? 'md:ml-auto' : ''}`} />
+        <div className={`my-4 h-px w-10 transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.16)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.15)]' : 'bg-[#F5F5F0]/15'} ${side === 'groom' ? 'md:ml-auto' : ''}`} />
 
-        <p className={`font-sans text-[11px] uppercase leading-relaxed tracking-[0.16em] transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.55)]' : 'text-[#F5F5F0]/55'}`}>
+        <p className={`font-sans text-[11px] uppercase leading-relaxed tracking-[0.16em] transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.55)]' : 'text-[#F5F5F0]/55'}`}>
           {person.parents}
         </p>
 
@@ -343,9 +347,9 @@ function PersonCard({
             rel="noopener noreferrer"
             className={[
               'mt-4 inline-flex items-center gap-2 transition duration-300',
-              isBurgundy ? 'text-[rgba(245,245,240,0.42)] hover:text-[#F5F5F0]' : 'text-[#F5F5F0]/40 hover:text-[#F5F5F0]',
-              'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5F5F0] focus-visible:ring-offset-2',
-              isBurgundy ? 'focus-visible:ring-offset-[#4A1F2A]' : 'focus-visible:ring-offset-[#050505]',
+              isTaupe ? 'text-[rgba(17,17,17,0.46)] hover:text-[#111111]' : isBurgundy ? 'text-[rgba(245,245,240,0.42)] hover:text-[#F5F5F0]' : 'text-[#F5F5F0]/40 hover:text-[#F5F5F0]',
+              'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
+              isTaupe ? 'focus-visible:ring-[#111111] focus-visible:ring-offset-[#C9AD8F]' : isBurgundy ? 'focus-visible:ring-[#F5F5F0] focus-visible:ring-offset-[#4A1F2A]' : 'focus-visible:ring-[#F5F5F0] focus-visible:ring-offset-[#050505]',
             ].join(' ')}
             aria-label={`Instagram ${person.fullName}`}
           >
@@ -387,6 +391,11 @@ export function CoupleSection() {
   }, [palette])
 
   const isBurgundy = palette === 'burgundy'
+  const isTaupe = palette === 'taupe'
+
+  const sectionClass = isTaupe ? 'bg-[#C9AD8F] text-[#111111]' : isBurgundy ? 'bg-[#4A1F2A] text-[#F5F5F0]' : 'bg-[#050505] text-[#F5F5F0]'
+  const headingClass = isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]'
+  const mutedClass = isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#F5F5F0]/55'
 
   useEffect(() => {
     const el = sectionRef.current
@@ -573,39 +582,37 @@ export function CoupleSection() {
       data-section
       data-theme="dark"
       data-wow="true"
-      className={`relative overflow-hidden py-24 text-[#F5F5F0] md:py-32 lg:py-40 transition-colors duration-500 ${
-        isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'
-      }`}
+      className={`relative overflow-hidden py-24 md:py-32 lg:py-40 transition-colors duration-500 ${sectionClass}`}
     >
       {/* Top/bottom hairlines */}
-      <div className={`pointer-events-none absolute inset-x-0 top-0 h-px transition-colors duration-500 ${isBurgundy ? 'bg-[rgba(245,245,240,0.14)]' : 'bg-[#F5F5F0]/10'}`} aria-hidden="true" />
-      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-px transition-colors duration-500 ${isBurgundy ? 'bg-[rgba(245,245,240,0.14)]' : 'bg-[#F5F5F0]/10'}`} aria-hidden="true" />
+      <div className={`pointer-events-none absolute inset-x-0 top-0 h-px transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.12)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.14)]' : 'bg-[#F5F5F0]/10'}`} aria-hidden="true" />
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-px transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.12)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.14)]' : 'bg-[#F5F5F0]/10'}`} aria-hidden="true" />
 
       <Container>
         {/* Header */}
         <div className="mx-auto max-w-[800px] text-center">
           <span
             data-couple-header-label
-            className={`mb-5 block font-mono text-[10px] uppercase tracking-[0.34em] transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#F5F5F0]/50'}`}
+            className={`mb-5 block font-mono text-[10px] uppercase tracking-[0.34em] transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#F5F5F0]/50'}`}
             style={{ opacity: 0 }}
           >
             The Couple
           </span>
           <h2
-            className="font-serif text-[clamp(40px,7vw,96px)] font-light leading-[0.92] text-[#F5F5F0]"
+            className={`font-serif text-[clamp(40px,7vw,96px)] font-light leading-[0.92] transition-colors duration-500 ${headingClass}`}
             aria-label={`${weddingData.bride.firstName} & ${weddingData.groom.firstName}`}
           >
             <SplitHeaderTitle text={`${weddingData.bride.firstName} & ${weddingData.groom.firstName}`} />
           </h2>
           <div
             data-couple-header-line
-            className={`mx-auto mt-6 h-px w-20 transition-colors duration-500 ${isBurgundy ? 'bg-[rgba(245,245,240,0.18)]' : 'bg-[#F5F5F0]/15'}`}
+            className={`mx-auto mt-6 h-px w-20 transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.18)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.18)]' : 'bg-[#F5F5F0]/15'}`}
             aria-hidden="true"
             style={{ opacity: 0, transform: 'scaleX(0)' }}
           />
           <p
             data-couple-header-sub
-            className={`mx-auto mt-5 max-w-[400px] font-serif text-[17px] italic leading-relaxed transition-colors duration-500 md:text-[19px] ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#F5F5F0]/55'}`}
+            className={`mx-auto mt-5 max-w-[400px] font-serif text-[17px] italic leading-relaxed transition-colors duration-500 md:text-[19px] ${mutedClass}`}
             style={{ opacity: 0 }}
           >
             Dua hati yang kini melangkah bersama.
@@ -623,6 +630,7 @@ export function CoupleSection() {
               isActive={heartIsActive}
               shouldReduceMotion={shouldReduceMotion}
               isBurgundy={isBurgundy}
+              isTaupe={isTaupe}
               className="h-24 w-24 lg:h-28 lg:w-28"
             />
           </div>
@@ -636,6 +644,7 @@ export function CoupleSection() {
             onEnter={() => setActiveSide('bride')}
             onLeave={() => setActiveSide(null)}
             isBurgundy={isBurgundy}
+            isTaupe={isTaupe}
           />
 
           {/* Mobile heart — between stacked cards */}
@@ -647,6 +656,7 @@ export function CoupleSection() {
               isActive={heartIsActive}
               shouldReduceMotion={shouldReduceMotion}
               isBurgundy={isBurgundy}
+              isTaupe={isTaupe}
               className="h-14 w-14"
             />
           </div>
@@ -660,6 +670,7 @@ export function CoupleSection() {
             onEnter={() => setActiveSide('groom')}
             onLeave={() => setActiveSide(null)}
             isBurgundy={isBurgundy}
+            isTaupe={isTaupe}
           />
         </div>
       </Container>

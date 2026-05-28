@@ -41,6 +41,94 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
   }, [palette]);
 
   const isBurgundy = palette === 'burgundy';
+  const isTaupe = palette === 'taupe';
+
+  const sectionClass = isTaupe
+    ? 'bg-[#C9AD8F] text-[#111111]'
+    : isBurgundy
+      ? 'bg-[#4A1F2A] text-[#F5F5F0]'
+      : 'bg-[#050505] text-[#F5F5F0]';
+
+  const textClass = isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]';
+
+  const mutedClass = isTaupe
+    ? 'text-[rgba(17,17,17,0.58)]'
+    : isBurgundy
+      ? 'text-[rgba(245,245,240,0.65)]'
+      : 'text-[#A4A4A4]';
+
+  const focusOutlineClass = isTaupe
+    ? 'focus-visible:outline-[rgba(17,17,17,0.50)]'
+    : 'focus-visible:outline-[#F5F5F0]';
+
+  const getLabelClass = () => isTaupe 
+    ? 'text-[rgba(17,17,17,0.58)] group-focus-within/field:text-[#111111]' 
+    : isBurgundy 
+      ? 'text-[rgba(245,245,240,0.65)] group-focus-within/field:text-[#F5F5F0]' 
+      : 'text-[#A4A4A4] group-focus-within/field:text-[#F5F5F0]';
+
+  const getInputClass = (hasError?: boolean) => {
+    const base = 'w-full border-0 border-b bg-transparent pb-3 text-[16px] transition-colors focus:outline-none focus:ring-0';
+    const textAndPlaceholder = isTaupe 
+      ? 'text-[#111111] placeholder:text-[rgba(17,17,17,0.32)]' 
+      : isBurgundy 
+        ? 'text-[#F5F5F0] placeholder:text-[rgba(245,245,240,0.30)]' 
+        : 'text-[#F5F5F0] placeholder:text-[#F5F5F0]/22';
+    const border = hasError 
+      ? (isTaupe ? 'border-[rgba(17,17,17,0.40)]' : isBurgundy ? 'border-[rgba(245,245,240,0.42)]' : 'border-[#F5F5F0]/42')
+      : (isTaupe 
+          ? 'border-[rgba(17,17,17,0.18)] focus:border-[rgba(17,17,17,0.65)]' 
+          : isBurgundy 
+            ? 'border-[rgba(245,245,240,0.18)] focus:border-[rgba(245,245,240,0.70)]' 
+            : 'border-[#F5F5F0]/14 focus:border-[#F5F5F0]/70');
+    return cn(base, textAndPlaceholder, border);
+  };
+
+  const getGuestInputContainerClass = (hasError?: boolean) => {
+    const base = 'flex w-full items-center justify-between border-b pb-2 transition-colors md:w-[152px]';
+    const border = hasError
+      ? (isTaupe ? 'border-[rgba(17,17,17,0.40)]' : isBurgundy ? 'border-[rgba(245,245,240,0.42)]' : 'border-[#F5F5F0]/42')
+      : (isTaupe
+          ? 'border-[rgba(17,17,17,0.18)] focus-within:border-[rgba(17,17,17,0.65)]'
+          : isBurgundy
+            ? 'border-[rgba(245,245,240,0.18)] focus-within:border-[rgba(245,245,240,0.70)]'
+            : 'border-[#F5F5F0]/14 focus-within:border-[#F5F5F0]/70');
+    return cn(base, border);
+  };
+
+  const getErrorTextClass = () => isTaupe 
+    ? 'text-[rgba(17,17,17,0.68)]' 
+    : isBurgundy 
+      ? 'text-[rgba(245,245,240,0.72)]' 
+      : 'text-[#F5F5F0]/72';
+
+  const getAttendanceCardClass = (isActive: boolean) => {
+    const base = "group/option relative flex min-h-[104px] cursor-pointer flex-col justify-between border p-4 transition-colors duration-300 focus-within:outline focus-within:outline-1 focus-within:outline-offset-4";
+    const focus = isTaupe ? 'focus-within:outline-[rgba(17,17,17,0.50)]' : 'focus-within:outline-[#F5F5F0]';
+    const activeState = isActive
+      ? (isTaupe 
+          ? "border-[rgba(17,17,17,0.38)] bg-[rgba(17,17,17,0.045)]" 
+          : isBurgundy 
+            ? "border-[rgba(245,245,240,0.35)] bg-[rgba(245,245,240,0.045)]" 
+            : "border-[#F5F5F0]/35 bg-[#F5F5F0]/[0.045]")
+      : (isTaupe 
+          ? "border-[rgba(17,17,17,0.16)] bg-[rgba(245,245,240,0.22)] hover:border-[rgba(17,17,17,0.28)]" 
+          : isBurgundy 
+            ? "border-[rgba(245,245,240,0.18)] bg-[rgba(35,12,20,0.30)] hover:border-[rgba(245,245,240,0.28)]" 
+            : "border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.018] hover:border-[#F5F5F0]/24");
+    return cn(base, focus, activeState);
+  };
+
+  const getSubmitButtonClass = () => {
+    const base = "group flex w-full items-center justify-between border p-5 transition-colors duration-500 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 disabled:cursor-not-allowed disabled:opacity-55";
+    const focus = isTaupe ? 'focus-visible:outline-[rgba(17,17,17,0.50)]' : 'focus-visible:outline-[#F5F5F0]';
+    const state = isTaupe
+      ? 'border-[rgba(17,17,17,0.18)] hover:border-[rgba(17,17,17,0.50)] hover:bg-[rgba(17,17,17,0.035)] text-[#111111]'
+      : isBurgundy
+        ? 'border-[rgba(245,245,240,0.18)] hover:border-[rgba(245,245,240,0.55)] text-[#F5F5F0]'
+        : 'border-[#F5F5F0]/16 hover:border-[#F5F5F0]/55 text-[#F5F5F0]';
+    return cn(base, focus, state);
+  };
 
   const {
     register,
@@ -98,38 +186,38 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
     <section 
       id="rsvp" 
       data-section 
-      data-theme="dark" 
+      data-theme={isTaupe ? "light" : "dark"} 
       data-global-reveal="true" 
-      className={`overflow-hidden py-24 text-[#F5F5F0] md:py-32 transition-colors duration-500 ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'}`}
+      className={`overflow-hidden py-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
     >
       <div className="container-base mx-auto max-w-6xl">
         <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
           <div className="flex flex-col lg:sticky lg:top-28" data-animate="title">
-            <div className="mb-8 h-12 w-px bg-[#F5F5F0]/15" aria-hidden="true" />
-            <span className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+            <div className={`mb-8 h-12 w-px ${isTaupe ? 'bg-[rgba(17,17,17,0.18)]' : 'bg-[#F5F5F0]/15'}`} aria-hidden="true" />
+            <span className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
               RSVP
             </span>
-            <h2 className="mb-6 font-serif text-[44px] font-light leading-[1.02] text-[#F5F5F0] md:text-[64px]">
+            <h2 className={`mb-6 font-serif text-[44px] font-light leading-[1.02] md:text-[64px] ${textClass}`}>
               Konfirmasi Kehadiran
             </h2>
-            <p className={`mb-8 max-w-md text-[15px] leading-7 transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+            <p className={`mb-8 max-w-md text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>
               Mohon konfirmasi kehadiran Anda agar kami dapat mempersiapkan momen ini dengan sebaik-baiknya.
             </p>
-            <div className={`flex max-w-sm items-start gap-4 border-l pl-5 transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.18)]' : 'border-[#F5F5F0]/12'}`}>
-              <span className={`mt-2 h-px w-8 transition-colors duration-500 ${isBurgundy ? 'bg-[rgba(245,245,240,0.25)]' : 'bg-[#F5F5F0]/22'}`} aria-hidden="true" />
-              <span className={`font-mono text-[10px] uppercase leading-6 transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+            <div className={`flex max-w-sm items-start gap-4 border-l pl-5 transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.16)]' : isBurgundy ? 'border-[rgba(245,245,240,0.18)]' : 'border-[#F5F5F0]/12'}`}>
+              <span className={`mt-2 h-px w-8 transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.24)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.25)]' : 'bg-[#F5F5F0]/22'}`} aria-hidden="true" />
+              <span className={`font-mono text-[10px] uppercase leading-6 transition-colors duration-500 ${mutedClass}`}>
                 Balasan Anda membantu kami menyiapkan tempat dan jamuan dengan lebih baik.
               </span>
             </div>
           </div>
 
           <div data-animate="card" className="group relative">
-            <div className={`absolute inset-0 border transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.18)] bg-[rgba(35,12,20,0.42)] group-hover:border-[rgba(245,245,240,0.28)]' : 'border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.032] group-hover:border-[#F5F5F0]/20'}`} aria-hidden="true" />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#F5F5F0]/[0.055] via-transparent to-transparent opacity-80" aria-hidden="true" />
-            <div className={`pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.35)]' : 'border-[#F5F5F0]/35'}`} aria-hidden="true" />
-            <div className={`pointer-events-none absolute right-0 top-0 h-3 w-3 border-r border-t transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.35)]' : 'border-[#F5F5F0]/35'}`} aria-hidden="true" />
-            <div className={`pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b border-l transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.25)]' : 'border-[#F5F5F0]/25'}`} aria-hidden="true" />
-            <div className={`pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.25)]' : 'border-[#F5F5F0]/25'}`} aria-hidden="true" />
+            <div className={`absolute inset-0 border transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.16)] bg-[rgba(245,245,240,0.30)] group-hover:border-[rgba(17,17,17,0.26)]' : isBurgundy ? 'border-[rgba(245,245,240,0.18)] bg-[rgba(35,12,20,0.42)] group-hover:border-[rgba(245,245,240,0.28)]' : 'border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.032] group-hover:border-[#F5F5F0]/20'}`} aria-hidden="true" />
+            <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br via-transparent to-transparent opacity-80 ${isTaupe ? 'from-[rgba(17,17,17,0.035)]' : 'from-[#F5F5F0]/[0.055]'}`} aria-hidden="true" />
+            <div className={`pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.28)]' : isBurgundy ? 'border-[rgba(245,245,240,0.35)]' : 'border-[#F5F5F0]/35'}`} aria-hidden="true" />
+            <div className={`pointer-events-none absolute right-0 top-0 h-3 w-3 border-r border-t transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.28)]' : isBurgundy ? 'border-[rgba(245,245,240,0.35)]' : 'border-[#F5F5F0]/35'}`} aria-hidden="true" />
+            <div className={`pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b border-l transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.22)]' : isBurgundy ? 'border-[rgba(245,245,240,0.25)]' : 'border-[#F5F5F0]/25'}`} aria-hidden="true" />
+            <div className={`pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.22)]' : isBurgundy ? 'border-[rgba(245,245,240,0.25)]' : 'border-[#F5F5F0]/25'}`} aria-hidden="true" />
 
             <div className="relative z-10 flex min-h-[560px] flex-col justify-center p-6 sm:p-8 md:p-12">
               <AnimatePresence mode="wait">
@@ -142,13 +230,13 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                     className="flex h-full flex-col items-center justify-center py-12 text-center"
                     role="status"
                   >
-                    <div className={`mb-8 flex h-16 w-16 items-center justify-center rounded-full border transition-colors duration-500 ${isBurgundy ? 'border-[rgba(245,245,240,0.28)] bg-[#2B1018]' : 'border-[#F5F5F0]/28 bg-[#050505]'}`}>
-                      <Check size={24} className="text-[#F5F5F0]" strokeWidth={1.4} aria-hidden="true" />
+                    <div className={`mb-8 flex h-16 w-16 items-center justify-center rounded-full border transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.28)] bg-[rgba(245,245,240,0.28)]' : isBurgundy ? 'border-[rgba(245,245,240,0.28)] bg-[#2B1018]' : 'border-[#F5F5F0]/28 bg-[#050505]'}`}>
+                      <Check size={24} className={textClass} strokeWidth={1.4} aria-hidden="true" />
                     </div>
-                    <h3 className="mb-4 font-serif text-[32px] font-light leading-tight text-[#F5F5F0] md:text-[42px]">
+                    <h3 className={`mb-4 font-serif text-[32px] font-light leading-tight md:text-[42px] ${textClass}`}>
                       Terima kasih, konfirmasi Anda telah kami terima.
                     </h3>
-                    <p className={`max-w-sm text-[15px] leading-7 transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+                    <p className={`max-w-sm text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>
                       Doa dan kehadiran Anda sangat berarti bagi kami.
                     </p>
                   </motion.div>
@@ -166,7 +254,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                   >
                     <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[1fr_auto]">
                       <div className="group/field flex flex-col gap-3">
-                        <label htmlFor="name" className={`font-mono text-[10px] uppercase transition-colors duration-300 group-focus-within/field:text-[#F5F5F0] ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+                        <label htmlFor="name" className={`font-mono text-[10px] uppercase transition-colors duration-300 ${getLabelClass()}`}>
                           Nama
                         </label>
                         <input
@@ -175,32 +263,25 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                           placeholder="Masukkan nama Anda"
                           aria-invalid={Boolean(errors.name)}
                           aria-describedby={errors.name ? 'name-error' : undefined}
-                          className={cn(
-                            "w-full border-0 border-b bg-transparent pb-3 text-[16px] text-[#F5F5F0] transition-colors focus:outline-none focus:ring-0",
-                            isBurgundy ? "placeholder:text-[rgba(245,245,240,0.30)]" : "placeholder:text-[#F5F5F0]/22",
-                            errors.name ? (isBurgundy ? "border-[rgba(245,245,240,0.42)]" : "border-[#F5F5F0]/42") : (isBurgundy ? "border-[rgba(245,245,240,0.18)] focus:border-[rgba(245,245,240,0.70)]" : "border-[#F5F5F0]/14 focus:border-[#F5F5F0]/70")
-                          )}
+                          className={getInputClass(Boolean(errors.name))}
                           {...register('name')}
                         />
-                        <p id="name-error" className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.72)]' : 'text-[#F5F5F0]/72'}`}>
+                        <p id="name-error" className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
                           {errors.name?.message ?? ''}
                         </p>
                       </div>
 
                       <div className="group/field flex flex-col gap-3">
-                        <label htmlFor="guestCount" className={`font-mono text-[10px] uppercase transition-colors duration-300 group-focus-within/field:text-[#F5F5F0] ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+                        <label htmlFor="guestCount" className={`font-mono text-[10px] uppercase transition-colors duration-300 ${getLabelClass()}`}>
                           Jumlah Tamu
                         </label>
-                        <div className={cn(
-                          "flex w-full items-center justify-between border-b pb-2 transition-colors md:w-[152px]",
-                          errors.guestCount ? (isBurgundy ? "border-[rgba(245,245,240,0.42)]" : "border-[#F5F5F0]/42") : (isBurgundy ? "border-[rgba(245,245,240,0.18)] focus-within:border-[rgba(245,245,240,0.70)]" : "border-[#F5F5F0]/14 focus-within:border-[#F5F5F0]/70")
-                        )}>
+                        <div className={getGuestInputContainerClass(Boolean(errors.guestCount))}>
                           <button
                             type="button"
                             onClick={handleDecreaseGuest}
                             disabled={guestCountValue <= 1}
                             aria-label="Kurangi jumlah tamu"
-                            className={`flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[#F5F5F0] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0] disabled:opacity-30 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}
+                            className={`flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors disabled:opacity-30 ${focusOutlineClass} ${isTaupe ? 'text-[rgba(17,17,17,0.58)] hover:text-[#111111]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)] hover:text-[#F5F5F0]' : 'text-[#A4A4A4] hover:text-[#F5F5F0]'}`}
                           >
                             <Minus size={16} strokeWidth={1.5} aria-hidden="true" />
                           </button>
@@ -211,7 +292,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                             readOnly
                             aria-invalid={Boolean(errors.guestCount)}
                             aria-describedby={errors.guestCount ? 'guest-count-error' : undefined}
-                            className="pointer-events-none w-10 cursor-default appearance-none border-0 bg-transparent text-center text-[16px] text-[#F5F5F0] focus:outline-none focus:ring-0"
+                            className={`pointer-events-none w-10 cursor-default appearance-none border-0 bg-transparent text-center text-[16px] focus:outline-none focus:ring-0 ${textClass}`}
                             {...register('guestCount', { valueAsNumber: true })}
                           />
 
@@ -220,19 +301,19 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                             onClick={handleIncreaseGuest}
                             disabled={guestCountValue >= 10}
                             aria-label="Tambah jumlah tamu"
-                            className={`flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[#F5F5F0] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0] disabled:opacity-30 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}
+                            className={`flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors disabled:opacity-30 ${focusOutlineClass} ${isTaupe ? 'text-[rgba(17,17,17,0.58)] hover:text-[#111111]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)] hover:text-[#F5F5F0]' : 'text-[#A4A4A4] hover:text-[#F5F5F0]'}`}
                           >
                             <Plus size={16} strokeWidth={1.5} aria-hidden="true" />
                           </button>
                         </div>
-                        <p id="guest-count-error" className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.72)]' : 'text-[#F5F5F0]/72'}`}>
+                        <p id="guest-count-error" className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
                           {errors.guestCount?.message ?? ''}
                         </p>
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <span className={`font-mono text-[10px] uppercase transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+                      <span className={`font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
                         Konfirmasi Kehadiran
                       </span>
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -245,12 +326,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                               initial={false}
                               animate={{ y: shouldReduceMotion || !isActive ? 0 : -2 }}
                               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                              className={cn(
-                                "group/option relative flex min-h-[104px] cursor-pointer flex-col justify-between border p-4 transition-colors duration-300 focus-within:outline focus-within:outline-1 focus-within:outline-offset-4 focus-within:outline-[#F5F5F0]",
-                                isActive
-                                  ? (isBurgundy ? "border-[rgba(245,245,240,0.35)] bg-[rgba(245,245,240,0.045)]" : "border-[#F5F5F0]/35 bg-[#F5F5F0]/[0.045]")
-                                  : (isBurgundy ? "border-[rgba(245,245,240,0.18)] bg-[rgba(35,12,20,0.30)] hover:border-[rgba(245,245,240,0.28)]" : "border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.018] hover:border-[#F5F5F0]/24")
-                              )}
+                              className={getAttendanceCardClass(isActive)}
                             >
                               <input
                                 type="radio"
@@ -261,42 +337,42 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                               <div className="flex items-start justify-between gap-3">
                                 <span className={cn(
                                   "text-[15px] transition-colors duration-300",
-                                  isActive ? "text-[#F5F5F0]" : (isBurgundy ? "text-[rgba(245,245,240,0.65)] group-hover/option:text-[#F5F5F0]" : "text-[#A4A4A4] group-hover/option:text-[#F5F5F0]")
+                                  isActive 
+                                    ? (isTaupe ? "text-[#111111]" : "text-[#F5F5F0]") 
+                                    : (isTaupe ? "text-[rgba(17,17,17,0.58)] group-hover/option:text-[#111111]" : isBurgundy ? "text-[rgba(245,245,240,0.65)] group-hover/option:text-[#F5F5F0]" : "text-[#A4A4A4] group-hover/option:text-[#F5F5F0]")
                                 )}>
                                   {opt.label}
                                 </span>
                                 <span className={cn(
                                   "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors duration-300",
-                                  isActive ? (isBurgundy ? "border-[rgba(245,245,240,0.45)] bg-[#F5F5F0] text-[#2B1018]" : "border-[#F5F5F0]/45 bg-[#F5F5F0] text-[#050505]") : (isBurgundy ? "border-[rgba(245,245,240,0.18)] text-transparent" : "border-[#F5F5F0]/14 text-transparent")
+                                  isActive 
+                                    ? (isTaupe ? "border-[rgba(17,17,17,0.42)] bg-[#111111] text-[#C9AD8F]" : isBurgundy ? "border-[rgba(245,245,240,0.45)] bg-[#F5F5F0] text-[#2B1018]" : "border-[#F5F5F0]/45 bg-[#F5F5F0] text-[#050505]") 
+                                    : (isTaupe ? "border-[rgba(17,17,17,0.18)] text-transparent" : isBurgundy ? "border-[rgba(245,245,240,0.18)] text-transparent" : "border-[#F5F5F0]/14 text-transparent")
                                 )}>
                                   <Icon size={12} strokeWidth={2.3} aria-hidden="true" />
                                 </span>
                               </div>
-                              <span className={`font-mono text-[9px] uppercase transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+                              <span className={`font-mono text-[9px] uppercase transition-colors duration-500 ${mutedClass}`}>
                                 {opt.note}
                               </span>
                             </motion.label>
                           )
                         })}
                       </div>
-                      <p className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.72)]' : 'text-[#F5F5F0]/72'}`}>
+                      <p className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
                         {errors.attendance?.message ?? ''}
                       </p>
                     </div>
 
                     <div className="group/field flex flex-col gap-3">
-                      <label htmlFor="message" className={`font-mono text-[10px] uppercase transition-colors duration-300 group-focus-within/field:text-[#F5F5F0] ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`}>
+                      <label htmlFor="message" className={`font-mono text-[10px] uppercase transition-colors duration-300 ${getLabelClass()}`}>
                         Ucapan & Doa (Opsional)
                       </label>
                       <textarea
                         id="message"
                         rows={3}
                         placeholder="Tulis ucapan bahagia Anda..."
-                        className={cn(
-                          "w-full resize-none border-0 border-b bg-transparent pb-3 text-[15px] text-[#F5F5F0] transition-colors focus:outline-none focus:ring-0",
-                          isBurgundy ? "placeholder:text-[rgba(245,245,240,0.30)]" : "placeholder:text-[#F5F5F0]/22",
-                          errors.message ? (isBurgundy ? "border-[rgba(245,245,240,0.42)]" : "border-[#F5F5F0]/42") : (isBurgundy ? "border-[rgba(245,245,240,0.18)] focus:border-[rgba(245,245,240,0.70)]" : "border-[#F5F5F0]/14 focus:border-[#F5F5F0]/70")
-                        )}
+                        className={cn(getInputClass(Boolean(errors.message)), "resize-none")}
                         {...register('message')}
                       />
                     </div>
@@ -305,23 +381,23 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`group flex w-full items-center justify-between border p-5 transition-colors duration-500 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#F5F5F0] disabled:cursor-not-allowed disabled:opacity-55 ${isBurgundy ? 'border-[rgba(245,245,240,0.18)] hover:border-[rgba(245,245,240,0.55)]' : 'border-[#F5F5F0]/16 hover:border-[#F5F5F0]/55'}`}
+                        className={getSubmitButtonClass()}
                       >
-                        <span className="font-mono text-[10px] uppercase text-[#F5F5F0]">
+                        <span className={`font-mono text-[10px] uppercase transition-colors duration-500 ${textClass}`}>
                           {isSubmitting ? 'Mengirim...' : 'Kirim Konfirmasi'}
                         </span>
                         {isSubmitting ? (
                           <LoaderCircle
                             size={16}
                             strokeWidth={1.5}
-                            className={cn("text-[#F5F5F0]", shouldReduceMotion ? "" : "animate-spin")}
+                            className={cn("transition-colors duration-500", textClass, shouldReduceMotion ? "" : "animate-spin")}
                             aria-hidden="true"
                           />
                         ) : (
                           <ArrowRight
                             size={16}
                             strokeWidth={1.5}
-                            className="text-[#F5F5F0] transition-transform duration-500 group-hover:translate-x-1"
+                            className={`transition-all duration-500 group-hover:translate-x-1 ${textClass}`}
                             aria-hidden="true"
                           />
                         )}

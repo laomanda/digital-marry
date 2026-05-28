@@ -55,6 +55,49 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
   }, [palette]);
 
   const isBurgundy = palette === 'burgundy';
+  const isTaupe = palette === 'taupe';
+
+  const rootClass = isTaupe
+    ? 'bg-[#C9AD8F]'
+    : isBurgundy
+      ? 'bg-[#4A1F2A]'
+      : 'bg-[#050505]';
+
+  const lineClass = isTaupe
+    ? 'bg-[rgba(17,17,17,0.18)]'
+    : isBurgundy
+      ? 'bg-[rgba(245,245,240,0.18)]'
+      : 'bg-[rgba(245,242,236,0.15)]';
+
+  const mutedClass = isTaupe
+    ? 'text-[rgba(17,17,17,0.58)]'
+    : isBurgundy
+      ? 'text-[rgba(245,245,240,0.65)]'
+      : 'text-[rgba(164,164,164,0.7)]';
+
+  const titleClass = isTaupe
+    ? 'text-[#111111]'
+    : isBurgundy
+      ? 'text-[#F5F5F0]'
+      : 'text-[#F5F2EC]';
+
+  const gradientClass = isTaupe
+    ? 'from-[#C9AD8F] via-[rgba(201,173,143,0.72)] to-[rgba(201,173,143,0.42)]'
+    : isBurgundy
+      ? 'from-[#4A1F2A] via-[rgba(74,31,42,0.60)] to-[rgba(74,31,42,0.30)]'
+      : 'from-[#050505] via-[#050505]/60 to-[#050505]/30';
+
+  const radialClass = isTaupe
+    ? 'radial-gradient(ellipse at center, rgba(201,173,143,0.08) 30%, rgba(111,82,58,0.34) 100%)'
+    : isBurgundy
+      ? 'radial-gradient(ellipse at center, transparent 30%, #4A1F2A 100%)'
+      : 'radial-gradient(ellipse at center, transparent 30%, #050505 100%)';
+
+  const buttonClass = isTaupe
+    ? 'text-[rgba(17,17,17,0.78)] border-[rgba(17,17,17,0.22)] hover:bg-[rgba(17,17,17,0.055)] hover:border-[rgba(17,17,17,0.38)] hover:text-[#111111] focus-visible:outline-[rgba(17,17,17,0.5)]'
+    : isBurgundy
+      ? 'text-[rgba(245,245,240,0.8)] border-[rgba(245,245,240,0.25)] hover:bg-[rgba(245,245,240,0.06)] hover:border-[rgba(245,245,240,0.4)] hover:text-[#F5F5F0] focus-visible:outline-[rgba(245,245,240,0.5)]'
+      : 'text-[rgba(245,242,236,0.8)] border-[rgba(245,242,236,0.25)] hover:bg-[rgba(245,242,236,0.06)] hover:border-[rgba(245,242,236,0.4)] hover:text-[#F5F2EC] focus-visible:outline-[rgba(245,242,236,0.5)]';
   const introTlRef = useRef<gsap.core.Timeline | null>(null)
   const exitTlRef = useRef<gsap.core.Timeline | null>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
@@ -270,7 +313,7 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
       data-section
       data-theme="dark"
       data-wow="true"
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'}`}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${rootClass}`}
       style={isOpened ? { visibility: 'hidden', pointerEvents: 'none' } : undefined}
     >
       {/* Background layer */}
@@ -282,8 +325,8 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
           loading="eager"
         />
         {/* Vignette + gradient overlay */}
-        <div className={`absolute inset-0 bg-gradient-to-t transition-colors duration-500 ${isBurgundy ? 'from-[#4A1F2A] via-[rgba(74,31,42,0.60)] to-[rgba(74,31,42,0.30)]' : 'from-[#050505] via-[#050505]/60 to-[#050505]/30'}`} />
-        <div className="absolute inset-0 transition-colors duration-500" style={{ background: isBurgundy ? 'radial-gradient(ellipse at center, transparent 30%, #4A1F2A 100%)' : 'radial-gradient(ellipse at center, transparent 30%, #050505 100%)' }} />
+        <div className={`absolute inset-0 bg-gradient-to-t transition-colors duration-500 ${gradientClass}`} />
+        <div className="absolute inset-0 transition-colors duration-500" style={{ background: radialClass }} />
       </div>
 
       {/* Content */}
@@ -292,14 +335,14 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
         {/* Decorative line */}
         <div
           data-cover-line
-          className={`w-px h-16 md:h-20 mb-8 transition-colors duration-500 ${isBurgundy ? 'bg-[rgba(245,245,240,0.18)]' : 'bg-[rgba(245,242,236,0.15)]'}`}
+          className={`w-px h-16 md:h-20 mb-8 transition-colors duration-500 ${lineClass}`}
           style={{ opacity: 0, transformOrigin: 'top center' }}
         />
 
         {/* Label */}
         <span
           data-cover-label
-          className={`label-caps tracking-[0.4em] mb-6 block transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[rgba(164,164,164,0.7)]'}`}
+          className={`label-caps tracking-[0.4em] mb-6 block transition-colors duration-500 ${mutedClass}`}
           style={{ opacity: 0 }}
         >
           The Wedding of
@@ -311,13 +354,13 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
           className="mb-4"
           style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: 'clamp(40px, 8vw, 80px)', lineHeight: 1.1 }}
         >
-          <LetterSplit text={coupleText} className={`transition-colors duration-500 ${isBurgundy ? 'text-[#F5F5F0]' : 'text-[#F5F2EC]'}`} />
+          <LetterSplit text={coupleText} className={`transition-colors duration-500 ${titleClass}`} />
         </h1>
 
         {/* Date */}
         <p
           data-cover-date
-          className={`font-sans text-[13px] md:text-[14px] tracking-[0.3em] mb-10 md:mb-14 transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[rgba(164,164,164,0.6)]'}`}
+          className={`font-sans text-[13px] md:text-[14px] tracking-[0.3em] mb-10 md:mb-14 transition-colors duration-500 ${mutedClass}`}
           style={{ opacity: 0 }}
         >
           {weddingData.wedding.dateFormatted}
@@ -329,11 +372,11 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
           className="flex flex-col items-center gap-2 mb-10 md:mb-12"
           style={{ opacity: 0 }}
         >
-          <p className={`font-sans text-[12px] tracking-[0.2em] uppercase transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.60)]' : 'text-[rgba(164,164,164,0.5)]'}`}>
+          <p className={`font-sans text-[12px] tracking-[0.2em] uppercase transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.60)]' : 'text-[rgba(164,164,164,0.5)]'}`}>
             Dear, Bapak/Ibu/Saudara/i
           </p>
           <p
-            className={`max-w-sm transition-colors duration-500 ${isBurgundy ? 'text-[rgba(245,245,240,0.75)]' : 'text-[rgba(245,242,236,0.7)]'}`}
+            className={`max-w-sm transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.78)]' : isBurgundy ? 'text-[rgba(245,245,240,0.75)]' : 'text-[rgba(245,242,236,0.7)]'}`}
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: 'clamp(14px, 2vw, 17px)', lineHeight: 1.7, fontStyle: 'italic' }}
           >
             {weddingData.wedding.openingQuote}
@@ -346,11 +389,7 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
             onClick={handleOpen}
             disabled={isAnimating}
             aria-label="Buka undangan pernikahan"
-            className={`relative inline-flex items-center justify-center px-10 py-4 font-mono text-[11px] tracking-[0.3em] uppercase bg-transparent transition-all duration-500 disabled:opacity-50 disabled:cursor-wait ${
-              isBurgundy
-                ? 'text-[rgba(245,245,240,0.8)] border border-[rgba(245,245,240,0.25)] hover:bg-[rgba(245,245,240,0.06)] hover:border-[rgba(245,245,240,0.4)] hover:text-[#F5F5F0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgba(245,245,240,0.5)]'
-                : 'text-[rgba(245,242,236,0.8)] border border-[rgba(245,242,236,0.25)] hover:bg-[rgba(245,242,236,0.06)] hover:border-[rgba(245,242,236,0.4)] hover:text-[#F5F2EC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgba(245,242,236,0.5)]'
-            }`}
+            className={`relative inline-flex items-center justify-center px-10 py-4 font-mono text-[11px] tracking-[0.3em] uppercase bg-transparent border transition-all duration-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-wait ${buttonClass}`}
           >
             Open Invitation
           </button>
