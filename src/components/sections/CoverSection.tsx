@@ -289,7 +289,7 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
     return null
   }
 
-  const coupleText = `${weddingData.bride.firstName} & ${weddingData.groom.firstName}`
+  const coupleText = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
 
   return (
     <section

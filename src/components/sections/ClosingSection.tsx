@@ -46,7 +46,7 @@ export default function ClosingSection() {
       ? 'from-[#4A1F2A]'
       : 'from-[#050505]';
 
-  const closingName = `${weddingData.bride.firstName} & ${weddingData.groom.firstName}`
+  const closingName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
   const fallbackImg = "https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80&fit=crop"
   const closingImage = weddingData.gallery?.[4]?.src || weddingData.gallery?.[0]?.src || fallbackImg
 

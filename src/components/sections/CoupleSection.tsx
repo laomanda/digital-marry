@@ -585,9 +585,9 @@ export function CoupleSection() {
           </span>
           <h2
             className={`font-serif text-[clamp(40px,7vw,96px)] font-light leading-[0.92] transition-colors duration-500 ${headingClass}`}
-            aria-label={`${weddingData.bride.firstName} & ${weddingData.groom.firstName}`}
+            aria-label={`${weddingData.groom.firstName} & ${weddingData.bride.firstName}`}
           >
-            <SplitHeaderTitle text={`${weddingData.bride.firstName} & ${weddingData.groom.firstName}`} />
+            <SplitHeaderTitle text={`${weddingData.groom.firstName} & ${weddingData.bride.firstName}`} />
           </h2>
           <div
             data-couple-header-line
@@ -620,13 +620,13 @@ export function CoupleSection() {
             />
           </div>
 
-          {/* Bride */}
+          {/* Groom */}
           <PersonCard
-            person={weddingData.bride}
-            side="bride"
-            active={activeSide === 'bride'}
-            inactive={activeSide === 'groom'}
-            onEnter={() => setActiveSide('bride')}
+            person={weddingData.groom}
+            side="groom"
+            active={activeSide === 'groom'}
+            inactive={activeSide === 'bride'}
+            onEnter={() => setActiveSide('groom')}
             onLeave={() => setActiveSide(null)}
             isBurgundy={isBurgundy}
             isTaupe={isTaupe}
@@ -646,13 +646,13 @@ export function CoupleSection() {
             />
           </div>
 
-          {/* Groom */}
+          {/* Bride */}
           <PersonCard
-            person={weddingData.groom}
-            side="groom"
-            active={activeSide === 'groom'}
-            inactive={activeSide === 'bride'}
-            onEnter={() => setActiveSide('groom')}
+            person={weddingData.bride}
+            side="bride"
+            active={activeSide === 'bride'}
+            inactive={activeSide === 'groom'}
+            onEnter={() => setActiveSide('bride')}
             onLeave={() => setActiveSide(null)}
             isBurgundy={isBurgundy}
             isTaupe={isTaupe}

@@ -10,7 +10,7 @@ const footerLinks = [
 ]
 
 export default function Footer() {
-  const coupleName = `${weddingData.bride.firstName} & ${weddingData.groom.firstName}`
+  const coupleName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
   const weddingYear = new Date(weddingData.wedding.date).getFullYear()
 
   return (

@@ -74,7 +74,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
       ? 'from-[#4A1F2A] via-[#4A1F2A]/78'
       : 'from-[#050505] via-[#050505]/78'
 
-  const coupleName = `${weddingData.bride.firstName} & ${weddingData.groom.firstName}`
+  const coupleName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
   const heroImage =
     weddingData.gallery?.[1]?.src ||
     weddingData.gallery?.[0]?.src ||
@@ -298,7 +298,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
               className={`max-w-[11ch] font-serif text-[clamp(58px,13vw,172px)] font-light leading-[0.82] tracking-normal md:max-w-[10.5ch] transition-colors duration-500 ${textClass}`}
               style={{ fontFamily: "'Cormorant Garamond', serif" }}
             >
-              <HeroNameLine text={weddingData.bride.firstName} className="block" />
+              <HeroNameLine text={weddingData.groom.firstName} className="block" />
               <span className="block">
                 <span
                   data-hero-char
@@ -307,7 +307,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
                 >
                   &amp;
                 </span>
-                <HeroNameLine text={weddingData.groom.firstName} className="inline" />
+                <HeroNameLine text={weddingData.bride.firstName} className="inline" />
               </span>
             </h1>
 
