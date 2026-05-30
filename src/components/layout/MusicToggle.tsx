@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { usePalette } from '../../hooks/usePalette'
 import { gsap } from '../../lib/gsap'
 import { Volume2, VolumeX } from 'lucide-react'
+import soundUrl from '../../assets/audio/sound.mpeg'
 
 interface MusicToggleProps {
   visible: boolean
@@ -12,7 +13,6 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [hasError, setHasError] = useState(false)
-  const hasInitialized = useRef(false)
   const { palette } = usePalette()
 
   const isBurgundy = palette === 'burgundy';
@@ -24,25 +24,24 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
       ? 'border-[rgba(245,245,240,0.18)] bg-[rgba(43,16,24,0.72)] text-[rgba(245,245,240,0.65)] hover:text-[#F5F5F0] hover:border-[rgba(245,245,240,0.34)] focus-visible:outline-[rgba(245,245,240,0.65)] disabled:hover:text-[rgba(245,245,240,0.65)] disabled:hover:border-[rgba(245,245,240,0.18)]'
       : 'border-[rgba(245,242,236,0.15)] bg-[rgba(5,5,5,0.7)] text-[rgba(245,242,236,0.6)] hover:text-[#F5F2EC] hover:border-[rgba(245,242,236,0.3)] focus-visible:outline-[rgba(245,242,236,0.5)] disabled:hover:text-[rgba(245,242,236,0.6)] disabled:hover:border-[rgba(245,242,236,0.15)]';
 
-  // Initialize audio element once
+  // Initialize audio element
   useEffect(() => {
-    if (hasInitialized.current) return
-    hasInitialized.current = true
-
-    const audio = new Audio('/audio/bgm.mp3')
+    const audio = new Audio(soundUrl)
     audio.loop = true
     audio.volume = 0.3
     audio.preload = 'none'
     audioRef.current = audio
 
-    audio.addEventListener('error', () => {
-      setHasError(true)
-    })
+    const onError = () => setHasError(true)
+    audio.addEventListener('error', onError)
 
     return () => {
+      audio.removeEventListener('error', onError)
       audio.pause()
       audio.src = ''
-      audioRef.current = null
+      if (audioRef.current === audio) {
+        audioRef.current = null
+      }
     }
   }, [])
 
@@ -92,7 +91,7 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
       ref={buttonRef}
       onClick={togglePlay}
       disabled={hasError}
-      title={hasError ? 'Berkas audio (/audio/bgm.mp3) tidak ditemukan' : ''}
+      title={hasError ? 'Berkas audio tidak ditemukan' : ''}
       aria-label={isPlaying ? 'Matikan musik latar' : 'Putar musik latar'}
       className={`fixed bottom-[max(1.5rem,env(safe-area-inset-bottom,0px))] right-[max(1.5rem,env(safe-area-inset-right,0px))] z-40 flex items-center justify-center w-11 h-11 rounded-full border backdrop-blur-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${paletteClasses}`}
       style={{ opacity: 0, pointerEvents: visible ? 'auto' : 'none' }}
