@@ -20,7 +20,7 @@ export function LoveStorySection() {
   const mobileContainerRef = useRef<HTMLDivElement>(null);
   const mobilePathRef = useRef<SVGLineElement>(null);
 
-  const { shouldReduceMotion } = useReducedMotionSafe();
+  const { shouldReduceHeavyMotion, shouldReduceMotion } = useReducedMotionSafe();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [visitedIndex, setVisitedIndex] = useState<number>(-1);
   const activeIndexRef = useRef<number | null>(null);
@@ -31,7 +31,7 @@ export function LoveStorySection() {
   const [isVideoInView, setIsVideoInView] = useState(false);
 
   useEffect(() => {
-    if (shouldReduceMotion || isMobile || videoError) return;
+    if (shouldReduceHeavyMotion || videoError) return;
     
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
@@ -44,7 +44,7 @@ export function LoveStorySection() {
       observer.observe(sectionRef.current);
     }
     return () => observer.disconnect();
-  }, [shouldReduceMotion, isMobile, videoError]);
+  }, [shouldReduceHeavyMotion, videoError]);
 
   const { palette } = usePalette();
   const isBurgundy = palette === 'burgundy';
@@ -176,7 +176,7 @@ export function LoveStorySection() {
     const el = sectionRef.current;
     if (!el) return;
 
-    if (shouldReduceMotion) {
+    if (shouldReduceHeavyMotion) {
       // Force all visual components to static complete states
       el.querySelectorAll<HTMLElement>('.desktop-card, .mobile-card').forEach((c) => {
         c.style.opacity = '1';
@@ -1105,17 +1105,17 @@ export function LoveStorySection() {
               <div 
                 data-final-decor 
                 className={`absolute top-0 bottom-0 w-px transition-colors duration-500 ${isTaupe ? 'bg-gradient-to-b from-[rgba(17,17,17,0.30)] to-transparent' : isBurgundy ? 'bg-gradient-to-b from-[rgba(245,245,240,0.34)] to-transparent' : 'bg-gradient-to-b from-[#F5F5F0]/30 to-transparent'}`} 
-                style={{ opacity: shouldReduceMotion ? 0.4 : 0, transform: shouldReduceMotion ? 'none' : 'scaleY(0)' }} 
+                style={{ opacity: shouldReduceHeavyMotion ? 0.4 : 0, transform: shouldReduceHeavyMotion ? 'none' : 'scaleY(0)' }} 
               />
               <div 
                 data-final-pulse 
                 className={`absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full transition-colors duration-500 ${isTaupe ? 'bg-[#111111] shadow-[0_0_12px_rgba(17,17,17,0.4)]' : 'bg-[#F5F5F0] shadow-[0_0_12px_rgba(245,245,240,0.6)]'}`} 
-                style={{ opacity: shouldReduceMotion ? 0.8 : 0, transform: shouldReduceMotion ? 'none' : 'scale(0)' }}
+                style={{ opacity: shouldReduceHeavyMotion ? 0.8 : 0, transform: shouldReduceHeavyMotion ? 'none' : 'scale(0)' }}
               />
             </div>
             <span 
               className={`font-serif italic text-[18px] md:text-[22px] px-4 block tracking-wide transition-opacity transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.72)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]'}`} 
-              style={{ opacity: shouldReduceMotion ? 1 : 0 }}
+              style={{ opacity: shouldReduceHeavyMotion ? 1 : 0 }}
             >
               Kini, kami melangkah bersama.
             </span>

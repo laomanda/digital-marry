@@ -397,7 +397,7 @@ function StaticTimeline({
 
 export default function EventSection() {
   const events = weddingData.events ?? []
-  const { shouldReduceMotion } = useReducedMotionSafe()
+  const { shouldReduceHeavyMotion, shouldReduceMotion } = useReducedMotionSafe()
   const sectionRef = useRef<HTMLElement | null>(null)
   const bgImgRef = useRef<HTMLImageElement | null>(null)
   const stageRef = useRef<HTMLDivElement | null>(null)
@@ -431,6 +431,12 @@ export default function EventSection() {
         const cards = Array.from(track.querySelectorAll<HTMLElement>('[data-event-card]'))
 
         if (!routeProgress) return undefined
+
+        if (shouldReduceHeavyMotion) {
+          // Force all elements to their final states
+          gsap.set('[data-route-header]', { opacity: 1, y: 0 })
+          return
+        }
 
         const routeLength = routeProgress.getTotalLength()
 
@@ -499,7 +505,7 @@ export default function EventSection() {
       media?.revert()
       ctx.revert()
     }
-  }, [events, shouldReduceMotion])
+  }, [events, shouldReduceHeavyMotion])
 
   return (
     <section
@@ -550,12 +556,12 @@ export default function EventSection() {
           </div>
         </div>
 
-        {!shouldReduceMotion && (
+        {!shouldReduceHeavyMotion && (
           <HorizontalStage
             events={events}
             activeEventId={activeEventId}
             setActiveEventId={setActiveEventId}
-            shouldReduceMotion={shouldReduceMotion}
+            shouldReduceMotion={shouldReduceHeavyMotion}
             stageRef={stageRef}
             trackRef={trackRef}
             isBurgundy={isBurgundy}
@@ -568,8 +574,8 @@ export default function EventSection() {
             events={events}
             activeEventId={activeEventId}
             setActiveEventId={setActiveEventId}
-            shouldReduceMotion={shouldReduceMotion}
-            className={shouldReduceMotion ? 'block' : 'lg:hidden'}
+            shouldReduceMotion={shouldReduceHeavyMotion}
+            className={shouldReduceHeavyMotion ? 'block' : 'lg:hidden'}
             isBurgundy={isBurgundy}
             isTaupe={isTaupe}
           />

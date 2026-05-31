@@ -4,6 +4,7 @@ interface ReducedMotionSafeState {
   prefersReducedMotion: boolean;
   isMobile: boolean;
   shouldReduceMotion: boolean;
+  shouldReduceHeavyMotion: boolean;
 }
 
 export function useReducedMotionSafe(): ReducedMotionSafeState {
@@ -11,6 +12,7 @@ export function useReducedMotionSafe(): ReducedMotionSafeState {
     prefersReducedMotion: false,
     isMobile: false,
     shouldReduceMotion: false,
+    shouldReduceHeavyMotion: false,
   });
 
   useEffect(() => {
@@ -26,8 +28,10 @@ export function useReducedMotionSafe(): ReducedMotionSafeState {
       setState({
         prefersReducedMotion: prefersReduced,
         isMobile: mobile,
-        // Only reduce motions if user specifically requests it via OS preference
+        // OS preference only
         shouldReduceMotion: prefersReduced,
+        // Mobile OR OS preference
+        shouldReduceHeavyMotion: prefersReduced || mobile,
       });
     };
 

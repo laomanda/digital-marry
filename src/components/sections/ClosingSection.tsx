@@ -8,7 +8,7 @@ import { usePalette } from '../../hooks/usePalette'
 export default function ClosingSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
-  const { shouldReduceMotion } = useReducedMotionSafe()
+  const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe()
 
   const { palette } = usePalette();
   const isBurgundy = palette === 'burgundy';
@@ -52,7 +52,7 @@ export default function ClosingSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      if (shouldReduceMotion) {
+      if (shouldReduceHeavyMotion) {
         gsap.set('.closing-reveal, .closing-char, .closing-seal, .closing-credit', {
           opacity: 1,
           y: 0,
@@ -104,11 +104,11 @@ export default function ClosingSection() {
 
       gsap.fromTo(
         '.closing-char',
-        { opacity: 0, y: 40, filter: 'blur(6px)' },
+        { opacity: 0, y: 40, filter: shouldReduceHeavyMotion ? 'none' : 'blur(6px)' },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
+          filter: shouldReduceHeavyMotion ? 'none' : 'blur(0px)',
           duration: 0.9,
           stagger: 0.04,
           ease: 'expo.out',
@@ -160,7 +160,7 @@ export default function ClosingSection() {
     }, sectionRef)
     
     return () => ctx.revert()
-  }, [shouldReduceMotion])
+  }, [shouldReduceMotion, shouldReduceHeavyMotion])
 
   return (
     <section 

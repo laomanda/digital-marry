@@ -369,8 +369,8 @@ function PersonCard({
 }
 
 export function CoupleSection() {
-  const { shouldReduceMotion } = useReducedMotionSafe()
   const sectionRef = useRef<HTMLElement>(null)
+  const { shouldReduceHeavyMotion, shouldReduceMotion } = useReducedMotionSafe()
   const [activeSide, setActiveSide] = useState<'bride' | 'groom' | null>(null)
   const heartIsActive = activeSide !== null
   const { palette } = usePalette()
@@ -384,7 +384,7 @@ export function CoupleSection() {
 
   useEffect(() => {
     const el = sectionRef.current
-    if (!el || shouldReduceMotion) {
+    if (!el || shouldReduceHeavyMotion) {
       // Make everything visible immediately
       el?.querySelectorAll<HTMLElement>('[data-couple-char], [data-couple-header-char]').forEach((c) => {
         c.style.opacity = '1'
@@ -402,6 +402,20 @@ export function CoupleSection() {
 
     const ctx = gsap.context(() => {
       // 1. Main Header Staggered Entrance Timeline (All Devices)
+      // If heavy motion is reduced (e.g. mobile or user preference), skip all heavy ScrollTrigger timelines
+      // and rely on static or lightweight CSS-based reveals.
+      if (shouldReduceHeavyMotion) {
+        // Force initial visual states to be completely visible on mobile immediately
+        gsap.set('[data-couple-header-label]', { opacity: 1, y: 0 })
+        gsap.set('[data-couple-header-char]', { opacity: 1, y: 0 })
+        gsap.set('[data-couple-header-line]', { scaleX: 1, opacity: 1 })
+        gsap.set('[data-couple-header-sub]', { opacity: 1, y: 0 })
+        gsap.set('[data-couple-side]', { opacity: 1, xPercent: 0, scale: 1 })
+        gsap.set('[data-couple-char]', { opacity: 1, y: 0 })
+        gsap.set('[data-couple-heart]', { opacity: 1, scale: 1 })
+        
+        return
+      }
       const headerTl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
@@ -613,7 +627,7 @@ export function CoupleSection() {
           >
             <EditorialHeart
               isActive={heartIsActive}
-              shouldReduceMotion={shouldReduceMotion}
+              shouldReduceMotion={shouldReduceHeavyMotion}
               isBurgundy={isBurgundy}
               isTaupe={isTaupe}
               className="h-24 w-24 lg:h-28 lg:w-28"
@@ -639,7 +653,7 @@ export function CoupleSection() {
           >
             <EditorialHeart
               isActive={heartIsActive}
-              shouldReduceMotion={shouldReduceMotion}
+              shouldReduceMotion={shouldReduceHeavyMotion}
               isBurgundy={isBurgundy}
               isTaupe={isTaupe}
               className="h-14 w-14"

@@ -7,7 +7,7 @@ import { usePalette } from '../../hooks/usePalette'
 import DomeGallery from '../ui/DomeGallery'
 
 export default function GallerySection() {
-  const { shouldReduceMotion } = useReducedMotionSafe()
+  const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe()
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
   const entranceButtonRef = useRef<HTMLButtonElement | null>(null)
 
@@ -170,7 +170,7 @@ export default function GallerySection() {
               openedImageBorderRadius="18px"
               openedImageWidth="min(78vw, 520px)"
               openedImageHeight="min(78vh, 620px)"
-              shouldReduceMotion={shouldReduceMotion}
+              shouldReduceMotion={shouldReduceHeavyMotion}
               onRequestClose={closeGallery}
             />
           </motion.div>

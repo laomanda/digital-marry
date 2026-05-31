@@ -159,7 +159,7 @@ function buildRows(wishes: GuestWish[]) {
 }
 
 export default function WishesSection({ guestWishes = [] }: WishesSectionProps) {
-  const { shouldReduceMotion } = useReducedMotionSafe()
+  const { shouldReduceHeavyMotion } = useReducedMotionSafe()
   const [pausedRowIndex, setPausedRowIndex] = useState<number | null>(null)
 
   const { palette } = usePalette();
@@ -238,7 +238,7 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
               Jadilah yang pertama mengirim doa untuk kami.
             </p>
           </div>
-        ) : shouldReduceMotion ? (
+        ) : shouldReduceHeavyMotion ? (
           <div className="mx-auto flex max-w-[1120px] flex-wrap justify-center gap-4" data-animate="card">
             {allWishes.map((wish) => (
               <CompactWishCard key={wish.id} wish={wish} isBurgundy={isBurgundy} isTaupe={isTaupe} />

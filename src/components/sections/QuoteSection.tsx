@@ -23,7 +23,7 @@ function QuoteWords({ text }: { text: string }) {
 }
 
 export function QuoteSection() {
-  const { shouldReduceMotion } = useReducedMotionSafe()
+  const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe()
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const markRef = useRef<HTMLSpanElement>(null)
@@ -100,7 +100,7 @@ export function QuoteSection() {
       gsap.set(contentElement, {
         opacity: 0.18,
         y: 28,
-        filter: 'blur(5px)',
+        filter: shouldReduceHeavyMotion ? 'none' : 'blur(5px)',
         rotate: 2,
         scale: 0.985,
         transformOrigin: '50% 50%',
@@ -110,7 +110,7 @@ export function QuoteSection() {
       gsap.set(partElements, {
         opacity: 0.32,
         y: 14,
-        filter: 'blur(3px)',
+        filter: shouldReduceHeavyMotion ? 'none' : 'blur(3px)',
         willChange: 'opacity, transform, filter',
       })
 
@@ -128,7 +128,7 @@ export function QuoteSection() {
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
+          filter: shouldReduceHeavyMotion ? 'none' : 'blur(0px)',
           rotate: 0,
           scale: 1,
           ease: 'none',
@@ -141,7 +141,7 @@ export function QuoteSection() {
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
+          filter: shouldReduceHeavyMotion ? 'none' : 'blur(0px)',
           ease: 'none',
           stagger: 0.05,
         },
@@ -154,7 +154,7 @@ export function QuoteSection() {
     return () => {
       ctx.revert()
     }
-  }, [shouldReduceMotion])
+  }, [shouldReduceMotion, shouldReduceHeavyMotion])
 
   return (
     <section

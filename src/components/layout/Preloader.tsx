@@ -13,7 +13,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const [progress, setProgress] = useState(0);
   const [rawProgress, setRawProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const { shouldReduceMotion } = useReducedMotionSafe();
+  const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe();
 
   const { palette } = usePalette()
   const isBurgundy = palette === 'burgundy'
@@ -137,8 +137,16 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             {/* The Logo Silhouette Fill */}
             <motion.div 
               className="relative flex justify-center items-center w-[min(80vw,320px)] md:w-[min(65vw,480px)] h-auto max-h-[50vh]"
-              initial={{ scale: shouldReduceMotion ? 1 : 0.92, filter: 'blur(8px)' }}
-              animate={{ scale: 1, filter: 'blur(0px)' }}
+              initial={{ 
+                scale: shouldReduceHeavyMotion ? 1 : 0.92, 
+                opacity: shouldReduceHeavyMotion ? 1 : 0,
+                filter: shouldReduceHeavyMotion ? 'none' : 'blur(8px)' 
+              }}
+              animate={{ 
+                scale: 1, 
+                opacity: 1,
+                filter: shouldReduceHeavyMotion ? 'none' : 'blur(0px)' 
+              }}
               transition={{ duration: 4, ease: 'easeOut' }}
             >
               {/* Dim/Background Logo */}

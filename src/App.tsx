@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from 'react'
+import { useState, useEffect, Suspense, lazy, useRef } from 'react'
 import { GuestWish } from './types/wish'
 import { supabase } from './lib/supabase'
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider'
@@ -13,6 +13,36 @@ import HeroSection from './components/sections/HeroSection'
 import { QuoteSection } from './components/sections/QuoteSection'
 import { CoupleSection } from './components/sections/CoupleSection'
 import { useGlobalReveal } from './hooks/useGlobalReveal'
+import { useReducedMotionSafe } from './hooks/useReducedMotionSafe'
+
+function LazySection({ children, heightDesk, heightMob }: { children: React.ReactNode, heightDesk: string, heightMob: string }) {
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const { isMobile } = useReducedMotionSafe()
+
+  useEffect(() => {
+    if (isVisible) return
+    const el = ref.current
+    if (!el) return
+    
+    const rootMargin = isMobile ? '500px 0px' : '900px 0px'
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true)
+        observer.disconnect()
+      }
+    }, { rootMargin })
+    
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [isVisible, isMobile])
+
+  return (
+    <div ref={ref} style={{ minHeight: isVisible ? undefined : (isMobile ? heightMob : heightDesk) }}>
+      {isVisible ? children : null}
+    </div>
+  )
+}
 
 // Lazy-loaded heavy sections below the fold
 const LoveStorySection = lazy(() => import('./components/sections/LoveStorySection').then(m => ({ default: m.LoveStorySection })))
@@ -105,15 +135,30 @@ export default function App() {
         
         {isInvitationOpen && (
           <Suspense fallback={<div style={{ minHeight: '100vh' }} aria-hidden="true" />}>
-            <LoveStorySection />
-            <CountdownSection />
-            <EventSection />
-
-            <RsvpSection onWishSubmit={handleAddWish} />
-            <WishesSection guestWishes={guestWishes} />
-            <GallerySection />
-            <GiftSection />
-            <ClosingSection />
+            <LazySection heightDesk="1200px" heightMob="900px">
+              <LoveStorySection />
+            </LazySection>
+            <LazySection heightDesk="800px" heightMob="800px">
+              <CountdownSection />
+            </LazySection>
+            <LazySection heightDesk="1000px" heightMob="1000px">
+              <EventSection />
+            </LazySection>
+            <LazySection heightDesk="900px" heightMob="900px">
+              <RsvpSection onWishSubmit={handleAddWish} />
+            </LazySection>
+            <LazySection heightDesk="800px" heightMob="800px">
+              <WishesSection guestWishes={guestWishes} />
+            </LazySection>
+            <LazySection heightDesk="800px" heightMob="800px">
+              <GallerySection />
+            </LazySection>
+            <LazySection heightDesk="900px" heightMob="900px">
+              <GiftSection />
+            </LazySection>
+            <LazySection heightDesk="900px" heightMob="900px">
+              <ClosingSection />
+            </LazySection>
           </Suspense>
         )}
       </main>

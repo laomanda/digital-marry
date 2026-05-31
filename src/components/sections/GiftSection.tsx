@@ -41,7 +41,7 @@ export default function GiftSection() {
   const [copyError, setCopyError] = useState(false)
   const [folderOpen, setFolderOpen] = useState(false)
   const [selectedGiftId, setSelectedGiftId] = useState(gifts[0]?.id ?? '')
-  const { shouldReduceMotion, isMobile } = useReducedMotionSafe()
+  const { shouldReduceMotion, shouldReduceHeavyMotion, isMobile } = useReducedMotionSafe()
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const detailRef = useRef<HTMLElement | null>(null)
   const copyButtonRef = useRef<HTMLButtonElement | null>(null)
@@ -238,7 +238,7 @@ export default function GiftSection() {
     const parts = detail.querySelectorAll('[data-gift-reveal]')
     const chars = detail.querySelectorAll('[data-account-char]')
 
-    if (shouldReduceMotion) {
+    if (shouldReduceHeavyMotion) {
       parts.forEach((part) => {
         const element = part as HTMLElement
         element.style.opacity = '1'

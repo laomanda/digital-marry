@@ -55,7 +55,7 @@ function AnimatedDigits({ value, pad = true, shouldReduceMotion }: AnimatedDigit
 
 export default function CountdownSection() {
   const { days, hours, minutes, seconds, isPast } = useCountdown(weddingData.wedding.date);
-  const { shouldReduceMotion } = useReducedMotionSafe();
+  const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe();
 
   const timeUnits = [
     { label: 'Jam', value: hours },
@@ -206,7 +206,7 @@ export default function CountdownSection() {
                 />
                 <motion.div
                   className="absolute inset-3 rounded-full opacity-40 transition-opacity duration-700 group-hover/days:opacity-70"
-                  animate={shouldReduceMotion ? undefined : { rotate: 360 }}
+                  animate={shouldReduceHeavyMotion ? undefined : { rotate: 360 }}
                   transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
                   aria-hidden="true"
                 >
@@ -252,7 +252,7 @@ export default function CountdownSection() {
                   />
                   <motion.div
                     className="absolute inset-3 rounded-full opacity-35 transition-opacity duration-700 group-hover/days:opacity-70"
-                    animate={shouldReduceMotion ? undefined : { rotate: 360 }}
+                    animate={shouldReduceHeavyMotion ? undefined : { rotate: 360 }}
                     transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
                     aria-hidden="true"
                   >

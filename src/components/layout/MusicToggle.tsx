@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { usePalette } from '../../hooks/usePalette'
+import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import { gsap } from '../../lib/gsap'
 import { Volume2, VolumeX } from 'lucide-react'
 import soundUrl from '../../assets/audio/sound.mpeg'
@@ -14,6 +15,7 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [hasError, setHasError] = useState(false)
   const { palette } = usePalette()
+  const { isMobile } = useReducedMotionSafe()
 
   const isBurgundy = palette === 'burgundy';
   const isTaupe = palette === 'taupe';
@@ -58,7 +60,7 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
 
       // Try autoplay on first visibility (user gesture already happened via Open Invitation)
       const audio = audioRef.current
-      if (audio && !isPlaying && !hasError) {
+      if (audio && !isPlaying && !hasError && !isMobile) {
         audio.play()
           .then(() => setIsPlaying(true))
           .catch(() => {
