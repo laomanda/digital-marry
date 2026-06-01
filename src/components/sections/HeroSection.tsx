@@ -241,7 +241,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
             src={heroImage}
             alt=""
             aria-hidden="true"
-            className={`h-full w-full scale-[1.02] object-cover grayscale transition-all duration-500 contrast-[1.12] brightness-[0.82]`}
+            className={`h-full w-full scale-[1.02] object-cover transition-all duration-500 contrast-[1.12] brightness-[0.82]`}
             loading="eager"
             decoding="async"
           />
