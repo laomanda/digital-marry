@@ -3,7 +3,7 @@ import { gsap } from '../../lib/gsap';
 import { weddingData } from '../../data/wedding.data';
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
 import { Container } from '../ui/Container';
-import loveStoryBackground from '../../assets/hero.webp';
+import loveStoryBackground from '../../assets/lainnya/foto/story.webp';
 
 export function LoveStorySection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -120,6 +120,23 @@ export function LoveStorySection() {
             }
           }
         );
+
+        // Smooth Parallax Scroll Effect (only if heavy motion is allowed)
+        if (!shouldReduceHeavyMotion) {
+          gsap.fromTo('.love-story-bg',
+            { yPercent: -10 },
+            {
+              yPercent: 10,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+        }
 
         // Desktop item entrance reveals
         const desktopItems = gsap.utils.toArray<HTMLElement>('.desktop-item');
@@ -244,12 +261,12 @@ export function LoveStorySection() {
         `}
       </style>
 
-      {/* Cinematic Static Background Image */}
+      {/* Cinematic Static Background Image with Parallax Overflow */}
       <img
         src={loveStoryBackground}
         loading="lazy"
         decoding="async"
-        className="love-story-bg absolute inset-0 w-full h-full object-cover pointer-events-none"
+        className="love-story-bg absolute -top-[10%] left-0 w-full h-[120%] object-cover pointer-events-none"
         style={{ opacity: backgroundImageOpacity }}
         alt=""
         aria-hidden="true"

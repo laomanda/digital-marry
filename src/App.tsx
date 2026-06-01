@@ -15,7 +15,7 @@ import { CoupleSection } from './components/sections/CoupleSection'
 import { useGlobalReveal } from './hooks/useGlobalReveal'
 import { useReducedMotionSafe } from './hooks/useReducedMotionSafe'
 
-function LazySection({ children, heightDesk, heightMob }: { children: React.ReactNode, heightDesk: string, heightMob: string }) {
+function LazySection({ children, id, heightDesk, heightMob }: { children: React.ReactNode, id?: string, heightDesk: string, heightMob: string }) {
   const [isVisible, setIsVisible] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { isMobile } = useReducedMotionSafe()
@@ -38,7 +38,7 @@ function LazySection({ children, heightDesk, heightMob }: { children: React.Reac
   }, [isVisible, isMobile])
 
   return (
-    <div ref={ref} style={{ minHeight: isVisible ? undefined : (isMobile ? heightMob : heightDesk) }}>
+    <div id={id} ref={ref} style={{ minHeight: isVisible ? undefined : (isMobile ? heightMob : heightDesk) }}>
       {isVisible ? children : null}
     </div>
   )
@@ -135,28 +135,28 @@ export default function App() {
         
         {isInvitationOpen && (
           <Suspense fallback={<div style={{ minHeight: '100vh' }} aria-hidden="true" />}>
-            <LazySection heightDesk="1200px" heightMob="900px">
+            <LazySection id="love-story" heightDesk="1200px" heightMob="900px">
               <LoveStorySection />
             </LazySection>
-            <LazySection heightDesk="800px" heightMob="800px">
+            <LazySection id="countdown" heightDesk="800px" heightMob="800px">
               <CountdownSection />
             </LazySection>
-            <LazySection heightDesk="1000px" heightMob="1000px">
+            <LazySection id="event" heightDesk="1000px" heightMob="1000px">
               <EventSection />
             </LazySection>
-            <LazySection heightDesk="900px" heightMob="900px">
+            <LazySection id="rsvp" heightDesk="900px" heightMob="900px">
               <RsvpSection onWishSubmit={handleAddWish} />
             </LazySection>
-            <LazySection heightDesk="800px" heightMob="800px">
+            <LazySection id="wishes" heightDesk="800px" heightMob="800px">
               <WishesSection guestWishes={guestWishes} />
             </LazySection>
-            <LazySection heightDesk="800px" heightMob="800px">
+            <LazySection id="gallery" heightDesk="800px" heightMob="800px">
               <GallerySection />
             </LazySection>
-            <LazySection heightDesk="900px" heightMob="900px">
+            <LazySection id="gift" heightDesk="900px" heightMob="900px">
               <GiftSection />
             </LazySection>
-            <LazySection heightDesk="900px" heightMob="900px">
+            <LazySection id="closing" heightDesk="900px" heightMob="900px">
               <ClosingSection />
             </LazySection>
           </Suspense>

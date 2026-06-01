@@ -1,3 +1,14 @@
+import bridePhoto from '../assets/lainnya/foto/girl-personal.webp'
+import groomPhoto from '../assets/lainnya/foto/man-personal.webp'
+import galeri1 from '../assets/lainnya/foto/galeri-1.webp'
+import galeri2 from '../assets/lainnya/foto/galeri-2.webp'
+import galeri3 from '../assets/lainnya/foto/galeri-3.webp'
+import galeri4 from '../assets/lainnya/foto/galeri-4.webp'
+import galeri5 from '../assets/lainnya/foto/galeri-5.webp'
+import galeri6 from '../assets/lainnya/foto/galeri-6.webp'
+import galeri7 from '../assets/lainnya/foto/galeri-7.webp'
+import galeri8 from '../assets/lainnya/foto/galeri-8.webp'
+
 export const weddingData = {
   bride: {
     firstName: 'Reny',
@@ -5,7 +16,7 @@ export const weddingData = {
     fullName: 'Reny Nur Khayati',
     parents: 'Putri ke-3 dari Bpk. Mungin & Ibu Kamsini',
     description: 'Seorang pecinta pagi yang tenang, sastra klasik, dan keindahan sederhana alam semesta.',
-    photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80&fit=crop',
+    photo: bridePhoto,
     instagram: '@renynurkhayati',
   },
   groom: {
@@ -14,7 +25,7 @@ export const weddingData = {
     fullName: 'Muhammad Ichsan Nurfalah',
     parents: 'Putra ke-2 dari Bpk. Danur Wenda & Ibu Ikin Rukini',
     description: 'Seorang arsitek yang menemukan inspirasi dalam keanggunan terstruktur dan kehangatan tawa bersama.',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop',
+    photo: groomPhoto,
     instagram: '@ichsannurfalah',
   },
   wedding: {
@@ -99,12 +110,16 @@ export const weddingData = {
     },
   ],
   gallery: [
-    { id: 1, src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80&fit=crop', alt: 'Couple portrait', span: 'tall' },
-    { id: 2, src: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800&q=80&fit=crop', alt: 'Wedding rings', span: 'normal' },
-    { id: 3, src: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800&q=80&fit=crop', alt: 'Wedding ceremony', span: 'normal' },
-    { id: 4, src: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&q=80&fit=crop', alt: 'Wedding bouquet', span: 'wide' },
-    { id: 5, src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&q=80&fit=crop', alt: 'Couple dancing', span: 'normal' },
-    { id: 6, src: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80&fit=crop', alt: 'Wedding venue', span: 'tall' },
+    { id: 1, src: bridePhoto, alt: 'Bride portrait', span: 'tall' },
+    { id: 2, src: groomPhoto, alt: 'Groom portrait', span: 'normal' },
+    { id: 3, src: galeri1, alt: 'Gallery 1', span: 'normal' },
+    { id: 4, src: galeri2, alt: 'Gallery 2', span: 'wide' },
+    { id: 5, src: galeri3, alt: 'Gallery 3', span: 'normal' },
+    { id: 6, src: galeri4, alt: 'Gallery 4', span: 'tall' },
+    { id: 7, src: galeri5, alt: 'Gallery 5', span: 'normal' },
+    { id: 8, src: galeri6, alt: 'Gallery 6', span: 'wide' },
+    { id: 9, src: galeri7, alt: 'Gallery 7', span: 'normal' },
+    { id: 10, src: galeri8, alt: 'Gallery 8', span: 'normal' },
   ],
   gifts: [
     {

@@ -3,7 +3,7 @@ import { animate } from 'animejs'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import heroImageLocal from '../../assets/hero.webp'
+import heroImageLocal from '../../assets/lainnya/foto/hero-section.webp'
 
 type HeroSectionProps = {
   isInvitationOpen: boolean

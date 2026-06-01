@@ -107,6 +107,21 @@ export default function Navbar({ visible = true }: NavbarProps) {
 
   const closeMenu = () => setMenuOpen(false)
 
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    closeMenu()
+    if (href.startsWith('#')) {
+      e.preventDefault()
+      const targetId = href.substring(1)
+      const targetElement = document.getElementById(targetId)
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+      }
+    }
+  }
+
   return (
     <>
       <div
@@ -198,7 +213,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
                           <a
                             href={link.href}
                             className="group block py-5 border-b border-[#F5F5F0]/10 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5F5F0]/50"
-                            onClick={closeMenu}
+                            onClick={(e) => handleLinkClick(e, link.href)}
                           >
                             <div className="flex items-center gap-4 transition-transform duration-300 group-hover:translate-x-1">
                               <Icon 
