@@ -36,10 +36,10 @@ export function LoveStorySection() {
     { x: 25, y: 90, align: 'right' }
   ];
 
-  const backgroundImageOpacity = isMobile || shouldReduceHeavyMotion || prefersReducedMotion ? 0.40 : 0.28;
+  const backgroundImageOpacity = isMobile || shouldReduceHeavyMotion || prefersReducedMotion ? 0.65 : 0.55;
   const backgroundOverlay = isMobile || shouldReduceHeavyMotion || prefersReducedMotion
-    ? 'linear-gradient(rgba(5,5,5,0.15), rgba(5,5,5,0.15)), radial-gradient(circle at center, rgba(5,5,5,0.05) 0%, rgba(5,5,5,0.25) 100%)'
-    : 'linear-gradient(rgba(5,5,5,0.66), rgba(5,5,5,0.7)), radial-gradient(circle at center, rgba(5,5,5,0.14) 0%, rgba(5,5,5,0.88) 100%)';
+    ? 'linear-gradient(rgba(5,5,5,0.15), rgba(5,5,5,0.15)), radial-gradient(circle at center, rgba(5,5,5,0.02) 0%, rgba(5,5,5,0.20) 100%)'
+    : 'linear-gradient(rgba(5,5,5,0.20), rgba(5,5,5,0.25)), radial-gradient(circle at center, rgba(5,5,5,0.05) 0%, rgba(5,5,5,0.35) 100%)';
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
