@@ -36,9 +36,9 @@ export function LoveStorySection() {
     { x: 25, y: 90, align: 'right' }
   ];
 
-  const backgroundImageOpacity = isMobile || shouldReduceHeavyMotion || prefersReducedMotion ? 0.18 : 0.28;
+  const backgroundImageOpacity = isMobile || shouldReduceHeavyMotion || prefersReducedMotion ? 0.40 : 0.28;
   const backgroundOverlay = isMobile || shouldReduceHeavyMotion || prefersReducedMotion
-    ? 'linear-gradient(rgba(5,5,5,0.80), rgba(5,5,5,0.86)), radial-gradient(circle at center, rgba(5,5,5,0.16) 0%, rgba(5,5,5,0.92) 100%)'
+    ? 'linear-gradient(rgba(5,5,5,0.15), rgba(5,5,5,0.15)), radial-gradient(circle at center, rgba(5,5,5,0.05) 0%, rgba(5,5,5,0.25) 100%)'
     : 'linear-gradient(rgba(5,5,5,0.66), rgba(5,5,5,0.7)), radial-gradient(circle at center, rgba(5,5,5,0.14) 0%, rgba(5,5,5,0.88) 100%)';
 
   useEffect(() => {
