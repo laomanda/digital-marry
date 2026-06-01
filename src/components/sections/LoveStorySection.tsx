@@ -360,7 +360,7 @@ export function LoveStorySection() {
 
                         {imageUrl && (
                           <div className="w-full aspect-[16/10] overflow-hidden rounded-[2px] mb-4 border border-[#F5F5F0]/10 relative z-10">
-                            <img src={imageUrl} alt={story.title} className="w-full h-full object-cover grayscale opacity-90 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0" loading="lazy" decoding="async" />
+                            <img src={imageUrl} alt={story.title} className="w-full h-full object-cover opacity-90 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-100" loading="lazy" decoding="async" />
                           </div>
                         )}
                         <div className="flex items-center gap-3 mb-2 relative z-10">
@@ -485,7 +485,7 @@ export function LoveStorySection() {
 
                           {imageUrl && (
                             <div className="w-full aspect-[16/10] overflow-hidden rounded-[2px] mb-5 border border-[#F5F5F0]/10 relative z-10">
-                              <img src={imageUrl} alt={story.title} className="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" loading="lazy" decoding="async" />
+                              <img src={imageUrl} alt={story.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" loading="lazy" decoding="async" />
                             </div>
                           )}
 

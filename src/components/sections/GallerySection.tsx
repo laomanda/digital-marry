@@ -68,7 +68,7 @@ export default function GallerySection() {
                     src={image.src}
                     alt=""
                     loading="lazy"
-                    className="h-full w-full object-cover grayscale"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               ))}
@@ -133,7 +133,7 @@ export default function GallerySection() {
 
             <DomeGallery
               images={images}
-              grayscale
+              grayscale={false}
               fit={0.56}
               minRadius={520}
               maxRadius={900}

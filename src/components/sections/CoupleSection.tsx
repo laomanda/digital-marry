@@ -293,7 +293,7 @@ function PersonCard({
           loading="eager"
           decoding="async"
           className={[
-            'absolute inset-0 h-full w-full object-cover grayscale',
+            'absolute inset-0 h-full w-full object-cover',
             'brightness-[0.88] contrast-[1.05]',
             'transition-transform duration-700 ease-out',
             active ? 'scale-[1.04]' : 'scale-100',
