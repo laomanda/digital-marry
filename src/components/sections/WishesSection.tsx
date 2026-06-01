@@ -93,7 +93,7 @@ function CompactWishCard({
           <div className="flex min-w-0 items-center gap-3">
             <WishMonogram name={wish.name} />
             <div className="min-w-0">
-              <h3 className={`truncate text-[15px] font-semibold transition-colors duration-500 ${textClass}`}>{wish.name}</h3>
+              <h3 className={`truncate font-athene text-[18px] transition-colors duration-500 ${textClass}`}>{wish.name}</h3>
               <span className={`mt-1 block truncate font-mono text-[9px] uppercase transition-colors duration-500 ${mutedClass}`}>
                 {wish.time}
               </span>
@@ -112,7 +112,7 @@ function CompactWishCard({
         </div>
 
         <p
-          className="my-4 overflow-hidden text-[15px] leading-[1.62] transition-colors duration-500 sm:text-[16px] text-[#A4A4A4] group-hover/card:text-[#F5F5F0]/88"
+          className="my-4 overflow-hidden font-montserrat text-[15px] font-semibold leading-[1.62] transition-colors duration-500 sm:text-[16px] text-[#A4A4A4] group-hover/card:text-[#F5F5F0]/88"
           style={{
             display: '-webkit-box',
             WebkitBoxOrient: 'vertical',
@@ -203,18 +203,18 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
           <span data-animate="text" className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
             Doa &amp; Ucapan
           </span>
-          <h2 data-animate="title" className={`mb-6 font-script text-[44px] font-light leading-[1.02] md:text-[64px] ${textClass}`} style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
+          <h2 data-animate="title" className={`mb-6 font-athene text-[44px] leading-[1.02] md:text-[64px] ${textClass}`}>
             Ucapan dari Mereka
           </h2>
-          <p data-animate="text" className={`max-w-md text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>
+          <p data-animate="text" className={`max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
             Terima kasih atas setiap doa dan ucapan yang telah diberikan.
           </p>
         </div>
 
         {allWishes.length === 0 ? (
           <div className="mx-auto max-w-[420px] border p-8 text-center transition-colors duration-500 border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.035]">
-            <p className={`mb-3 font-serif text-[30px] font-light transition-colors duration-500 ${textClass}`}>Belum ada ucapan.</p>
-            <p className={`text-[14px] leading-7 transition-colors duration-500 ${mutedClass}`}>
+            <p className={`mb-3 font-athene text-[30px] transition-colors duration-500 ${textClass}`}>Belum ada ucapan.</p>
+            <p className={`font-montserrat text-[14px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
               Jadilah yang pertama mengirim doa untuk kami.
             </p>
           </div>

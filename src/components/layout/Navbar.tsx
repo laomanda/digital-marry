@@ -220,10 +220,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
                                 size={18} 
                                 className="text-[#A4A4A4] transition-colors duration-300 group-hover:text-[#F5F5F0]" 
                               />
-                              <span
-                                className="text-[34px] text-[#F5F5F0]/78 transition-colors duration-300 group-hover:text-[#F5F5F0] pt-1"
-                                style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
-                              >
+                              <span className="pt-1 font-athene text-[34px] leading-none text-[#F5F5F0]/78 transition-colors duration-300 group-hover:text-[#F5F5F0]">
                                 {link.label}
                               </span>
                             </div>
@@ -236,7 +233,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
 
                 {/* Footer */}
                 <div className="mt-8 border-t border-[#F5F5F0]/10 pt-5 pb-2 text-left">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#A4A4A4]">
+                  <p className="font-athene text-[24px] leading-none text-[#A4A4A4]">
                     {coupleName}
                   </p>
                 </div>

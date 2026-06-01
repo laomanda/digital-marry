@@ -4,6 +4,7 @@ import { weddingData } from '../../data/wedding.data';
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
 import { Container } from '../ui/Container';
 import loveStoryBackground from '../../assets/lainnya/foto/story.webp';
+import loveStoryFeatureImage from '../../assets/lainnya/foto/story-thumbnail.webp';
 
 export function LoveStorySection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -86,7 +87,53 @@ export function LoveStorySection() {
         }
       });
 
-      // 2. Desktop SVG Path Draw & Desktop Cards
+      // 2. Cinematic bridge image before the timeline
+      const featureImage = el.querySelector<HTMLElement>('.love-feature-image');
+      const featureHorizontalLines = gsap.utils.toArray<HTMLElement>('.love-feature-hline');
+      const featureVerticalLines = gsap.utils.toArray<HTMLElement>('.love-feature-vline');
+      const featureMarks = gsap.utils.toArray<HTMLElement>('.love-feature-mark');
+
+      if (featureImage) {
+        const featureTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: '.love-feature',
+            start: 'top 78%',
+            toggleActions: 'play none none none'
+          }
+        });
+
+        featureTl
+          .fromTo(
+            featureImage,
+            { y: 28, opacity: 0, scale: 0.96, filter: shouldReduceHeavyMotion ? 'none' : 'blur(6px)' },
+            { y: 0, opacity: 1, scale: 1, filter: 'none', duration: 1, ease: 'power3.out' }
+          );
+
+        if (featureMarks.length) {
+          featureTl.fromTo(
+            featureMarks,
+            { opacity: 0, scale: 0.75 },
+            { opacity: 1, scale: 1, duration: 0.45, stagger: 0.04, ease: 'power2.out' },
+            '-=0.55'
+          );
+        }
+
+        featureTl
+          .fromTo(
+            featureHorizontalLines,
+            { scaleX: 0, opacity: 0, transformOrigin: 'center center' },
+            { scaleX: 1, opacity: 1, duration: 0.65, stagger: 0.08, ease: 'power2.out' },
+            '-=0.35'
+          )
+          .fromTo(
+            featureVerticalLines,
+            { scaleY: 0, opacity: 0, transformOrigin: 'top center' },
+            { scaleY: 1, opacity: 1, duration: 0.65, ease: 'power2.out' },
+            '-=0.45'
+          );
+      }
+
+      // 3. Desktop SVG Path Draw & Desktop Cards
       mm.add("(min-width: 1024px)", () => {
         // SVG path highlight draw
         const path = el.querySelector('.desktop-path-highlight') as SVGPathElement;
@@ -182,7 +229,7 @@ export function LoveStorySection() {
         });
       });
 
-      // 3. Mobile Animation
+      // 4. Mobile Animation
       mm.add("(max-width: 1023px)", () => {
         if (shouldReduceHeavyMotion) return;
         
@@ -200,7 +247,7 @@ export function LoveStorySection() {
         });
       });
 
-      // 4. Closing Note Animation
+      // 5. Closing Note Animation
       const closingTl = gsap.timeline({
         scrollTrigger: {
           trigger: '.closing-note-container',
@@ -284,16 +331,38 @@ export function LoveStorySection() {
 
       <Container>
         {/* Intro Header */}
-        <div className="flex flex-col items-center text-center mb-14 lg:mb-32 relative z-10">
+        <div className="flex flex-col items-center text-center mb-10 lg:mb-20 relative z-10">
           <span className={`intro-anim font-mono text-[11px] md:text-[12px] tracking-[0.25em] uppercase mb-6 transition-colors duration-500 ${mutedClass}`}>
             Cerita Kami
           </span>
-          <h2 className={`intro-anim font-script text-[38px] md:text-[56px] lg:text-[72px] leading-[1.06] md:leading-[1.1] font-light max-w-[320px] px-4 md:max-w-2xl transition-colors duration-500 ${headingClass}`} style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
+          <h2 className={`intro-anim font-athene text-[38px] md:text-[56px] lg:text-[72px] leading-[1.06] md:leading-[1.1] max-w-[320px] px-4 md:max-w-2xl transition-colors duration-500 ${headingClass}`}>
             Awal Kisah Kami
           </h2>
-          <p className="intro-anim mt-6 text-[14px] md:text-[16px] leading-7 font-sans max-w-md px-4 transition-colors duration-500 text-[#F5F5F0]/[0.64] md:text-[#A4A4A4]">
+          <p className="intro-anim mt-6 max-w-md px-4 font-montserrat text-[14px] font-semibold leading-7 transition-colors duration-500 text-[#F5F5F0]/[0.64] md:text-[16px] md:text-[#A4A4A4]">
             Setiap cerita memiliki awal, dan inilah bagian kecil dari perjalanan kami.
           </p>
+        </div>
+
+        {/* Cinematic image bridge before the story flow */}
+        <div className="love-feature relative z-10 mx-auto mb-16 max-w-[920px] px-2 md:mb-24 lg:mb-32">
+          <div className="love-feature-hline mx-auto mb-7 h-px w-20 bg-gradient-to-r from-transparent via-[#F5F5F0]/28 to-transparent md:w-32" aria-hidden="true" />
+          <div className="group relative mx-auto overflow-hidden">
+            <div className="love-feature-image relative overflow-hidden">
+              <img
+                src={loveStoryFeatureImage}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                className="h-auto w-full object-contain transition-transform duration-700 group-hover:scale-[1.01]"
+              />
+            </div>
+          </div>
+
+          <div className="mt-7 flex flex-col items-center" aria-hidden="true">
+            <div className="love-feature-vline h-12 w-px origin-top bg-gradient-to-b from-[#F5F5F0]/26 to-transparent md:h-16" />
+            <div className="mt-2 h-[7px] w-[7px] rounded-full border border-[#F5F5F0]/24 bg-[#F5F5F0]/55 shadow-[0_0_14px_rgba(245,245,240,0.16)]" />
+          </div>
         </div>
 
         {/* TIMELINE CONTAINER */}
@@ -364,13 +433,17 @@ export function LoveStorySection() {
                           </div>
                         )}
                         <div className="flex items-center gap-3 mb-2 relative z-10">
-                          <span className="font-mono text-[10px] tracking-[0.25em] text-[#F5F5F0]/70 uppercase group-hover:text-[#F5F5F0]/90 transition-colors duration-500">{story.date}</span>
+                          {story.date && (
+                            <span className="font-mono text-[10px] tracking-[0.25em] text-[#F5F5F0]/70 uppercase group-hover:text-[#F5F5F0]/90 transition-colors duration-500">
+                              {story.date}
+                            </span>
+                          )}
                           <div className="flex-1 h-px bg-gradient-to-r from-[#F5F5F0]/15 to-transparent" />
                         </div>
-                        <h3 className="font-serif text-[22px] leading-tight mb-2 text-[#F5F5F0]/80 group-hover:text-[#F5F5F0] transition-colors duration-500 relative z-10">
+                        <h3 className="relative z-10 mb-2 font-athene text-[22px] leading-tight text-[#F5F5F0]/80 transition-colors duration-500 group-hover:text-[#F5F5F0]">
                           {story.title}
                         </h3>
-                        <p className="font-sans text-[14px] leading-7 text-[#F5F5F0]/72 group-hover:text-[#F5F5F0]/85 transition-colors duration-500 relative z-10">
+                        <p className="relative z-10 whitespace-pre-line font-montserrat text-[14px] font-semibold leading-7 text-[#F5F5F0]/72 transition-colors duration-500 group-hover:text-[#F5F5F0]/85">
                           {story.description}
                         </p>
                       </div>
@@ -390,7 +463,7 @@ export function LoveStorySection() {
                 
                 {/* Closing Note Text Left Aligned (Exact same coordinates as cards) */}
                 <div className="w-full pl-[60px] pr-3 relative z-10">
-                  <span className="font-serif italic text-[18px] md:text-[22px] text-[#D6D6D0]/80 tracking-wide block">
+                  <span className="block font-athene text-[18px] tracking-wide text-[#D6D6D0]/80 md:text-[22px]">
                     Kini, kami melangkah bersama.
                   </span>
                 </div>
@@ -490,16 +563,18 @@ export function LoveStorySection() {
                           )}
 
                           <div className={`flex items-center gap-3 mb-2.5 relative z-10 ${node.align === 'right' ? '' : 'flex-row-reverse'}`}>
-                            <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-[#F5F5F0]/60 group-hover:text-[#F5F5F0]/90 transition-colors duration-500">
-                              {story.date}
-                            </span>
+                            {story.date && (
+                              <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-[#F5F5F0]/60 group-hover:text-[#F5F5F0]/90 transition-colors duration-500">
+                                {story.date}
+                              </span>
+                            )}
                             <div className="w-8 h-px bg-gradient-to-r from-[#F5F5F0]/20 to-transparent" />
                           </div>
 
-                          <h3 className="font-serif text-[26px] xl:text-[30px] leading-[1.2] mb-3 text-[#F5F5F0]/80 group-hover:text-[#F5F5F0] transition-colors duration-500 relative z-10">
+                          <h3 className="relative z-10 mb-3 font-athene text-[26px] leading-[1.2] text-[#F5F5F0]/80 transition-colors duration-500 group-hover:text-[#F5F5F0] xl:text-[30px]">
                             {story.title}
                           </h3>
-                          <p className="font-sans text-[14px] leading-relaxed max-w-prose text-[#A4A4A4]/70 group-hover:text-[#A4A4A4] transition-colors duration-500 relative z-10">
+                          <p className="relative z-10 max-w-prose whitespace-pre-line font-montserrat text-[14px] font-semibold leading-relaxed text-[#A4A4A4]/70 transition-colors duration-500 group-hover:text-[#A4A4A4]">
                             {story.description}
                           </p>
                         </div>
@@ -525,7 +600,7 @@ export function LoveStorySection() {
                 <div className="closing-dot w-[6px] h-[6px] rounded-full bg-[#F5F5F0]/50 border border-[#F5F5F0]/20 shadow-[0_0_8px_rgba(245,245,240,0.1)]" />
               </div>
             </div>
-            <span className="closing-note font-serif italic text-[18px] md:text-[22px] lg:text-[24px] text-[#D6D6D0]/80 mt-4 tracking-wide block">
+            <span className="closing-note mt-4 block font-athene text-[18px] tracking-wide text-[#D6D6D0]/80 md:text-[22px] lg:text-[24px]">
               Kini, kami melangkah bersama.
             </span>
           </div>

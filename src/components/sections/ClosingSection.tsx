@@ -173,12 +173,12 @@ export default function ClosingSection() {
           </span>
           
           
-          <p className={`closing-quote closing-reveal font-serif italic text-[19px] md:text-[26px] leading-relaxed font-light ${textClass}`}>
+          <p className={`closing-quote closing-reveal font-montserrat text-[19px] font-semibold leading-relaxed md:text-[26px] ${textClass}`}>
             &ldquo;{weddingData.closingQuote.text}&rdquo;
           </p>
 
           
-          <p className={`closing-author closing-reveal font-sans text-[11px] md:text-[12px] uppercase tracking-[0.3em] mt-1 transition-colors duration-500 ${mutedClass}`}>
+          <p className={`closing-author closing-reveal mt-1 font-montserrat text-[11px] font-semibold uppercase tracking-[0.3em] transition-colors duration-500 md:text-[12px] ${mutedClass}`}>
             — {weddingData.closingQuote.author}
           </p>
         </div>
@@ -188,15 +188,12 @@ export default function ClosingSection() {
           
           {/* Accessible Staggered Signature */}
           <h2
-            className={`closing-signature font-script font-light ${textClass}`}
+            className={`closing-signature whitespace-nowrap font-athene ${textClass}`}
             style={{
-              fontFamily: "'Great Vibes', cursive", 
-              fontWeight: 400,
-              fontSize: 'clamp(56px, 12vw, 160px)',
+              fontSize: 'clamp(34px, 9.5vw, 160px)',
               lineHeight: 0.85,
-              letterSpacing: '-0.03em',
+              letterSpacing: '-0.02em',
               maxWidth: '100%',
-              overflowWrap: 'break-word',
             }}
             aria-label={closingName}
           >
@@ -216,7 +213,7 @@ export default function ClosingSection() {
             <p className={`closing-date closing-reveal font-mono text-[9px] md:text-[11px] tracking-[0.5em] uppercase transition-colors duration-500 ${mutedClass}`}>
               {weddingData.wedding.dateFormatted}
             </p>
-            <p className={`closing-thanks closing-reveal font-sans text-[13px] md:text-[14px] max-w-md leading-relaxed border-t pt-4 mt-2 transition-colors duration-500 ${mutedClass} border-[rgba(245,245,240,0.1)]`}>
+            <p className={`closing-thanks closing-reveal mt-2 max-w-md border-t pt-4 font-montserrat text-[13px] font-semibold leading-relaxed transition-colors duration-500 md:text-[14px] ${mutedClass} border-[rgba(245,245,240,0.1)]`}>
               Terima kasih telah menjadi bagian dari hari paling berharga dalam hidup kami. Kehadiran dan doa Anda adalah berkah yang tak ternilai.
             </p>
             <div className="closing-seal flex items-center gap-3 pt-1 transition-colors duration-500 text-[#F5F5F0]/70" aria-hidden="true">

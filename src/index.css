@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Athene Voyage';
+  src: url('./assets/font/Athene%20Voyage.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./assets/font/Montserrat-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,6 +24,8 @@
     --color-deep-black: #111111;
     --color-warm-offwhite: #F5F5F0;
     --color-border-light: rgba(255, 255, 255, 0.12);
+    --font-athene: 'Athene Voyage', 'Cormorant Garamond', Georgia, serif;
+    --font-montserrat: 'Montserrat', 'DM Sans', system-ui, sans-serif;
     
     /* Fallback variables for stability with pre-existing styling classes */
     --black: #111111;

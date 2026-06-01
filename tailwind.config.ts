@@ -32,6 +32,8 @@ const config: Config = {
         white: '#FFFFFF',
       },
       fontFamily: {
+        athene: ['"Athene Voyage"', '"Cormorant Garamond"', 'Georgia', 'serif'],
+        montserrat: ['"Montserrat"', '"DM Sans"', 'system-ui', 'sans-serif'],
         serif: ['"Instrument Serif"', '"Cormorant Garamond"', 'Georgia', 'serif'],
         sans: ['"Inter"', '"DM Sans"', 'system-ui', 'sans-serif'],
         mono: ['"DM Mono"', 'monospace'],

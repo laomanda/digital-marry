@@ -83,30 +83,29 @@ export const weddingData = {
   },
   loveStory: [
     {
-      date: 'Oktober 2018',
-      title: 'Pertemuan Pertama',
-      description: 'Sebuah pertemuan tak terduga di sebuah galeri seni lokal. Tatapan yang bertemu di atas lukisan kontemporer memicu percakapan yang berlangsung hingga larut malam.',
+      date: '2017',
+      title: 'Pertemuan',
+      description: 'Pertemuan sederhana di kampus menjadi awal cerita Ichsan dan Reny. Dari keberanian kecil untuk berkenalan, kesan itu tumbuh menjadi sesuatu yang sulit dilupakan.',
     },
     {
-      
-      date: 'Desember 2018',
-      title: 'Kencan Pertama',
-      description: 'Kopi dan hujan. Kami menghabiskan sore di sudut kafe yang sunyi, menemukan cinta bersama atas arsitektur vintage dan jazz.',
+      date: '',
+      title: 'Rasa yang Ditahan',
+      description: 'Ada rasa yang tumbuh sejak awal, namun Ichsan memilih menjaga langkah. Bukan karena ragu, melainkan karena ingin memberi waktu agar cerita ini tidak singkat.',
     },
     {
-      date: 'Maret 2020',
-      title: 'Melewati Badai Bersama',
-      description: 'Pandemi datang dan memisahkan jarak, namun justru mendekatkan hati. Ribuan pesan dan panggilan video menjadi saksi bisu cinta yang tumbuh.',
+      date: '2018',
+      title: 'Jeda & Kembali',
+      description: 'Jarak sempat membuat percakapan berhenti. Namun rindu tidak benar-benar pergi, hingga akhirnya mereka dipertemukan kembali.',
     },
     {
-      date: 'Agustus 2023',
-      title: 'Lamaran',
-      description: 'Di bawah langit penuh bintang dalam perjalanan singkat ke pegunungan. Sebuah pertanyaan sederhana namun mendalam, dan "Ya" yang penuh kebahagiaan.',
+      date: '2019–2022',
+      title: 'Memulai & Bertumbuh',
+      description: 'Ichsan memberanikan diri mengungkapkan rasa, dan Reny menerimanya. Perjalanan membawa mereka belajar, berhenti sejenak, lalu kembali di tahun 2022 dengan hati yang lebih siap.',
     },
     {
-      date: 'Desember 2024',
-      title: 'Hari Pernikahan',
-      description: 'Dan hari ini, kami berdiri di sini bersama kalian semua — para saksi dari cinta yang telah kami rawat selama bertahun-tahun.',
+      date: '2026',
+      title: 'Menetap',
+      description: 'Setelah pertemuan, jeda, dan kembali, mereka memilih menetap. Di tahun 2026, Ichsan & Reny memutuskan untuk melangkah menuju pernikahan.',
     },
   ],
   gallery: [

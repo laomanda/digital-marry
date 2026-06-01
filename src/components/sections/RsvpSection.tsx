@@ -132,15 +132,15 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
             <span className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
               RSVP
             </span>
-            <h2 className={`mb-6 font-script text-[44px] font-light leading-[1.02] md:text-[64px] ${textClass}`} style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
+            <h2 className={`mb-6 font-athene text-[44px] leading-[1.02] md:text-[64px] ${textClass}`}>
               Konfirmasi Kehadiran
             </h2>
-            <p className={`mb-8 max-w-md text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>
+            <p className={`mb-8 max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
               Mohon konfirmasi kehadiran Anda agar kami dapat mempersiapkan momen ini dengan sebaik-baiknya.
             </p>
             <div className="flex max-w-sm items-start gap-4 border-l pl-5 transition-colors duration-500 border-[#F5F5F0]/12">
               <span className="mt-2 h-px w-8 transition-colors duration-500 bg-[#F5F5F0]/22" aria-hidden="true" />
-              <span className={`font-mono text-[10px] uppercase leading-6 transition-colors duration-500 ${mutedClass}`}>
+              <span className={`font-montserrat text-[10px] font-semibold uppercase leading-6 transition-colors duration-500 ${mutedClass}`}>
                 Balasan Anda membantu kami menyiapkan tempat dan jamuan dengan lebih baik.
               </span>
             </div>
@@ -168,10 +168,10 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                     <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-full border transition-colors duration-500 border-[#F5F5F0]/28 bg-[#050505]">
                       <Check size={24} className={textClass} strokeWidth={1.4} aria-hidden="true" />
                     </div>
-                    <h3 className={`mb-4 font-serif text-[32px] font-light leading-tight md:text-[42px] ${textClass}`}>
+                    <h3 className={`mb-4 font-athene text-[32px] leading-tight md:text-[42px] ${textClass}`}>
                       Terima kasih, konfirmasi Anda telah kami terima.
                     </h3>
-                    <p className={`max-w-sm text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>
+                    <p className={`max-w-sm font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
                       Doa dan kehadiran Anda sangat berarti bagi kami.
                     </p>
                   </motion.div>
@@ -201,7 +201,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                           className={getInputClass(Boolean(errors.name))}
                           {...register('name')}
                         />
-                        <p id="name-error" className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
+                        <p id="name-error" className={`min-h-[18px] font-montserrat text-[12px] font-semibold leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
                           {errors.name?.message ?? ''}
                         </p>
                       </div>
@@ -241,7 +241,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                             <Plus size={16} strokeWidth={1.5} aria-hidden="true" />
                           </button>
                         </div>
-                        <p id="guest-count-error" className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
+                        <p id="guest-count-error" className={`min-h-[18px] font-montserrat text-[12px] font-semibold leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
                           {errors.guestCount?.message ?? ''}
                         </p>
                       </div>
@@ -294,7 +294,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
                           )
                         })}
                       </div>
-                      <p className={`min-h-[18px] text-[12px] leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
+                      <p className={`min-h-[18px] font-montserrat text-[12px] font-semibold leading-[18px] transition-colors duration-500 ${getErrorTextClass()}`}>
                         {errors.attendance?.message ?? ''}
                       </p>
                     </div>

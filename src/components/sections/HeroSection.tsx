@@ -38,9 +38,9 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
   const nameRef = useRef<HTMLHeadingElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
-  const overlayIntroOpacity = 0.48
-  const overlayInitialOpacity = 0.86
-  const overlayScrollOpacity = 0.78
+  const overlayIntroOpacity = 0.15
+  const overlayInitialOpacity = 0.45
+  const overlayScrollOpacity = 0.35
 
   const rootClass = 'bg-[#050505]'
   const textClass = 'text-[#F5F5F0]'
@@ -51,8 +51,8 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
   const lineMedium = 'bg-[rgba(245,245,240,0.28)]'
   const lineSoft = 'bg-[rgba(245,245,240,0.14)]'
 
-  const overlayGradientClass = 'bg-[linear-gradient(90deg,rgba(5,5,5,0.92)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.18)_72%,rgba(5,5,5,0.48)_100%)]'
-  const overlayRadialStyle = 'radial-gradient(circle at 72% 28%, transparent 0%, rgba(5,5,5,0.28) 34%, rgba(5,5,5,0.78) 100%)'
+  const overlayGradientClass = 'bg-[linear-gradient(90deg,rgba(5,5,5,0.30)_0%,rgba(5,5,5,0.15)_34%,rgba(5,5,5,0.05)_72%,rgba(5,5,5,0.20)_100%)]'
+  const overlayRadialStyle = 'radial-gradient(circle at 72% 28%, transparent 0%, rgba(5,5,5,0.08) 34%, rgba(5,5,5,0.30) 100%)'
   const bottomFadeClass = 'from-[#050505] via-[#050505]/78'
 
   const coupleName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
@@ -241,7 +241,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
             src={heroImage}
             alt=""
             aria-hidden="true"
-            className={`h-full w-full scale-[1.02] object-cover transition-all duration-500 contrast-[1.12] brightness-[0.82]`}
+            className={`h-full w-full scale-[1.02] object-cover transition-all duration-500 contrast-[1.06] brightness-[0.96]`}
             loading="eager"
             decoding="async"
           />
@@ -284,8 +284,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
             <h1
               ref={nameRef}
               aria-label={coupleName}
-              className={`max-w-[11ch] font-script text-[clamp(58px,13vw,172px)] font-light leading-[0.82] tracking-normal md:max-w-[10.5ch] transition-colors duration-500 ${textClass}`}
-              style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
+              className={`max-w-[11ch] font-athene text-[clamp(58px,13vw,172px)] leading-[0.82] tracking-normal md:max-w-[10.5ch] transition-colors duration-500 ${textClass}`}
             >
               <HeroNameLine text={weddingData.groom.firstName} className="block" />
               <span className="block">
@@ -311,8 +310,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
                   {weddingData.wedding.dateFormatted}
                 </p>
                 <p
-                  className={`max-w-md font-serif text-[17px] italic leading-[1.65] md:text-[20px] transition-colors duration-500 ${mutedClass}`}
-                  style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300 }}
+                  className={`max-w-md font-montserrat text-[17px] font-semibold leading-[1.65] transition-colors duration-500 md:text-[20px] ${mutedClass}`}
                 >
                   Sebuah undangan untuk merayakan cinta yang telah kami rawat bersama
                 </p>

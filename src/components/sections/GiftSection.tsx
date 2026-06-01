@@ -117,7 +117,7 @@ export default function GiftSection() {
             <span className="pointer-events-none absolute left-2 right-2 top-2 h-px bg-[#050505]/10" aria-hidden="true" />
 
             <span className="flex flex-col items-center gap-1">
-              <span className={`font-serif text-[11px] leading-none ${folderInkClass}`}>
+              <span className={`font-athene text-[13px] leading-none ${folderInkClass}`}>
                 {bankName}
               </span>
               <span className="h-px w-7 bg-[#050505]/16" aria-hidden="true" />
@@ -263,12 +263,11 @@ export default function GiftSection() {
           </span>
           <h2
             data-animate="title"
-            className={`font-script text-[46px] font-light leading-[1.02] md:text-[78px] ${textClass}`}
-            style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
+            className={`font-athene text-[46px] leading-[1.02] md:text-[78px] ${textClass}`}
           >
             Amplop Digital
           </h2>
-          <p data-animate="text" className={`mx-auto mt-6 max-w-md text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>
+          <p data-animate="text" className={`mx-auto mt-6 max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
             Doa dan kehadiran Anda adalah hadiah terbaik bagi kami.
           </p>
         </header>
@@ -324,7 +323,7 @@ export default function GiftSection() {
                           <span className={`mb-3 block font-mono text-[10px] uppercase tracking-[0.3em] transition-colors duration-500 ${mutedClass}`}>
                             Amplop Digital
                           </span>
-                          <h3 className={`font-serif text-[32px] font-light leading-none md:text-[38px] ${textClass}`}>
+                          <h3 className={`font-athene text-[32px] leading-none md:text-[38px] ${textClass}`}>
                             {selectedGift.bank}
                           </h3>
                         </div>
@@ -361,7 +360,7 @@ export default function GiftSection() {
                           <span className={`mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] transition-colors duration-500 ${mutedClass}`}>
                             Atas Nama
                           </span>
-                          <p className="text-[15px] leading-6 transition-colors duration-500 text-[#F5F5F0]/[0.86]">
+                          <p className="font-montserrat text-[15px] font-semibold leading-6 transition-colors duration-500 text-[#F5F5F0]/[0.86]">
                             {selectedGift.accountName}
                           </p>
                         </div>

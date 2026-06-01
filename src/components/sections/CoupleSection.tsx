@@ -316,9 +316,8 @@ function PersonCard({
       {/* Info */}
       <div className="mt-6 text-center">
         <h3
-          className="font-script text-[clamp(36px,5vw,64px)] font-light leading-[0.9] transition-colors duration-500 text-[#F5F5F0]"
+          className="font-athene text-[clamp(36px,5vw,64px)] leading-[0.9] transition-colors duration-500 text-[#F5F5F0]"
           aria-label={person.fullName}
-          style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
         >
           <SplitName name={person.firstName} />
         </h3>
@@ -329,7 +328,7 @@ function PersonCard({
 
         <div className="mx-auto my-4 h-px w-10 transition-colors duration-500 bg-[#F5F5F0]/15" />
 
-        <p className="font-sans text-[11px] uppercase leading-relaxed tracking-[0.16em] transition-colors duration-500 text-[#F5F5F0]/55">
+        <p className="font-montserrat text-[11px] font-semibold uppercase leading-relaxed tracking-[0.16em] transition-colors duration-500 text-[#F5F5F0]/55">
           {person.parents}
         </p>
 
@@ -585,9 +584,8 @@ export function CoupleSection() {
             The Couple
           </span>
           <h2
-            className={`font-script text-[clamp(40px,7vw,96px)] font-light leading-[0.92] transition-colors duration-500 ${headingClass}`}
+            className={`font-athene text-[clamp(40px,7vw,96px)] leading-[0.92] transition-colors duration-500 ${headingClass}`}
             aria-label={`${weddingData.groom.firstName} & ${weddingData.bride.firstName}`}
-            style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
           >
             <SplitHeaderTitle text={`${weddingData.groom.firstName} & ${weddingData.bride.firstName}`} />
           </h2>
@@ -599,7 +597,7 @@ export function CoupleSection() {
           />
           <p
             data-couple-header-sub
-            className={`mx-auto mt-5 max-w-[400px] font-serif text-[17px] italic leading-relaxed transition-colors duration-500 md:text-[19px] ${mutedClass}`}
+            className={`mx-auto mt-5 max-w-[400px] font-montserrat text-[17px] font-semibold leading-relaxed transition-colors duration-500 md:text-[19px] ${mutedClass}`}
             style={{ opacity: 0 }}
           >
             Dua hati yang kini melangkah bersama.

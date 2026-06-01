@@ -77,7 +77,7 @@ function EventCard({
       }`}
     >
       <span
-        className="pointer-events-none absolute right-4 top-1 font-serif text-[112px] leading-none md:right-6 md:text-[148px] [@media(max-height:650px)]:text-[96px] text-[#F5F5F0]/[0.045]"
+        className="pointer-events-none absolute right-4 top-1 font-athene text-[112px] leading-none md:right-6 md:text-[148px] [@media(max-height:650px)]:text-[96px] text-[#F5F5F0]/[0.045]"
         aria-hidden="true"
       >
         {number}
@@ -107,7 +107,7 @@ function EventCard({
             <p className="mb-3 font-mono text-[10px] uppercase transition-colors duration-500 text-[#A4A4A4]">
               {event.subtitle}
             </p>
-            <h3 className="font-serif text-[38px] font-light leading-[1.02] md:text-[48px] [@media(max-height:650px)]:text-[36px] text-[#F5F5F0]">
+            <h3 className="font-athene text-[38px] leading-[1.02] md:text-[48px] [@media(max-height:650px)]:text-[36px] text-[#F5F5F0]">
               {event.title}
             </h3>
           </div>
@@ -135,8 +135,8 @@ function EventCard({
             <Calendar size={16} strokeWidth={1.5} className="mt-0.5 transition-colors duration-500 text-[#A4A4A4]" aria-hidden="true" />
             <dl>
               <dt className="mb-1 font-mono text-[9px] uppercase transition-colors duration-500 text-[#A4A4A4]">Tanggal &amp; Waktu</dt>
-              <dd className="text-[14px] leading-6 text-[#F5F5F0]">{event.date}</dd>
-              <dd className="mt-1 flex items-center gap-2 text-[14px] leading-6 transition-colors duration-500 text-[#A4A4A4]">
+              <dd className="font-montserrat text-[14px] font-semibold leading-6 text-[#F5F5F0]">{event.date}</dd>
+              <dd className="mt-1 flex items-center gap-2 font-montserrat text-[14px] font-semibold leading-6 transition-colors duration-500 text-[#A4A4A4]">
                 <Clock size={14} strokeWidth={1.5} aria-hidden="true" />
                 <span>{event.time}</span>
               </dd>
@@ -147,8 +147,8 @@ function EventCard({
             <MapPin size={16} strokeWidth={1.5} className="mt-0.5 transition-colors duration-500 text-[#A4A4A4]" aria-hidden="true" />
             <dl>
               <dt className="mb-1 font-mono text-[9px] uppercase transition-colors duration-500 text-[#A4A4A4]">Lokasi</dt>
-              <dd className="text-[14px] font-medium leading-6 text-[#F5F5F0]">{event.venue}</dd>
-              <dd className="mt-1 text-[13px] leading-6 transition-colors duration-500 text-[#A4A4A4]">{event.address}</dd>
+              <dd className="font-montserrat text-[14px] font-semibold leading-6 text-[#F5F5F0]">{event.venue}</dd>
+              <dd className="mt-1 font-montserrat text-[13px] font-semibold leading-6 transition-colors duration-500 text-[#A4A4A4]">{event.address}</dd>
             </dl>
           </div>
         </div>
@@ -265,11 +265,11 @@ function HorizontalStage({
         </div>
 
         <div className="flex h-full w-[54vw] items-center justify-center">
-          <div className="max-w-[360px] text-center">
+          <div className="max-w-[520px] text-center">
             <span className="mb-5 block font-mono text-[10px] uppercase transition-colors duration-500 text-[#A4A4A4]">
               Tanggal Acara
             </span>
-            <p className="font-serif text-[56px] font-light leading-none text-[#F5F5F0]">
+            <p className="whitespace-nowrap font-athene text-[clamp(36px,4.2vw,56px)] leading-none text-[#F5F5F0]">
               {weddingData.wedding.dateFormatted}
             </p>
           </div>
@@ -505,10 +505,10 @@ export default function EventSection() {
             <span className="mb-5 block font-mono text-[10px] uppercase transition-colors duration-500 [@media(max-height:650px)]:mb-2 [@media(max-height:650px)]:text-[9px] text-[#A4A4A4]">
               Rangkaian Acara
             </span>
-            <h2 className="font-script text-[44px] font-light leading-[1.02] md:text-[68px] lg:text-[82px] [@media(max-height:650px)]:text-[50px] text-[#F5F5F0]" style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
+            <h2 className="font-athene text-[44px] leading-[1.02] md:text-[68px] lg:text-[82px] [@media(max-height:650px)]:text-[50px] text-[#F5F5F0]">
               Detail Acara
             </h2>
-            <p className="mt-6 max-w-[560px] text-[15px] leading-7 transition-colors duration-500 md:text-[16px] [@media(max-height:650px)]:mt-3 [@media(max-height:650px)]:max-w-[480px] [@media(max-height:650px)]:text-[13px] [@media(max-height:650px)]:leading-5 text-[#A4A4A4]">
+            <p className="mt-6 max-w-[560px] font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 md:text-[16px] [@media(max-height:650px)]:mt-3 [@media(max-height:650px)]:max-w-[480px] [@media(max-height:650px)]:text-[13px] [@media(max-height:650px)]:leading-5 text-[#A4A4A4]">
               Dengan penuh sukacita, kami mengundang Anda untuk hadir dan memberikan doa restu.
             </p>
             <span className="mt-8 hidden h-12 w-px transition-colors duration-500 lg:block [@media(max-height:650px)]:mt-5 [@media(max-height:650px)]:h-7 bg-[#F5F5F0]/12" aria-hidden="true" />

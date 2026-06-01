@@ -4,7 +4,7 @@ import { animate } from 'animejs'
 import { weddingData } from '../../data/wedding.data'
 import { useScrollLock } from '../../hooks/useScrollLock'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import coverImage from '../../assets/cover.webp'
+import coverImage from '../../assets/lainnya/foto/galeri-1.webp'
 
 interface CoverSectionProps {
   onOpen?: () => void
@@ -17,18 +17,38 @@ interface CoverSectionProps {
  * Spaces are preserved as non-breaking spaces with explicit width.
  */
 function LetterSplit({ text, className }: { text: string; className?: string }) {
+  const parts = text.split(/(\s+)/)
+
   return (
     <span className={className} aria-label={text}>
-      {text.split('').map((char, i) => (
-        <span
-          key={i}
-          className="cover-char"
-          aria-hidden="true"
-          style={{ opacity: 0, ...(char === ' ' ? { width: '0.3em' } : undefined) }}
-        >
-          {char === ' ' ? '\u00A0' : char}
-        </span>
-      ))}
+      {parts.map((part, partIndex) => {
+        if (/^\s+$/.test(part)) {
+          return (
+            <span
+              key={`space-${partIndex}`}
+              className="cover-char inline-block"
+              aria-hidden="true"
+              style={{ opacity: 0, width: '0.28em' }}
+            >
+              {'\u00A0'}
+            </span>
+          )
+        }
+
+        return (
+          <span key={`word-${partIndex}`} className="inline-block whitespace-nowrap" aria-hidden="true">
+            {part.split('').map((char, charIndex) => (
+              <span
+                key={`${partIndex}-${charIndex}`}
+                className="cover-char"
+                style={{ opacity: 0 }}
+              >
+                {char}
+              </span>
+            ))}
+          </span>
+        )
+      })}
     </span>
   )
 }
@@ -277,7 +297,7 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
         <img
           src={coverImage}
           alt=""
-          className="w-full h-full object-cover grayscale opacity-30"
+          className="w-full h-full object-cover"
           loading="eager"
           fetchPriority="high"
           decoding="async"
@@ -309,10 +329,10 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
         {/* Couple name with letter stagger */}
         <h1
           data-cover-title
-          className="mb-4"
-          style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400, fontSize: 'clamp(56px, 12vw, 96px)', lineHeight: 1.1 }}
+          className="mb-4 w-[min(92vw,860px)] whitespace-nowrap font-athene"
+          style={{ fontSize: 'clamp(38px, 10vw, 96px)', lineHeight: 1.05 }}
         >
-          <LetterSplit text={coupleText} className={`transition-colors duration-500 ${titleClass}`} />
+          <LetterSplit text={coupleText} className={`inline-block transition-colors duration-500 ${titleClass}`} />
         </h1>
 
         {/* Date */}
@@ -330,12 +350,12 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
           className="flex flex-col items-center gap-2 mb-10 md:mb-12"
           style={{ opacity: 0 }}
         >
-          <p className="font-sans text-[12px] tracking-[0.2em] uppercase transition-colors duration-500 text-[rgba(164,164,164,0.5)]">
+          <p className="font-montserrat text-[12px] font-semibold tracking-[0.2em] uppercase transition-colors duration-500 text-[rgba(164,164,164,0.5)]">
             Dear, Bapak/Ibu/Saudara/i
           </p>
           <p
-            className="max-w-sm transition-colors duration-500 text-[rgba(245,242,236,0.7)]"
-            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: 'clamp(14px, 2vw, 17px)', lineHeight: 1.7, fontStyle: 'italic' }}
+            className="max-w-sm font-montserrat font-semibold transition-colors duration-500 text-[rgba(245,242,236,0.7)]"
+            style={{ fontSize: 'clamp(14px, 2vw, 17px)', lineHeight: 1.7 }}
           >
             {weddingData.wedding.openingQuote}
           </p>

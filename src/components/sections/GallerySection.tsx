@@ -85,10 +85,10 @@ export default function GallerySection() {
             <span className={`mb-5 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
               Galeri
             </span>
-            <h2 className={`mb-6 font-script text-[48px] font-light leading-[1.02] md:text-[78px] ${textClass}`} style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
+            <h2 className={`mb-6 font-athene text-[48px] leading-[1.02] md:text-[78px] ${textClass}`}>
               Momen Berharga
             </h2>
-            <p className={`mb-9 max-w-md text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>
+            <p className={`mb-9 max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
               Beberapa potongan cerita yang kami simpan sebagai kenangan.
             </p>
             <button

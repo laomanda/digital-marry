@@ -186,8 +186,7 @@ export function QuoteSection() {
             <p
               data-no-global-reveal="true"
               data-quote-text
-              className={`relative z-10 font-serif text-[clamp(30px,5vw,58px)] font-light italic leading-[1.26] tracking-normal transition-colors duration-500 ${textClass}`}
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              className={`relative z-10 font-montserrat text-[clamp(22px,3.4vw,40px)] font-semibold leading-[1.42] tracking-normal transition-colors duration-500 ${textClass}`}
             >
               <QuoteWords text={quoteText} />
             </p>

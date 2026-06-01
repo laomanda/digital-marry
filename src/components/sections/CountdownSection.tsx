@@ -101,14 +101,13 @@ export default function CountdownSection() {
             </span>
             <h2
               data-animate="title"
-              className={`font-script text-[40px] font-light leading-[1.05] transition-colors duration-500 md:text-[64px] lg:text-[76px] ${textClass}`}
-              style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
+              className={`font-athene text-[40px] leading-[1.05] transition-colors duration-500 md:text-[64px] lg:text-[76px] ${textClass}`}
             >
               {isPast ? 'Hari Bahagia Telah Tiba' : 'Menghitung Hari'}
             </h2>
             <p
               data-animate="text"
-              className={`mt-5 max-w-[520px] font-sans text-[15px] leading-7 transition-colors duration-500 md:mt-6 md:text-[16px] ${mutedClass}`}
+              className={`mt-5 max-w-[520px] font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 md:mt-6 md:text-[16px] ${mutedClass}`}
             >
               {isPast
                 ? 'Dengan penuh sukacita, hari yang dinantikan telah datang.'
@@ -160,7 +159,7 @@ export default function CountdownSection() {
 
                 <div className="relative z-10 flex max-w-[300px] flex-col items-center px-8 text-center">
                   <span className={`mb-5 h-px w-20 transition-colors duration-500 ${shortDividerClass}`} aria-hidden="true" />
-                  <span className={`font-serif text-[52px] font-light leading-none md:text-[72px] transition-colors duration-500 ${textClass}`}>
+                  <span className={`font-athene text-[52px] leading-none transition-colors duration-500 md:text-[72px] ${textClass}`}>
                     Telah Tiba
                   </span>
                   <span className={`mt-6 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
