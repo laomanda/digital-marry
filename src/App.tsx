@@ -25,7 +25,7 @@ function LazySection({ children, heightDesk, heightMob }: { children: React.Reac
     const el = ref.current
     if (!el) return
     
-    const rootMargin = isMobile ? '500px 0px' : '900px 0px'
+    const rootMargin = isMobile ? '200px 0px' : '600px 0px'
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setIsVisible(true)

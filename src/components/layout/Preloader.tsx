@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { weddingData } from '../../data/wedding.data';
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import { usePalette } from '../../hooks/usePalette';
-import logo from '../../assets/logo.webp';
+import logo from '../../assets/logo-400.webp';
 
 interface PreloaderProps {
   onComplete: () => void;
@@ -13,39 +12,28 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const [progress, setProgress] = useState(0);
   const [rawProgress, setRawProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe();
+  const { isMobile, shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe();
 
-  const { palette } = usePalette()
-  const isBurgundy = palette === 'burgundy'
-  const isTaupe = palette === 'taupe';
-
-  const rootClasses = isTaupe
-    ? 'bg-[#C9AD8F] text-[#111111]'
-    : isBurgundy
-      ? 'bg-[#4A1F2A] text-[#F5F5F0]'
-      : 'bg-[#050505] text-[#F5F5F0]';
-
-  const mutedTextClass = isTaupe
-    ? 'text-[rgba(17,17,17,0.58)]'
-    : isBurgundy
-      ? 'text-[rgba(245,245,240,0.65)]'
-      : 'text-[#A4A4A4]';
-
-  const progressTextClass = isTaupe
-    ? 'text-[#111111]'
-    : 'text-[#F5F5F0]';
-
-  const vignetteClass = isTaupe
-    ? 'bg-[radial-gradient(circle_at_center,rgba(201,173,143,0.05)_0%,rgba(111,82,58,0.34)_100%)]'
-    : isBurgundy
-      ? 'bg-[radial-gradient(circle_at_center,rgba(74,31,42,0.10)_0%,#2B1018_100%)]'
-      : 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.95)_100%)]';
+  const rootClasses = 'bg-[#050505] text-[#F5F5F0]';
+  const mutedTextClass = 'text-[#A4A4A4]';
+  const progressTextClass = 'text-[#F5F5F0]';
+  const vignetteClass = 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.95)_100%)]';
+  const prefersReducedMotionRuntime =
+    shouldReduceMotion ||
+    (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const isMobileViewport =
+    isMobile || (typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches);
+  const isLightweightMotion = shouldReduceHeavyMotion || isMobileViewport || prefersReducedMotionRuntime;
+  const preloaderDuration = prefersReducedMotionRuntime ? 900 : isMobileViewport ? 1400 : 2500;
+  const completedHoldDuration = prefersReducedMotionRuntime ? 80 : isMobileViewport ? 140 : 600;
+  const exitDuration = prefersReducedMotionRuntime ? 0.3 : isMobileViewport ? 0.45 : 0.8;
+  const exitDurationMs = exitDuration * 1000;
 
   useEffect(() => {
     // Prevent scrolling while preloader is active
+    const previousBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    
-    const duration = shouldReduceMotion ? 1000 : 4000; // 4 seconds for a slow, luxurious reveal
+
     let startTime: number | null = null;
     let animationFrameId: number;
     let timeout1: any;
@@ -54,11 +42,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     const animateLoader = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
-      const t = Math.min(elapsed / duration, 1);
-      
-      // Cinematic easeOutQuart for super smooth deceleration
+      const t = Math.min(elapsed / preloaderDuration, 1);
+
+      // Mobile uses a softer curve so the counter remains readable.
+      const easeOutQuad = 1 - Math.pow(1 - t, 2);
       const easeOutQuart = 1 - Math.pow(1 - t, 4);
-      const currentProgress = shouldReduceMotion ? t * 100 : easeOutQuart * 100;
+      const easedProgress = prefersReducedMotionRuntime ? t : isMobileViewport ? easeOutQuad : easeOutQuart;
+      const currentProgress = easedProgress * 100;
 
       setProgress(Math.floor(currentProgress));
       setRawProgress(currentProgress);
@@ -69,13 +59,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         // Wait a brief moment at 100% to let user savor the completed logo
         timeout1 = setTimeout(() => {
           setIsVisible(false);
-          
+
           // Wait for exit animation to finish before notifying parent to unmount
           timeout2 = setTimeout(() => {
-            document.body.style.overflow = '';
+            document.body.style.overflow = previousBodyOverflow;
             onComplete();
-          }, shouldReduceMotion ? 400 : 1200); 
-        }, 800);
+          }, exitDurationMs);
+        }, completedHoldDuration);
       }
     };
 
@@ -85,9 +75,16 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       cancelAnimationFrame(animationFrameId);
       clearTimeout(timeout1);
       clearTimeout(timeout2);
-      document.body.style.overflow = '';
+      document.body.style.overflow = previousBodyOverflow;
     };
-  }, [onComplete, shouldReduceMotion]);
+  }, [
+    completedHoldDuration,
+    exitDurationMs,
+    isMobileViewport,
+    onComplete,
+    prefersReducedMotionRuntime,
+    preloaderDuration,
+  ]);
 
   // Determine current label based on progress for a dynamic storytelling feel
   let loadingLabel = 'Initializing';
@@ -102,7 +99,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         <motion.div
           className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${rootClasses}`}
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: shouldReduceMotion ? 0.3 : 1.2, ease: [0.22, 1, 0.36, 1] } }}
+          exit={{
+            opacity: 0,
+            scale: prefersReducedMotionRuntime ? 1 : isMobileViewport ? 0.985 : 1,
+            transition: { duration: exitDuration, ease: [0.22, 1, 0.36, 1] },
+          }}
           role="status"
           aria-label="Loading wedding invitation"
         >
@@ -138,16 +139,16 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             <motion.div 
               className="relative flex justify-center items-center w-[min(80vw,320px)] md:w-[min(65vw,480px)] h-auto max-h-[50vh]"
               initial={{ 
-                scale: shouldReduceHeavyMotion ? 1 : 0.92, 
-                opacity: shouldReduceHeavyMotion ? 1 : 0,
-                filter: shouldReduceHeavyMotion ? 'none' : 'blur(8px)' 
+                scale: isLightweightMotion ? 1 : 0.92,
+                opacity: isLightweightMotion ? 1 : 0,
+                filter: isLightweightMotion ? 'none' : 'blur(8px)'
               }}
               animate={{ 
                 scale: 1, 
                 opacity: 1,
-                filter: shouldReduceHeavyMotion ? 'none' : 'blur(0px)' 
+                filter: isLightweightMotion ? 'none' : 'blur(0px)'
               }}
-              transition={{ duration: 4, ease: 'easeOut' }}
+              transition={{ duration: isLightweightMotion ? 0.45 : 4, ease: 'easeOut' }}
             >
               {/* Dim/Background Logo */}
               <img 
@@ -156,7 +157,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                 width="400"
                 height="400"
                 fetchPriority="high"
-                className="absolute w-full h-full object-contain pointer-events-none select-none opacity-15 filter blur-[2px] grayscale"
+                className={`absolute w-full h-full object-contain pointer-events-none select-none opacity-15 filter grayscale ${isLightweightMotion ? '' : 'blur-[2px]'}`}
                 aria-hidden="true"
               />
               
@@ -169,8 +170,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                 fetchPriority="high"
                 className="relative w-full h-full object-contain pointer-events-none select-none opacity-100 will-change-[clip-path]"
                 style={{ 
-                  clipPath: shouldReduceMotion ? 'none' : `inset(${100 - rawProgress}% 0 0 0)`,
-                  opacity: shouldReduceMotion ? (rawProgress / 100) : 1
+                  clipPath: isLightweightMotion ? 'none' : `inset(${100 - rawProgress}% 0 0 0)`,
+                  opacity: isLightweightMotion ? (rawProgress / 100) : 1
                 }}
               />
             </motion.div>

@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { weddingData } from '../../data/wedding.data';
 import { useCountdown } from '../../hooks/useCountdown';
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import { usePalette } from '../../hooks/usePalette';
 import { Container } from '../ui/Container';
 
 const tickMarks = Array.from({ length: 60 }, (_, index) => ({
@@ -63,88 +62,21 @@ export default function CountdownSection() {
     { label: 'Detik', value: seconds },
   ];
 
-  const { palette } = usePalette()
-  const isBurgundy = palette === 'burgundy'
-  const isTaupe = palette === 'taupe';
-
-  const sectionBgClass = isTaupe
-    ? 'bg-[#C9AD8F]'
-    : isBurgundy
-      ? 'bg-[#4A1F2A]'
-      : 'bg-[#050505]';
-
-  const textClass = isTaupe
-    ? 'text-[#111111]'
-    : 'text-[#F5F5F0]';
-
-  const mutedClass = isTaupe
-    ? 'text-[rgba(17,17,17,0.58)]'
-    : isBurgundy
-      ? 'text-[rgba(245,245,240,0.65)]'
-      : 'text-[#A4A4A4]';
-
-  const lineSoftClass = isTaupe
-    ? 'bg-[rgba(17,17,17,0.14)]'
-    : isBurgundy
-      ? 'bg-[rgba(245,245,240,0.14)]'
-      : 'bg-[#F5F5F0]/[0.08]';
-
-  const outerRingClass = isTaupe
-    ? 'border-[rgba(17,17,17,0.18)] group-hover/days:border-[rgba(17,17,17,0.32)]'
-    : isBurgundy
-      ? 'border-[rgba(245,245,240,0.18)] group-hover/days:border-[rgba(245,245,240,0.30)]'
-      : 'border-[rgba(245,245,240,0.12)] group-hover/days:border-[rgba(245,245,240,0.28)]';
-
-  const outerRingNormalClass = isTaupe
-    ? 'border-[rgba(17,17,17,0.18)] group-hover/days:border-[rgba(17,17,17,0.32)]'
-    : isBurgundy
-      ? 'border-[rgba(245,245,240,0.18)] group-hover/days:border-[rgba(245,245,240,0.30)]'
-      : 'border-[rgba(245,245,240,0.12)] group-hover/days:border-[rgba(245,245,240,0.30)]';
-
-  const innerRingClass = isTaupe
-    ? 'border-[rgba(17,17,17,0.12)] group-hover/days:border-[rgba(17,17,17,0.24)]'
-    : isBurgundy
-      ? 'border-[rgba(245,245,240,0.12)] group-hover/days:border-[rgba(245,245,240,0.22)]'
-      : 'border-[rgba(245,245,240,0.08)] group-hover/days:border-[rgba(245,245,240,0.18)]';
-
-  const horizontalLineClass = isTaupe
-    ? 'bg-[rgba(17,17,17,0.16)] group-hover/days:bg-[rgba(17,17,17,0.26)]'
-    : isBurgundy
-      ? 'bg-[rgba(245,245,240,0.15)] group-hover/days:bg-[rgba(245,245,240,0.25)]'
-      : 'bg-[#F5F5F0]/10 group-hover/days:bg-[#F5F5F0]/20';
-
-  const tickClass = isTaupe
-    ? 'bg-[rgba(17,17,17,0.38)]'
-    : isBurgundy
-      ? 'bg-[rgba(245,245,240,0.35)]'
-      : 'bg-[#F5F5F0]/35';
-
-  const connectorClass = isTaupe
-    ? 'bg-gradient-to-b from-[rgba(17,17,17,0.24)] to-transparent'
-    : isBurgundy
-      ? 'bg-gradient-to-b from-[rgba(245,245,240,0.25)] to-transparent'
-      : 'bg-gradient-to-b from-[#F5F5F0]/20 to-transparent';
-
-  const unitCardClass = isTaupe
-    ? 'border-[rgba(17,17,17,0.16)] hover:border-[rgba(17,17,17,0.32)] bg-[rgba(245,245,240,0.22)] hover:bg-[rgba(255,255,255,0.26)]'
-    : isBurgundy
-      ? 'border-[rgba(245,245,240,0.16)] hover:border-[rgba(245,245,240,0.32)] bg-[rgba(35,12,20,0.28)] hover:bg-[rgba(245,245,240,0.035)]'
-      : 'border-[rgba(245,245,240,0.12)] hover:border-[rgba(245,245,240,0.32)] hover:bg-[#F5F5F0]/[0.02]';
-
-  const unitHairlineClass = isTaupe
-    ? 'bg-[rgba(17,17,17,0.34)] group-hover/unit:bg-[rgba(17,17,17,0.60)]'
-    : isBurgundy
-      ? 'bg-[rgba(245,245,240,0.40)] group-hover/unit:bg-[rgba(245,245,240,0.70)]'
-      : 'bg-[#F5F5F0]/30 group-hover/unit:bg-[#F5F5F0]/60';
-
-  const shortDividerClass = isTaupe
-    ? 'bg-[rgba(17,17,17,0.22)]'
-    : isBurgundy
-      ? 'bg-[rgba(245,245,240,0.25)]'
-      : 'bg-[#F5F5F0]/20';
-
-  const hoverTextClass = isTaupe ? 'group-hover/days:text-[#111111]' : 'group-hover/days:text-[#F5F5F0]';
-  const hoverUnitTextClass = isTaupe ? 'group-hover/unit:text-[#111111]' : 'group-hover/unit:text-[#F5F5F0]';
+  const sectionBgClass = 'bg-[#050505]';
+  const textClass = 'text-[#F5F5F0]';
+  const mutedClass = 'text-[#A4A4A4]';
+  const lineSoftClass = 'bg-[#F5F5F0]/[0.08]';
+  const outerRingClass = 'border-[rgba(245,245,240,0.12)] group-hover/days:border-[rgba(245,245,240,0.28)]';
+  const outerRingNormalClass = 'border-[rgba(245,245,240,0.12)] group-hover/days:border-[rgba(245,245,240,0.30)]';
+  const innerRingClass = 'border-[rgba(245,245,240,0.08)] group-hover/days:border-[rgba(245,245,240,0.18)]';
+  const horizontalLineClass = 'bg-[#F5F5F0]/10 group-hover/days:bg-[#F5F5F0]/20';
+  const tickClass = 'bg-[#F5F5F0]/35';
+  const connectorClass = 'bg-gradient-to-b from-[#F5F5F0]/20 to-transparent';
+  const unitCardClass = 'border-[rgba(245,245,240,0.12)] hover:border-[rgba(245,245,240,0.32)] hover:bg-[#F5F5F0]/[0.02]';
+  const unitHairlineClass = 'bg-[#F5F5F0]/30 group-hover/unit:bg-[#F5F5F0]/60';
+  const shortDividerClass = 'bg-[#F5F5F0]/20';
+  const hoverTextClass = 'group-hover/days:text-[#F5F5F0]';
+  const hoverUnitTextClass = 'group-hover/unit:text-[#F5F5F0]';
 
   const timerAriaLabel = isPast
     ? 'Hari bahagia telah tiba.'

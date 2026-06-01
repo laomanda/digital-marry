@@ -4,7 +4,7 @@ import { animate } from 'animejs'
 import { weddingData } from '../../data/wedding.data'
 import { useScrollLock } from '../../hooks/useScrollLock'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import { usePalette } from '../../hooks/usePalette'
+import coverImage from '../../assets/cover.webp'
 
 interface CoverSectionProps {
   onOpen?: () => void
@@ -38,51 +38,14 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
   const [isAnimating, setIsAnimating] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
-  const { palette } = usePalette()
-  const isBurgundy = palette === 'burgundy'
-  const isTaupe = palette === 'taupe';
+  const rootClass = 'bg-[#050505]';
+  const lineClass = 'bg-[rgba(245,242,236,0.15)]';
+  const mutedClass = 'text-[rgba(164,164,164,0.7)]';
+  const titleClass = 'text-[#F5F2EC]';
+  const gradientClass = 'from-[#050505] via-[#050505]/60 to-[#050505]/30';
+  const radialClass = 'radial-gradient(ellipse at center, transparent 30%, #050505 100%)';
+  const buttonClass = 'text-[rgba(245,242,236,0.8)] border-[rgba(245,242,236,0.25)] hover:bg-[rgba(245,242,236,0.06)] hover:border-[rgba(245,242,236,0.4)] hover:text-[#F5F2EC] focus-visible:outline-[rgba(245,242,236,0.5)]';
 
-  const rootClass = isTaupe
-    ? 'bg-[#C9AD8F]'
-    : isBurgundy
-      ? 'bg-[#4A1F2A]'
-      : 'bg-[#050505]';
-
-  const lineClass = isTaupe
-    ? 'bg-[rgba(17,17,17,0.18)]'
-    : isBurgundy
-      ? 'bg-[rgba(245,245,240,0.18)]'
-      : 'bg-[rgba(245,242,236,0.15)]';
-
-  const mutedClass = isTaupe
-    ? 'text-[rgba(17,17,17,0.58)]'
-    : isBurgundy
-      ? 'text-[rgba(245,245,240,0.65)]'
-      : 'text-[rgba(164,164,164,0.7)]';
-
-  const titleClass = isTaupe
-    ? 'text-[#111111]'
-    : isBurgundy
-      ? 'text-[#F5F5F0]'
-      : 'text-[#F5F2EC]';
-
-  const gradientClass = isTaupe
-    ? 'from-[#C9AD8F] via-[rgba(201,173,143,0.72)] to-[rgba(201,173,143,0.42)]'
-    : isBurgundy
-      ? 'from-[#4A1F2A] via-[rgba(74,31,42,0.60)] to-[rgba(74,31,42,0.30)]'
-      : 'from-[#050505] via-[#050505]/60 to-[#050505]/30';
-
-  const radialClass = isTaupe
-    ? 'radial-gradient(ellipse at center, rgba(201,173,143,0.08) 30%, rgba(111,82,58,0.34) 100%)'
-    : isBurgundy
-      ? 'radial-gradient(ellipse at center, transparent 30%, #4A1F2A 100%)'
-      : 'radial-gradient(ellipse at center, transparent 30%, #050505 100%)';
-
-  const buttonClass = isTaupe
-    ? 'text-[rgba(17,17,17,0.78)] border-[rgba(17,17,17,0.22)] hover:bg-[rgba(17,17,17,0.055)] hover:border-[rgba(17,17,17,0.38)] hover:text-[#111111] focus-visible:outline-[rgba(17,17,17,0.5)]'
-    : isBurgundy
-      ? 'text-[rgba(245,245,240,0.8)] border-[rgba(245,245,240,0.25)] hover:bg-[rgba(245,245,240,0.06)] hover:border-[rgba(245,245,240,0.4)] hover:text-[#F5F5F0] focus-visible:outline-[rgba(245,245,240,0.5)]'
-      : 'text-[rgba(245,242,236,0.8)] border-[rgba(245,242,236,0.25)] hover:bg-[rgba(245,242,236,0.06)] hover:border-[rgba(245,242,236,0.4)] hover:text-[#F5F2EC] focus-visible:outline-[rgba(245,242,236,0.5)]';
   const introTlRef = useRef<gsap.core.Timeline | null>(null)
   const exitTlRef = useRef<gsap.core.Timeline | null>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
@@ -99,12 +62,20 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
 
       if (shouldReduceMotion) {
         // Reduced motion: make everything visible instantly
-        gsap.set(root.querySelectorAll('[data-cover-line], [data-cover-label], [data-cover-date], [data-cover-guest], [data-cover-button]'), {
-          opacity: 1,
-          y: 0,
-        })
-        gsap.set(root.querySelectorAll('.cover-char'), { opacity: 1 })
-        gsap.set(root.querySelector('[data-cover-bg]'), { scale: 1, opacity: 1 })
+        const coverParts = Array.from(
+          root.querySelectorAll<HTMLElement>('[data-cover-line], [data-cover-label], [data-cover-date], [data-cover-guest], [data-cover-button]')
+        )
+        const coverChars = Array.from(root.querySelectorAll<HTMLElement>('.cover-char'))
+        const coverBg = root.querySelector<HTMLElement>('[data-cover-bg]')
+
+        if (coverParts.length) {
+          gsap.set(coverParts, {
+            opacity: 1,
+            y: 0,
+          })
+        }
+        if (coverChars.length) gsap.set(coverChars, { opacity: 1 })
+        if (coverBg) gsap.set(coverBg, { scale: 1, opacity: 1 })
         return
       }
 
@@ -304,10 +275,12 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
       {/* Background layer */}
       <div data-cover-bg className="absolute inset-0" style={{ opacity: 0 }}>
         <img
-          src={weddingData.gallery[0]?.src}
+          src={coverImage}
           alt=""
           className="w-full h-full object-cover grayscale opacity-30"
           loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
         {/* Vignette + gradient overlay */}
         <div className={`absolute inset-0 bg-gradient-to-t transition-colors duration-500 ${gradientClass}`} />
@@ -357,11 +330,11 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
           className="flex flex-col items-center gap-2 mb-10 md:mb-12"
           style={{ opacity: 0 }}
         >
-          <p className={`font-sans text-[12px] tracking-[0.2em] uppercase transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.60)]' : 'text-[rgba(164,164,164,0.5)]'}`}>
+          <p className="font-sans text-[12px] tracking-[0.2em] uppercase transition-colors duration-500 text-[rgba(164,164,164,0.5)]">
             Dear, Bapak/Ibu/Saudara/i
           </p>
           <p
-            className={`max-w-sm transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.78)]' : isBurgundy ? 'text-[rgba(245,245,240,0.75)]' : 'text-[rgba(245,242,236,0.7)]'}`}
+            className="max-w-sm transition-colors duration-500 text-[rgba(245,242,236,0.7)]"
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: 'clamp(14px, 2vw, 17px)', lineHeight: 1.7, fontStyle: 'italic' }}
           >
             {weddingData.wedding.openingQuote}

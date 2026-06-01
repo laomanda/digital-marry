@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { usePalette } from '../../hooks/usePalette'
+
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import { gsap } from '../../lib/gsap'
 import { Volume2, VolumeX } from 'lucide-react'
@@ -14,17 +14,8 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [hasError, setHasError] = useState(false)
-  const { palette } = usePalette()
   const { isMobile } = useReducedMotionSafe()
-
-  const isBurgundy = palette === 'burgundy';
-  const isTaupe = palette === 'taupe';
-
-  const paletteClasses = isTaupe
-    ? 'border-[rgba(17,17,17,0.18)] bg-[rgba(245,245,240,0.46)] text-[rgba(17,17,17,0.58)] hover:text-[#111111] hover:border-[rgba(17,17,17,0.34)] focus-visible:outline-[rgba(17,17,17,0.5)] disabled:hover:text-[rgba(17,17,17,0.58)] disabled:hover:border-[rgba(17,17,17,0.18)]'
-    : isBurgundy
-      ? 'border-[rgba(245,245,240,0.18)] bg-[rgba(43,16,24,0.72)] text-[rgba(245,245,240,0.65)] hover:text-[#F5F5F0] hover:border-[rgba(245,245,240,0.34)] focus-visible:outline-[rgba(245,245,240,0.65)] disabled:hover:text-[rgba(245,245,240,0.65)] disabled:hover:border-[rgba(245,245,240,0.18)]'
-      : 'border-[rgba(245,242,236,0.15)] bg-[rgba(5,5,5,0.7)] text-[rgba(245,242,236,0.6)] hover:text-[#F5F2EC] hover:border-[rgba(245,242,236,0.3)] focus-visible:outline-[rgba(245,242,236,0.5)] disabled:hover:text-[rgba(245,242,236,0.6)] disabled:hover:border-[rgba(245,242,236,0.15)]';
+  const paletteClasses = 'border-[rgba(245,242,236,0.15)] bg-[rgba(5,5,5,0.7)] text-[rgba(245,242,236,0.6)] hover:text-[#F5F2EC] hover:border-[rgba(245,242,236,0.3)] focus-visible:outline-[rgba(245,242,236,0.5)] disabled:hover:text-[rgba(245,242,236,0.6)] disabled:hover:border-[rgba(245,242,236,0.15)]';
 
   // Initialize audio element
   useEffect(() => {

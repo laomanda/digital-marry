@@ -146,12 +146,12 @@ const Folder: React.FC<FolderProps> = ({
     const root = folderRef.current
     if (!root) return
 
-    const paperInners = root.querySelectorAll('[data-folder-paper-inner]')
+    const paperInners = Array.from(root.querySelectorAll<HTMLElement>('[data-folder-paper-inner]'))
     const iconEl = root.querySelector('[data-folder-icon]')
 
     if (prefersReducedMotion) {
       gsap.set(root, { y: isOpen ? -8 : 0 })
-      gsap.set(paperInners, { opacity: 1, y: 0, scale: 1 })
+      if (paperInners.length) gsap.set(paperInners, { opacity: 1, y: 0, scale: 1 })
       if (iconEl) gsap.set(iconEl, { opacity: isOpen ? 0.35 : 0.55, scale: 1 })
       return
     }
@@ -163,7 +163,7 @@ const Folder: React.FC<FolderProps> = ({
         ease: 'power3.out',
       })
 
-      if (isOpen) {
+      if (isOpen && paperInners.length) {
         gsap.fromTo(
           paperInners,
           { opacity: 0.76, y: 5, scale: 0.975 },
@@ -177,7 +177,7 @@ const Folder: React.FC<FolderProps> = ({
             ease: 'power3.out',
           }
         )
-      } else {
+      } else if (paperInners.length) {
         gsap.to(paperInners, {
           opacity: 0.86,
           y: 0,

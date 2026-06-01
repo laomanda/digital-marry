@@ -3,48 +3,18 @@ import { Heart } from 'lucide-react'
 import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import { usePalette } from '../../hooks/usePalette'
 
 export default function ClosingSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
   const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe()
 
-  const { palette } = usePalette();
-  const isBurgundy = palette === 'burgundy';
-  const isTaupe = palette === 'taupe';
-
-  const sectionClass = isTaupe
-    ? 'bg-[#C9AD8F] text-[#111111]'
-    : isBurgundy
-      ? 'bg-[#4A1F2A] text-[#F5F5F0]'
-      : 'bg-[#050505] text-[#F5F5F0]';
-
-  const textClass = isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]';
-
-  const mutedClass = isTaupe
-    ? 'text-[rgba(17,17,17,0.58)]'
-    : isBurgundy
-      ? 'text-[rgba(245,245,240,0.65)]'
-      : 'text-[#A4A4A4]';
-
-  const overlayClass = isTaupe
-    ? 'bg-[rgba(201,173,143,0.72)]'
-    : isBurgundy
-      ? 'bg-[rgba(74,31,42,0.72)]'
-      : 'bg-[#050505]/70';
-
-  const vignetteClass = isTaupe
-    ? 'bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(201,173,143,0.42)_42%,#C9AD8F_100%)]'
-    : isBurgundy
-      ? 'bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(74,31,42,0.40)_42%,#4A1F2A_100%)]'
-      : 'bg-[radial-gradient(ellipse_at_center,transparent_0%,#050505_100%)]';
-
-  const footerBridgeClass = isTaupe
-    ? 'from-[#C9AD8F]'
-    : isBurgundy
-      ? 'from-[#4A1F2A]'
-      : 'from-[#050505]';
+  const sectionClass = 'bg-[#050505] text-[#F5F5F0]';
+  const textClass = 'text-[#F5F5F0]';
+  const mutedClass = 'text-[#A4A4A4]';
+  const overlayClass = 'bg-[#050505]/70';
+  const vignetteClass = 'bg-[radial-gradient(ellipse_at_center,transparent_0%,#050505_100%)]';
+  const footerBridgeClass = 'from-[#050505]';
 
   const closingName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
   const fallbackImg = "https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80&fit=crop"
@@ -167,7 +137,7 @@ export default function ClosingSection() {
       id="closing" 
       ref={sectionRef} 
       data-section 
-      data-theme={isTaupe ? "light" : "dark"} 
+      data-theme="dark" 
       data-wow="true"
       className={`relative -mt-px min-h-screen w-full flex flex-col justify-end overflow-hidden pb-32 md:pb-40 pt-32 px-6 md:px-12 transition-colors duration-500 ${sectionClass}`}
     >
@@ -186,7 +156,7 @@ export default function ClosingSection() {
           src={closingImage}
           alt=""
           aria-hidden="true"
-          className={`w-full h-full object-cover grayscale transition-opacity duration-500 ${isTaupe ? 'opacity-45' : 'opacity-60'}`}
+          className="w-full h-full object-cover grayscale transition-opacity duration-500 opacity-60"
         />
         {/* Dual Vignette Overlay for maximum readability */}
         <div className={`absolute inset-0 transition-colors duration-500 ${overlayClass}`} />
@@ -244,20 +214,20 @@ export default function ClosingSection() {
             <p className={`closing-date closing-reveal font-mono text-[9px] md:text-[11px] tracking-[0.5em] uppercase transition-colors duration-500 ${mutedClass}`}>
               {weddingData.wedding.dateFormatted}
             </p>
-            <p className={`closing-thanks closing-reveal font-sans text-[13px] md:text-[14px] max-w-md leading-relaxed border-t pt-4 mt-2 transition-colors duration-500 ${mutedClass} ${isTaupe ? 'border-[rgba(17,17,17,0.18)]' : isBurgundy ? 'border-[rgba(245,245,240,0.18)]' : 'border-[rgba(245,245,240,0.1)]'}`}>
+            <p className={`closing-thanks closing-reveal font-sans text-[13px] md:text-[14px] max-w-md leading-relaxed border-t pt-4 mt-2 transition-colors duration-500 ${mutedClass} border-[rgba(245,245,240,0.1)]`}>
               Terima kasih telah menjadi bagian dari hari paling berharga dalam hidup kami. Kehadiran dan doa Anda adalah berkah yang tak ternilai.
             </p>
-            <div className={`closing-seal flex items-center gap-3 pt-1 transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.72)]' : isBurgundy ? 'text-[rgba(245,245,240,0.70)]' : 'text-[#F5F5F0]/70'}`} aria-hidden="true">
-              <span className={`h-px w-10 transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.24)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.22)]' : 'bg-[#F5F5F0]/20'}`} />
+            <div className="closing-seal flex items-center gap-3 pt-1 transition-colors duration-500 text-[#F5F5F0]/70" aria-hidden="true">
+              <span className="h-px w-10 transition-colors duration-500 bg-[#F5F5F0]/20" />
               <Heart size={14} strokeWidth={1.25} />
-              <span className={`h-px w-10 transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.24)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.22)]' : 'bg-[#F5F5F0]/20'}`} />
+              <span className="h-px w-10 transition-colors duration-500 bg-[#F5F5F0]/20" />
             </div>
           </div>
           
         </div>
       </div>
 
-      <p className={`closing-credit closing-reveal absolute bottom-6 left-1/2 z-20 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.24em] md:bottom-8 transition-colors duration-500 ${isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.60)]' : 'text-[#A4A4A4]/70'}`}>
+      <p className="closing-credit closing-reveal absolute bottom-6 left-1/2 z-20 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.24em] md:bottom-8 transition-colors duration-500 text-[#A4A4A4]/70">
         Created by Jakkob Panj
       </p>
 

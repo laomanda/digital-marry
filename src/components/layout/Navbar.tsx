@@ -13,7 +13,6 @@ import {
 import { cn } from '../../lib/utils'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import { usePalette } from '../../hooks/usePalette'
 
 const navLinks = [
   { number: '01', label: 'Home', href: '#hero', subtitle: 'Pembuka', icon: Home },
@@ -25,39 +24,9 @@ const navLinks = [
   { number: '07', label: 'Gift', href: '#gift', subtitle: 'Tanda Kasih', icon: Gift },
 ]
 
-const palettes = {
-  black: {
-    label: 'Black',
-    bg: '#050505',
-    text: '#F5F5F0',
-    muted: '#A4A4A4',
-    border: 'rgba(245,245,240,0.16)',
-  },
-  burgundy: {
-    label: 'Burgundy',
-    bg: '#4A1F2A',
-    text: '#F5F5F0',
-    muted: 'rgba(245,245,240,0.65)',
-    border: 'rgba(245,245,240,0.18)',
-  },
-  taupe: {
-    label: 'Warm Taupe',
-    bg: '#C9AD8F',
-    text: '#111111',
-    muted: 'rgba(17,17,17,0.58)',
-    border: 'rgba(17,17,17,0.18)',
-  },
-} as const
-
-type PaletteKey = keyof typeof palettes
-
-const PALETTE_STORAGE_KEY = 'navbar_palette'
-
 interface NavbarProps {
   visible?: boolean
 }
-
-// Removed getStoredPalette as it is handled by usePalette hook
 
 function MenuIconMark({ Icon }: { Icon: LucideIcon }) {
   return (
@@ -75,16 +44,13 @@ function MenuIconMark({ Icon }: { Icon: LucideIcon }) {
 
 export default function Navbar({ visible = true }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const { palette } = usePalette()
   const { shouldReduceMotion } = useReducedMotionSafe()
   const coupleName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
-  const activePalette = palettes[palette]
-  const paletteKeys = Object.keys(palettes) as PaletteKey[]
   const menuThemeStyle = {
-    '--menu-bg': activePalette.bg,
-    '--menu-text': activePalette.text,
-    '--menu-muted': activePalette.muted,
-    '--menu-border': activePalette.border,
+    '--menu-bg': '#050505',
+    '--menu-text': '#F5F5F0',
+    '--menu-muted': '#A4A4A4',
+    '--menu-border': 'rgba(245,245,240,0.16)',
   } as CSSProperties
 
   useEffect(() => {
@@ -158,16 +124,6 @@ export default function Navbar({ visible = true }: NavbarProps) {
 
   const closeMenu = () => setMenuOpen(false)
 
-  const selectPalette = (key: PaletteKey) => {
-    try {
-      window.localStorage.setItem(PALETTE_STORAGE_KEY, key)
-      window.dispatchEvent(new CustomEvent('navbar-palette-change', { detail: key }))
-    } catch {
-      // Palette persistence is optional; the menu should keep working without storage.
-      window.dispatchEvent(new CustomEvent('navbar-palette-change', { detail: key }))
-    }
-  }
-
   return (
     <>
       <div
@@ -220,8 +176,8 @@ export default function Navbar({ visible = true }: NavbarProps) {
             initial="initial"
             animate={{
               ...overlayVariants.animate,
-              backgroundColor: activePalette.bg,
-              color: activePalette.text,
+              backgroundColor: '#050505',
+              color: '#F5F5F0',
             }}
             exit="exit"
           >
@@ -300,54 +256,6 @@ export default function Navbar({ visible = true }: NavbarProps) {
 
               <div className="mt-3 flex flex-col gap-3 border-t border-[color:var(--menu-border)] pt-3 font-mono text-[10px] uppercase tracking-[0.28em] text-[color:var(--menu-muted)] md:mt-[3vh] md:pt-[1.5vh] md:flex-row md:items-end md:justify-between">
                 <span>{coupleName}</span>
-
-                <div className="flex flex-col gap-2 md:items-end">
-                  <span>Warna Menu</span>
-                  <div className="flex flex-wrap items-center gap-3">
-                    {paletteKeys.map((key) => {
-                      const paletteOption = palettes[key]
-                      const isActive = palette === key
-
-                      return (
-                        <motion.button
-                          key={key}
-                          type="button"
-                          aria-label={`Gunakan warna ${paletteOption.label}`}
-                          aria-pressed={isActive}
-                          className="group/palette flex items-center gap-2 rounded-[2px] outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--menu-text)]"
-                          onClick={() => selectPalette(key)}
-                          whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
-                          whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                          transition={{ duration: 0.22, ease: 'easeOut' }}
-                        >
-                          <span
-                            className={cn(
-                              'flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-300 md:h-10 md:w-10',
-                              isActive
-                                ? 'border-[color:var(--menu-text)]'
-                                : 'border-[color:var(--menu-border)]',
-                            )}
-                          >
-                            <span
-                              className="h-6 w-6 rounded-full border border-black/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] md:h-7 md:w-7"
-                              style={{ backgroundColor: paletteOption.bg }}
-                            />
-                          </span>
-                          <span
-                            className={cn(
-                              'text-left text-[9px] tracking-[0.22em] transition-colors duration-300',
-                              isActive
-                                ? 'text-[color:var(--menu-text)]'
-                                : 'text-[color:var(--menu-muted)] group-hover/palette:text-[color:var(--menu-text)]',
-                            )}
-                          >
-                            {paletteOption.label}
-                          </span>
-                        </motion.button>
-                      )
-                    })}
-                  </div>
-                </div>
               </div>
             </div>
           </motion.div>

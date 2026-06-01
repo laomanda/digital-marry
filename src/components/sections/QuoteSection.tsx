@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
-import { usePalette } from '../../hooks/usePalette'
 import { Container } from '../ui/Container'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 
@@ -29,47 +28,13 @@ export function QuoteSection() {
   const markRef = useRef<HTMLSpanElement>(null)
   const [isQuoteHovered, setIsQuoteHovered] = useState(false)
 
-  const { palette } = usePalette()
-  const isBurgundy = palette === 'burgundy'
-  const isTaupe = palette === 'taupe'
-
-  const sectionClass = isTaupe
-    ? 'bg-[#C9AD8F] text-[#111111]'
-    : isBurgundy
-      ? 'bg-[#4A1F2A] text-[#F5F5F0]'
-      : 'bg-[#050505] text-[#F5F5F0]'
-
-  const textClass = isTaupe
-    ? 'text-[#111111]'
-    : 'text-[#F5F5F0]'
-
-  const mutedClass = isTaupe
-    ? 'text-[rgba(17,17,17,0.58)]'
-    : isBurgundy
-      ? 'text-[rgba(245,245,240,0.65)]'
-      : 'text-[rgba(245,245,240,0.58)]'
-
-  const lineStrongClass = isTaupe
-    ? 'bg-[rgba(17,17,17,0.18)]'
-    : isBurgundy
-      ? 'bg-[rgba(245,245,240,0.18)]'
-      : 'bg-[rgba(245,245,240,0.15)]'
-
-  const lineSoftClass = isTaupe
-    ? 'bg-[rgba(17,17,17,0.14)]'
-    : isBurgundy
-      ? 'bg-[rgba(245,245,240,0.14)]'
-      : 'bg-[rgba(245,245,240,0.10)]'
-
-  const decorClass = isTaupe
-    ? 'text-[rgba(17,17,17,0.38)]'
-    : isBurgundy
-      ? 'text-[rgba(245,245,240,0.42)]'
-      : 'text-[#F5F5F0]/35'
-
-  const quoteMarkClass = isTaupe
-    ? 'text-[#111111]'
-    : 'text-[#F5F5F0]'
+  const sectionClass = 'bg-[#050505] text-[#F5F5F0]'
+  const textClass = 'text-[#F5F5F0]'
+  const mutedClass = 'text-[rgba(245,245,240,0.58)]'
+  const lineStrongClass = 'bg-[rgba(245,245,240,0.15)]'
+  const lineSoftClass = 'bg-[rgba(245,245,240,0.10)]'
+  const decorClass = 'text-[#F5F5F0]/35'
+  const quoteMarkClass = 'text-[#F5F5F0]'
 
   const quoteText = weddingData.wedding.quote.text
   const quoteAuthor = weddingData.wedding.quote.author
@@ -212,7 +177,7 @@ export function QuoteSection() {
                 scale: shouldReduceMotion ? 1 : 0.96,
                 rotate: shouldReduceMotion ? 0 : -1.5,
               }}
-              animate={{ opacity: isQuoteHovered ? (isTaupe ? 0.07 : 0.065) : shouldReduceMotion ? 0.04 : undefined }}
+              animate={{ opacity: isQuoteHovered ? 0.065 : shouldReduceMotion ? 0.04 : undefined }}
               transition={{ duration: 0.32, ease: 'easeOut' }}
             >
               &ldquo;

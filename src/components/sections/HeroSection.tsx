@@ -3,7 +3,7 @@ import { animate } from 'animejs'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import { usePalette } from '../../hooks/usePalette'
+import heroImageLocal from '../../assets/hero.webp'
 
 type HeroSectionProps = {
   isInvitationOpen: boolean
@@ -38,47 +38,25 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
   const nameRef = useRef<HTMLHeadingElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
-  const { palette } = usePalette()
+  const overlayIntroOpacity = 0.48
+  const overlayInitialOpacity = 0.86
+  const overlayScrollOpacity = 0.78
 
-  const isBurgundy = palette === 'burgundy'
-  const isTaupe = palette === 'taupe'
+  const rootClass = 'bg-[#050505]'
+  const textClass = 'text-[#F5F5F0]'
+  const mutedClass = 'text-[rgba(245,245,240,0.58)]'
+  const dimClass = 'text-[rgba(245,245,240,0.42)]'
 
-  const overlayIntroOpacity = isTaupe ? 0.58 : 0.48
-  const overlayInitialOpacity = isTaupe ? 0.78 : 0.86
-  const overlayScrollOpacity = isTaupe ? 0.70 : 0.78
+  const lineStrong = 'bg-[rgba(245,245,240,0.22)]'
+  const lineMedium = 'bg-[rgba(245,245,240,0.28)]'
+  const lineSoft = 'bg-[rgba(245,245,240,0.14)]'
 
-  const rootClass = isTaupe ? 'bg-[#C9AD8F]' : isBurgundy ? 'bg-[#4A1F2A]' : 'bg-[#050505]'
-  const textClass = isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]'
-  const mutedClass = isTaupe ? 'text-[rgba(17,17,17,0.58)]' : 'text-[rgba(245,245,240,0.58)]'
-  const dimClass = isTaupe ? 'text-[rgba(17,17,17,0.42)]' : 'text-[rgba(245,245,240,0.42)]'
-  
-  const lineStrong = isTaupe ? 'bg-[rgba(17,17,17,0.22)]' : 'bg-[rgba(245,245,240,0.22)]'
-  const lineMedium = isTaupe ? 'bg-[rgba(17,17,17,0.22)]' : 'bg-[rgba(245,245,240,0.28)]'
-  const lineSoft = isTaupe ? 'bg-[rgba(17,17,17,0.14)]' : 'bg-[rgba(245,245,240,0.14)]'
-
-  const overlayGradientClass = isTaupe
-    ? 'bg-[linear-gradient(90deg,rgba(201,173,143,0.92)_0%,rgba(201,173,143,0.66)_34%,rgba(201,173,143,0.20)_72%,rgba(201,173,143,0.52)_100%)]'
-    : isBurgundy
-      ? 'bg-[linear-gradient(90deg,rgba(74,31,42,0.92)_0%,rgba(74,31,42,0.62)_34%,rgba(74,31,42,0.18)_72%,rgba(74,31,42,0.48)_100%)]'
-      : 'bg-[linear-gradient(90deg,rgba(5,5,5,0.92)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.18)_72%,rgba(5,5,5,0.48)_100%)]'
-
-  const overlayRadialStyle = isTaupe
-    ? 'radial-gradient(circle at 72% 28%, transparent 0%, rgba(201,173,143,0.28) 34%, rgba(111,82,58,0.42) 100%)'
-    : isBurgundy
-      ? 'radial-gradient(circle at 72% 28%, transparent 0%, rgba(74,31,42,0.28) 34%, rgba(74,31,42,0.78) 100%)'
-      : 'radial-gradient(circle at 72% 28%, transparent 0%, rgba(5,5,5,0.28) 34%, rgba(5,5,5,0.78) 100%)'
-
-  const bottomFadeClass = isTaupe
-    ? 'from-[#C9AD8F] via-[rgba(201,173,143,0.78)]'
-    : isBurgundy
-      ? 'from-[#4A1F2A] via-[#4A1F2A]/78'
-      : 'from-[#050505] via-[#050505]/78'
+  const overlayGradientClass = 'bg-[linear-gradient(90deg,rgba(5,5,5,0.92)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.18)_72%,rgba(5,5,5,0.48)_100%)]'
+  const overlayRadialStyle = 'radial-gradient(circle at 72% 28%, transparent 0%, rgba(5,5,5,0.28) 34%, rgba(5,5,5,0.78) 100%)'
+  const bottomFadeClass = 'from-[#050505] via-[#050505]/78'
 
   const coupleName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
-  const heroImage =
-    weddingData.gallery?.[1]?.src ||
-    weddingData.gallery?.[0]?.src ||
-    'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=85&fit=crop'
+  const heroImage = heroImageLocal
 
   useEffect(() => {
     if (!isInvitationOpen) return
@@ -91,9 +69,9 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
 
     const ctx = gsap.context(() => {
       const bgScale = root.querySelector<HTMLElement>('[data-hero-bg-scale]')
-      const chars = nameRef.current?.querySelectorAll<HTMLElement>('[data-hero-char]')
-      const animatedElements = root.querySelectorAll<HTMLElement>('[data-hero-animate]')
-      const lines = root.querySelectorAll<HTMLElement>('[data-hero-line]')
+      const chars = Array.from(nameRef.current?.querySelectorAll<HTMLElement>('[data-hero-char]') ?? [])
+      const animatedElements = Array.from(root.querySelectorAll<HTMLElement>('[data-hero-animate]'))
+      const lines = Array.from(root.querySelectorAll<HTMLElement>('[data-hero-line]'))
       const scrollIndicator = root.querySelector<HTMLElement>('[data-hero-scroll]')
 
       if (shouldReduceMotion) {
@@ -101,10 +79,10 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
         gsap.set(bgScale, { opacity: 1, scale: 1, y: 0 })
         gsap.set(overlayRef.current, { opacity: overlayIntroOpacity })
         gsap.set(contentRef.current, { opacity: 1, y: 0 })
-        gsap.set(animatedElements, { opacity: 1, y: 0, x: 0 })
-        gsap.set(lines, { opacity: 1, scaleX: 1, scaleY: 1 })
-        gsap.set(chars || [], { opacity: 1, y: 0 })
-        gsap.set(scrollIndicator, { opacity: 1, y: 0 })
+        if (animatedElements.length) gsap.set(animatedElements, { opacity: 1, y: 0, x: 0 })
+        if (lines.length) gsap.set(lines, { opacity: 1, scaleX: 1, scaleY: 1 })
+        if (chars.length) gsap.set(chars, { opacity: 1, y: 0 })
+        if (scrollIndicator) gsap.set(scrollIndicator, { opacity: 1, y: 0 })
         return
       }
 
@@ -112,10 +90,10 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
       gsap.set(bgScale, { opacity: 1, scale: 1.12, y: 0 })
       gsap.set(overlayRef.current, { opacity: overlayInitialOpacity })
       gsap.set(contentRef.current, { opacity: 1, y: 0 })
-      gsap.set(animatedElements, { opacity: 0, y: 18 })
-      gsap.set(lines, { opacity: 0, scaleX: 0, transformOrigin: 'left center' })
-      gsap.set(chars || [], { opacity: 0, y: 40 })
-      gsap.set(scrollIndicator, { opacity: 0, y: 12 })
+      if (animatedElements.length) gsap.set(animatedElements, { opacity: 0, y: 18 })
+      if (lines.length) gsap.set(lines, { opacity: 0, scaleX: 0, transformOrigin: 'left center' })
+      if (chars.length) gsap.set(chars, { opacity: 0, y: 40 })
+      if (scrollIndicator) gsap.set(scrollIndicator, { opacity: 0, y: 12 })
 
       const createScrollTimeline = () => {
         if (!isActive || !bgScale || !contentRef.current || !overlayRef.current) return
@@ -145,7 +123,9 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
       intro
         .to(bgScale, { scale: 1, duration: 2.35, ease: 'power3.out' }, 0)
         .to(overlayRef.current, { opacity: overlayIntroOpacity, duration: 1.8, ease: 'power2.out' }, 0.08)
-        .to(
+
+      if (lines.length) {
+        intro.to(
           lines,
           {
             opacity: 1,
@@ -156,7 +136,10 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
           },
           0.48,
         )
-        .to(
+      }
+
+      if (animatedElements.length) {
+        intro.to(
           animatedElements,
           {
             opacity: 1,
@@ -167,22 +150,27 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
           },
           0.68,
         )
-        .call(
-          () => {
-            if (!chars?.length) return
+      }
 
-            animate(chars, {
-              opacity: [0, 1],
-              translateY: [40, 0],
-              duration: 950,
-              delay: (_el: Element, index: number) => index * 34,
-              ease: 'outExpo',
-            })
-          },
-          [],
-          0.96,
-        )
-        .to(scrollIndicator, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 2.05)
+      intro.call(
+        () => {
+          if (!chars.length) return
+
+          animate(chars, {
+            opacity: [0, 1],
+            translateY: [40, 0],
+            duration: 950,
+            delay: (_el: Element, index: number) => index * 34,
+            ease: 'outExpo',
+          })
+        },
+        [],
+        0.96,
+      )
+
+      if (scrollIndicator) {
+        intro.to(scrollIndicator, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 2.05)
+      }
 
       const canUsePointerDepth =
         window.matchMedia('(hover: hover) and (pointer: fine)').matches && bgRef.current
@@ -253,8 +241,9 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
             src={heroImage}
             alt=""
             aria-hidden="true"
-            className={`h-full w-full scale-[1.02] object-cover grayscale transition-all duration-500 ${isTaupe ? 'contrast-[1.05] brightness-[1.05]' : 'contrast-[1.12] brightness-[0.82]'}`}
+            className={`h-full w-full scale-[1.02] object-cover grayscale transition-all duration-500 contrast-[1.12] brightness-[0.82]`}
             loading="eager"
+            decoding="async"
           />
         </div>
       </div>
@@ -348,16 +337,10 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
               </div>
 
               <div className={`relative h-28 w-px overflow-hidden transition-colors duration-500 ${lineSoft}`}>
-                <span className={`absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent to-transparent transition-colors duration-500 ${isTaupe ? 'via-[#111111]/40' : 'via-[#F5F5F0]/45'}`} />
+                <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#F5F5F0]/45 to-transparent transition-colors duration-500" />
                 <span
                   data-hero-scroll-dot
-                  className={`absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full border transition-colors duration-500 ${
-                    isTaupe 
-                      ? 'border-[rgba(17,17,17,0.6)] bg-[#C9AD8F] shadow-[0_0_16px_rgba(17,17,17,0.16)]'
-                      : isBurgundy 
-                        ? 'border-[#F5F5F0]/70 bg-[#4A1F2A] shadow-[0_0_16px_rgba(245,245,240,0.18)]' 
-                        : 'border-[#F5F5F0]/70 bg-[#050505] shadow-[0_0_16px_rgba(245,245,240,0.18)]'
-                  }`}
+                  className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full border transition-colors duration-500 border-[#F5F5F0]/70 bg-[#050505] shadow-[0_0_16px_rgba(245,245,240,0.18)]"
                 />
               </div>
             </div>

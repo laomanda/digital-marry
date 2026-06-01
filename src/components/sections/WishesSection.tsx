@@ -3,11 +3,9 @@ import { Quote } from 'lucide-react'
 import { weddingData } from '../../data/wedding.data'
 import { GuestWish } from '../../types/wish'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import { usePalette } from '../../hooks/usePalette'
 
 interface WishesSectionProps {
   guestWishes?: GuestWish[]
-  palette?: 'default' | 'burgundy' | 'taupe'
 }
 
 function getInitials(name: string) {
@@ -16,14 +14,10 @@ function getInitials(name: string) {
   return words.slice(0, 2).map((word) => word[0]?.toUpperCase()).join('')
 }
 
-function WishMonogram({ name, isBurgundy = false, isTaupe = false }: { name: string, isBurgundy?: boolean, isTaupe?: boolean }) {
+function WishMonogram({ name }: { name: string }) {
   const getMonogramClass = () => {
     const base = 'flex h-12 w-12 shrink-0 items-center justify-center rounded-full border transition-colors duration-500 font-serif text-[16px]';
-    const state = isTaupe
-      ? 'border-[rgba(17,17,17,0.18)] bg-[rgba(201,173,143,0.72)] text-[#111111] group-hover/card:border-[rgba(17,17,17,0.30)]'
-      : isBurgundy
-        ? 'border-[rgba(245,245,240,0.28)] bg-[#2B1018] text-[#F5F5F0] group-hover/card:border-[rgba(245,245,240,0.38)]'
-        : 'border-[#F5F5F0]/18 bg-[#050505] text-[#F5F5F0] group-hover/card:border-[#F5F5F0]/38';
+    const state = 'border-[#F5F5F0]/18 bg-[#050505] text-[#F5F5F0] group-hover/card:border-[#F5F5F0]/38';
     return `${base} ${state}`;
   }
 
@@ -37,46 +31,30 @@ function WishMonogram({ name, isBurgundy = false, isTaupe = false }: { name: str
 function CompactWishCard({
   wish,
   onHoverChange,
-  isBurgundy = false,
-  isTaupe = false,
 }: {
   wish: GuestWish
   onHoverChange?: (isHovered: boolean) => void
-  isBurgundy?: boolean
-  isTaupe?: boolean
 }) {
   const isNew = wish.source === 'rsvp'
 
   const getCardClass = () => {
     const base = 'group/card relative flex h-[184px] w-[320px] shrink-0 overflow-hidden border p-5 transition-all duration-500 hover:-translate-y-1 sm:w-[350px] sm:p-6 lg:w-[380px]';
-    const state = isTaupe
-      ? `bg-[rgba(245,245,240,0.34)] hover:bg-[rgba(245,245,240,0.46)] ${isNew ? 'border-[rgba(17,17,17,0.20)]' : 'border-[rgba(17,17,17,0.14)]'} hover:border-[rgba(17,17,17,0.28)]`
-      : isBurgundy 
-        ? `bg-[rgba(35,12,20,0.48)] hover:bg-[rgba(35,12,20,0.62)] hover:border-[rgba(245,245,240,0.34)] ${isNew ? 'border-[rgba(245,245,240,0.24)]' : 'border-[rgba(245,245,240,0.18)]'}`
-        : `bg-[#F5F5F0]/[0.035] hover:border-[#F5F5F0]/28 ${isNew ? 'border-[#F5F5F0]/18' : 'border-[#F5F5F0]/12'}`;
+    const state = `bg-[#F5F5F0]/[0.035] hover:border-[#F5F5F0]/28 ${isNew ? 'border-[#F5F5F0]/18' : 'border-[#F5F5F0]/12'}`;
     return `${base} ${state}`;
   }
 
-  const textClass = isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]';
-  const mutedClass = isTaupe ? 'text-[rgba(17,17,17,0.58)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)]' : 'text-[#A4A4A4]';
+  const textClass = 'text-[#F5F5F0]';
+  const mutedClass = 'text-[#A4A4A4]';
 
   const getBadgeClass = () => {
     const base = 'shrink-0 border px-2 py-1 font-mono text-[8px] uppercase transition-colors duration-500';
-    const state = isTaupe
-      ? 'border-[rgba(17,17,17,0.18)] text-[rgba(17,17,17,0.58)] bg-[rgba(17,17,17,0.025)]'
-      : isBurgundy
-        ? 'border-[rgba(245,245,240,0.22)] text-[rgba(245,245,240,0.65)] bg-[rgba(245,245,240,0.025)]'
-        : 'border-[#F5F5F0]/18 text-[#A4A4A4]';
+    const state = 'border-[#F5F5F0]/18 text-[#A4A4A4]';
     return `${base} ${state}`;
   }
 
   const getAttendanceRowClass = () => {
     const base = 'flex items-center justify-between border-t pt-3 font-mono text-[10px] uppercase transition-colors duration-500';
-    const state = isTaupe
-      ? 'border-[rgba(17,17,17,0.10)] text-[rgba(17,17,17,0.58)]'
-      : isBurgundy
-        ? 'border-[rgba(245,245,240,0.12)] text-[rgba(245,245,240,0.65)]'
-        : 'border-[#F5F5F0]/10 text-[#A4A4A4]';
+    const state = 'border-[#F5F5F0]/10 text-[#A4A4A4]';
     return `${base} ${state}`;
   }
 
@@ -86,21 +64,34 @@ function CompactWishCard({
       onMouseLeave={() => onHoverChange?.(false)}
       className={getCardClass()}
     >
-      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br transition-opacity duration-500 group-hover/card:opacity-100 ${isTaupe ? 'from-[rgba(17,17,17,0.035)] via-transparent to-transparent opacity-100' : isBurgundy ? 'from-[rgba(245,245,240,0.08)] via-transparent to-transparent opacity-40' : 'from-[#F5F5F0]/[0.06] via-transparent to-transparent opacity-70'}`} aria-hidden="true" />
-      <div className={`pointer-events-none absolute inset-[1px] border transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.04)]' : isBurgundy ? 'border-[rgba(245,245,240,0.06)]' : 'border-[#F5F5F0]/[0.035]'}`} aria-hidden="true" />
-      <div className={`pointer-events-none absolute left-0 top-0 h-px w-20 transition-all duration-500 group-hover/card:w-28 ${isTaupe ? 'bg-[rgba(17,17,17,0.18)] group-hover/card:bg-[rgba(17,17,17,0.34)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.22)] group-hover/card:bg-[rgba(245,245,240,0.38)]' : 'bg-[#F5F5F0]/18 group-hover/card:bg-[#F5F5F0]/34'}`} aria-hidden="true" />
-      <div className={`pointer-events-none absolute -right-5 -top-5 transition-opacity duration-500 group-hover/card:opacity-95 ${isTaupe ? 'text-[rgba(17,17,17,0.035)] opacity-80' : isBurgundy ? 'text-[rgba(245,245,240,0.045)] opacity-80' : 'text-[#F5F5F0]/[0.035]'}`} aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br transition-opacity duration-500 group-hover/card:opacity-100 from-[#F5F5F0]/[0.06] via-transparent to-transparent opacity-70" aria-hidden="true" />
+      
+      {/* Elegant Shine Sweep Effect on Hover */}
+      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
+        <div 
+          className="absolute top-0 h-full w-[250%]"
+          style={{
+            left: '-75%',
+            background: 'linear-gradient(115deg, transparent 40%, rgba(245,245,240,0.06) 45%, rgba(245,245,240,0.22) 50%, rgba(245,245,240,0.06) 55%, transparent 60%)',
+            animation: 'card-shine-sweep 1.6s ease-in-out infinite',
+            mixBlendMode: 'plus-lighter'
+          }}
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-[1px] border transition-colors duration-500 border-[#F5F5F0]/[0.035]" aria-hidden="true" />
+      <div className="pointer-events-none absolute left-0 top-0 h-px w-20 transition-all duration-500 group-hover/card:w-28 bg-[#F5F5F0]/18 group-hover/card:bg-[#F5F5F0]/34" aria-hidden="true" />
+      <div className="pointer-events-none absolute -right-5 -top-5 transition-opacity duration-500 group-hover/card:opacity-95 text-[#F5F5F0]/[0.035]" aria-hidden="true">
         <Quote size={78} strokeWidth={1} />
       </div>
-      <div className={`pointer-events-none absolute left-0 top-0 h-2.5 w-2.5 border-l border-t transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.14)]' : isBurgundy ? 'border-[rgba(245,245,240,0.28)]' : 'border-[#F5F5F0]/28'}`} aria-hidden="true" />
-      <div className={`pointer-events-none absolute right-0 top-0 h-2.5 w-2.5 border-r border-t transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.14)]' : isBurgundy ? 'border-[rgba(245,245,240,0.18)]' : 'border-[#F5F5F0]/16'}`} aria-hidden="true" />
-      <div className={`pointer-events-none absolute bottom-0 left-0 h-2.5 w-2.5 border-b border-l transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.14)]' : isBurgundy ? 'border-[rgba(245,245,240,0.18)]' : 'border-[#F5F5F0]/14'}`} aria-hidden="true" />
-      <div className={`pointer-events-none absolute bottom-0 right-0 h-2.5 w-2.5 border-b border-r transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.14)]' : isBurgundy ? 'border-[rgba(245,245,240,0.22)]' : 'border-[#F5F5F0]/20'}`} aria-hidden="true" />
+      <div className="pointer-events-none absolute left-0 top-0 h-2.5 w-2.5 border-l border-t transition-colors duration-500 border-[#F5F5F0]/28" aria-hidden="true" />
+      <div className="pointer-events-none absolute right-0 top-0 h-2.5 w-2.5 border-r border-t transition-colors duration-500 border-[#F5F5F0]/16" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-0 left-0 h-2.5 w-2.5 border-b border-l transition-colors duration-500 border-[#F5F5F0]/14" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-2.5 w-2.5 border-b border-r transition-colors duration-500 border-[#F5F5F0]/20" aria-hidden="true" />
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-between">
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
-            <WishMonogram name={wish.name} isBurgundy={isBurgundy} isTaupe={isTaupe} />
+            <WishMonogram name={wish.name} />
             <div className="min-w-0">
               <h3 className={`truncate text-[15px] font-semibold transition-colors duration-500 ${textClass}`}>{wish.name}</h3>
               <span className={`mt-1 block truncate font-mono text-[9px] uppercase transition-colors duration-500 ${mutedClass}`}>
@@ -121,7 +112,7 @@ function CompactWishCard({
         </div>
 
         <p
-          className={`my-4 overflow-hidden text-[15px] leading-[1.62] transition-colors duration-500 sm:text-[16px] ${isTaupe ? 'text-[rgba(17,17,17,0.58)] group-hover/card:text-[rgba(17,17,17,0.82)]' : isBurgundy ? 'text-[rgba(245,245,240,0.65)] group-hover/card:text-[rgba(245,245,240,0.88)]' : 'text-[#A4A4A4] group-hover/card:text-[#F5F5F0]/88'}`}
+          className="my-4 overflow-hidden text-[15px] leading-[1.62] transition-colors duration-500 sm:text-[16px] text-[#A4A4A4] group-hover/card:text-[#F5F5F0]/88"
           style={{
             display: '-webkit-box',
             WebkitBoxOrient: 'vertical',
@@ -133,10 +124,10 @@ function CompactWishCard({
 
         <div className={getAttendanceRowClass()}>
           <span className="flex items-center gap-2">
-            <span className={`h-1.5 w-1.5 rounded-full transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.42)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.48)]' : 'bg-[#F5F5F0]/42'}`} aria-hidden="true" />
+            <span className="h-1.5 w-1.5 rounded-full transition-colors duration-500 bg-[#F5F5F0]/42" aria-hidden="true" />
             <span>{wish.attending ? 'Hadir' : 'Tidak Hadir'}</span>
           </span>
-          <span className={`h-px w-10 transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.18)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.18)]' : 'bg-[#F5F5F0]/16'}`} aria-hidden="true" />
+          <span className="h-px w-10 transition-colors duration-500 bg-[#F5F5F0]/16" aria-hidden="true" />
         </div>
       </div>
     </article>
@@ -148,37 +139,21 @@ function buildRows(wishes: GuestWish[]) {
 
   const minimumCards = Math.max(8, wishes.length * 2)
   const expanded = Array.from({ length: minimumCards }, (_, index) => wishes[index % wishes.length])
-  const firstOffset = Math.ceil(expanded.length / 3)
-  const secondOffset = Math.ceil(expanded.length / 2)
+  const halfOffset = Math.ceil(expanded.length / 2)
 
   return [
     expanded,
-    [...expanded.slice(firstOffset), ...expanded.slice(0, firstOffset)],
-    [...expanded.slice(secondOffset), ...expanded.slice(0, secondOffset)],
+    [...expanded.slice(halfOffset), ...expanded.slice(0, halfOffset)],
   ]
 }
 
 export default function WishesSection({ guestWishes = [] }: WishesSectionProps) {
-  const { shouldReduceHeavyMotion } = useReducedMotionSafe()
+  const { shouldReduceMotion } = useReducedMotionSafe()
   const [pausedRowIndex, setPausedRowIndex] = useState<number | null>(null)
 
-  const { palette } = usePalette();
-  const isBurgundy = palette === 'burgundy';
-  const isTaupe = palette === 'taupe';
-
-  const sectionClass = isTaupe
-    ? 'bg-[#C9AD8F] text-[#111111]'
-    : isBurgundy
-      ? 'bg-[#4A1F2A] text-[#F5F5F0]'
-      : 'bg-[#050505] text-[#F5F5F0]';
-
-  const textClass = isTaupe ? 'text-[#111111]' : 'text-[#F5F5F0]';
-
-  const mutedClass = isTaupe
-    ? 'text-[rgba(17,17,17,0.58)]'
-    : isBurgundy
-      ? 'text-[rgba(245,245,240,0.65)]'
-      : 'text-[#A4A4A4]';
+  const sectionClass = 'bg-[#050505] text-[#F5F5F0]';
+  const textClass = 'text-[#F5F5F0]';
+  const mutedClass = 'text-[#A4A4A4]';
 
   const allWishes = useMemo(() => {
     const mappedInitialWishes: GuestWish[] = weddingData.wishes.map((w) => ({
@@ -199,7 +174,7 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
     <section
       id="wishes"
       data-section
-      data-theme={isTaupe ? "light" : "dark"}
+      data-theme="dark"
       data-global-reveal="true"
       className={`overflow-hidden py-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
     >
@@ -214,12 +189,17 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
             from { transform: translate3d(-50%, 0, 0); }
             to { transform: translate3d(0, 0, 0); }
           }
+
+          @keyframes card-shine-sweep {
+            0% { transform: translate3d(-120%, 0, 0); }
+            100% { transform: translate3d(120%, 0, 0); }
+          }
         `}
       </style>
 
       <div className="container-base">
         <div className="mx-auto mb-14 flex max-w-[680px] flex-col items-center text-center md:mb-16">
-          <div data-animate="line" className={`mb-8 h-12 w-px transition-colors duration-500 ${isTaupe ? 'bg-[rgba(17,17,17,0.18)]' : isBurgundy ? 'bg-[rgba(245,245,240,0.18)]' : 'bg-[#F5F5F0]/15'}`} aria-hidden="true" />
+          <div data-animate="line" className="mb-8 h-12 w-px transition-colors duration-500 bg-[#F5F5F0]/15" aria-hidden="true" />
           <span data-animate="text" className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
             Doa &amp; Ucapan
           </span>
@@ -232,16 +212,16 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
         </div>
 
         {allWishes.length === 0 ? (
-          <div className={`mx-auto max-w-[420px] border p-8 text-center transition-colors duration-500 ${isTaupe ? 'border-[rgba(17,17,17,0.16)] bg-[rgba(245,245,240,0.34)]' : isBurgundy ? 'border-[rgba(245,245,240,0.18)] bg-[rgba(35,12,20,0.46)]' : 'border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.035]'}`}>
+          <div className="mx-auto max-w-[420px] border p-8 text-center transition-colors duration-500 border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.035]">
             <p className={`mb-3 font-serif text-[30px] font-light transition-colors duration-500 ${textClass}`}>Belum ada ucapan.</p>
             <p className={`text-[14px] leading-7 transition-colors duration-500 ${mutedClass}`}>
               Jadilah yang pertama mengirim doa untuk kami.
             </p>
           </div>
-        ) : shouldReduceHeavyMotion ? (
+        ) : shouldReduceMotion ? (
           <div className="mx-auto flex max-w-[1120px] flex-wrap justify-center gap-4" data-animate="card">
             {allWishes.map((wish) => (
-              <CompactWishCard key={wish.id} wish={wish} isBurgundy={isBurgundy} isTaupe={isTaupe} />
+              <CompactWishCard key={wish.id} wish={wish} />
             ))}
           </div>
         ) : (
@@ -267,8 +247,6 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
                       <CompactWishCard
                         key={`${wish.id}-${rowIndex}-${index}`}
                         wish={wish}
-                        isBurgundy={isBurgundy}
-                        isTaupe={isTaupe}
                         onHoverChange={(isHovered) => {
                           setPausedRowIndex((current) => {
                             if (isHovered) return rowIndex
