@@ -284,8 +284,8 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
             <h1
               ref={nameRef}
               aria-label={coupleName}
-              className={`max-w-[11ch] font-serif text-[clamp(58px,13vw,172px)] font-light leading-[0.82] tracking-normal md:max-w-[10.5ch] transition-colors duration-500 ${textClass}`}
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              className={`max-w-[11ch] font-script text-[clamp(58px,13vw,172px)] font-light leading-[0.82] tracking-normal md:max-w-[10.5ch] transition-colors duration-500 ${textClass}`}
+              style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
             >
               <HeroNameLine text={weddingData.groom.firstName} className="block" />
               <span className="block">

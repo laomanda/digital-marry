@@ -1,5 +1,6 @@
-import { type CSSProperties, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
+
 import {
   BookOpen,
   CalendarDays,
@@ -8,50 +9,29 @@ import {
   Home,
   Images,
   MailCheck,
-  type LucideIcon,
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 
 const navLinks = [
-  { number: '01', label: 'Home', href: '#hero', subtitle: 'Pembuka', icon: Home },
-  { number: '02', label: 'Couple', href: '#couple', subtitle: 'Bride and groom', icon: Heart },
-  { number: '03', label: 'Story', href: '#love-story', subtitle: 'Cerita Kami', icon: BookOpen },
-  { number: '04', label: 'Event', href: '#event', subtitle: 'Waktu dan Tempat', icon: CalendarDays },
-  { number: '05', label: 'RSVP', href: '#rsvp', subtitle: 'Konfirmasi Hadir', icon: MailCheck },
-  { number: '06', label: 'Gallery', href: '#gallery', subtitle: 'Momen Berharga', icon: Images },
-  { number: '07', label: 'Gift', href: '#gift', subtitle: 'Tanda Kasih', icon: Gift },
+  { number: '01', label: 'Home', href: '#hero', icon: Home },
+  { number: '02', label: 'Couple', href: '#couple', icon: Heart },
+  { number: '03', label: 'Story', href: '#love-story', icon: BookOpen },
+  { number: '04', label: 'Event', href: '#event', icon: CalendarDays },
+  { number: '05', label: 'RSVP', href: '#rsvp', icon: MailCheck },
+  { number: '06', label: 'Gallery', href: '#gallery', icon: Images },
+  { number: '07', label: 'Gift', href: '#gift', icon: Gift },
 ]
 
 interface NavbarProps {
   visible?: boolean
 }
 
-function MenuIconMark({ Icon }: { Icon: LucideIcon }) {
-  return (
-    <span
-      aria-hidden="true"
-      className="relative flex h-9 w-9 shrink-0 items-center justify-center text-[color:var(--menu-muted)] transition-colors duration-300 group-hover:text-[color:var(--menu-text)] md:h-10 md:w-10"
-    >
-      <span className="absolute left-0 top-0 h-2.5 w-2.5 border-l border-t border-[color:var(--menu-border)] transition-all duration-500 ease-out group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 group-hover:border-[color:var(--menu-text)]" />
-      <span className="absolute bottom-0 right-0 h-2.5 w-2.5 border-b border-r border-[color:var(--menu-border)] transition-all duration-500 ease-out group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:border-[color:var(--menu-text)]" />
-      <span className="absolute inset-[7px] border border-[color:var(--menu-border)] transition-all duration-500 ease-out group-hover:inset-[5px] group-hover:border-[color:var(--menu-text)]" />
-      <Icon className="relative h-4 w-4 stroke-[1.15] transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:scale-110 md:h-[18px] md:w-[18px]" />
-    </span>
-  )
-}
-
 export default function Navbar({ visible = true }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const { shouldReduceMotion } = useReducedMotionSafe()
   const coupleName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
-  const menuThemeStyle = {
-    '--menu-bg': '#050505',
-    '--menu-text': '#F5F5F0',
-    '--menu-muted': '#A4A4A4',
-    '--menu-border': 'rgba(245,245,240,0.16)',
-  } as CSSProperties
 
   useEffect(() => {
     if (!visible) {
@@ -63,13 +43,10 @@ export default function Navbar({ visible = true }: NavbarProps) {
     if (!visible || !menuOpen) return
 
     const previousBodyOverflow = document.body.style.overflow
-    const previousHtmlOverflow = document.documentElement.style.overflow
     document.body.style.overflow = 'hidden'
-    document.documentElement.style.overflow = 'hidden'
 
     return () => {
       document.body.style.overflow = previousBodyOverflow
-      document.documentElement.style.overflow = previousHtmlOverflow
     }
   }, [menuOpen, visible])
 
@@ -86,17 +63,23 @@ export default function Navbar({ visible = true }: NavbarProps) {
     return () => window.removeEventListener('keydown', closeOnEscape)
   }, [menuOpen, visible])
 
-  const overlayVariants: Variants = shouldReduceMotion
+  const drawerVariants: Variants = shouldReduceMotion
     ? {
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0.2 } },
-        exit: { opacity: 0, transition: { duration: 0.18 } },
+        initial: { x: '100%', opacity: 0 },
+        animate: { x: 0, opacity: 1, transition: { duration: 0.2 } },
+        exit: { x: '100%', opacity: 0, transition: { duration: 0.2 } },
       }
     : {
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0.55, ease: 'easeOut' } },
-        exit: { opacity: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+        initial: { x: '100%' },
+        animate: { x: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+        exit: { x: '100%', transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
       }
+
+  const backdropVariants: Variants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { duration: 0.25 } },
+    exit: { opacity: 0, transition: { duration: 0.25 } }
+  }
 
   const listVariants: Variants = shouldReduceMotion
     ? {
@@ -106,20 +89,20 @@ export default function Navbar({ visible = true }: NavbarProps) {
       }
     : {
         initial: {},
-        animate: { transition: { staggerChildren: 0.055, delayChildren: 0.12 } },
-        exit: { transition: { staggerChildren: 0.035, staggerDirection: -1 } },
+        animate: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
+        exit: { transition: { staggerChildren: 0.04, staggerDirection: -1 } },
       }
 
-  const itemVariants: Variants = shouldReduceMotion
+  const drawerItemVariants: Variants = shouldReduceMotion
     ? {
         initial: { opacity: 0 },
         animate: { opacity: 1, transition: { duration: 0.22 } },
         exit: { opacity: 0, transition: { duration: 0.14 } },
       }
     : {
-        initial: { opacity: 0, y: 24 },
-        animate: { opacity: 1, y: 0, transition: { duration: 0.58, ease: 'easeOut' } },
-        exit: { opacity: 0, y: 12, transition: { duration: 0.22, ease: 'easeIn' } },
+        initial: { opacity: 0, x: 20 },
+        animate: { opacity: 1, x: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+        exit: { opacity: 0, x: 10, transition: { duration: 0.2, ease: 'easeIn' } },
       }
 
   const closeMenu = () => setMenuOpen(false)
@@ -144,7 +127,7 @@ export default function Navbar({ visible = true }: NavbarProps) {
           onClick={() => setMenuOpen((open) => !open)}
           aria-label={menuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
           aria-expanded={menuOpen}
-          aria-controls="fullscreen-navigation"
+          aria-controls="drawer-navigation"
           whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
           whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
           transition={{ duration: 0.28, ease: 'easeOut' }}
@@ -166,99 +149,85 @@ export default function Navbar({ visible = true }: NavbarProps) {
 
       <AnimatePresence>
         {visible && menuOpen && (
-          <motion.div
-            id="fullscreen-navigation"
-            role="dialog"
-            aria-modal="true"
-            className="fixed inset-0 z-[8990] overflow-y-auto overflow-x-hidden bg-[var(--menu-bg)] text-[color:var(--menu-text)]"
-            style={menuThemeStyle}
-            variants={overlayVariants}
-            initial="initial"
-            animate={{
-              ...overlayVariants.animate,
-              backgroundColor: '#050505',
-              color: '#F5F5F0',
-            }}
-            exit="exit"
-          >
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,var(--menu-border),transparent_38%)]" />
-            <span className="pointer-events-none absolute left-5 top-24 h-12 w-12 border-l border-t border-[color:var(--menu-border)] md:left-10 md:top-28" />
-            <span className="pointer-events-none absolute bottom-8 right-5 h-12 w-12 border-b border-r border-[color:var(--menu-border)] md:bottom-10 md:right-10" />
-
-            <div className="container-base relative flex min-h-dvh flex-col justify-center py-[4vh] md:py-[4vh]">
-              <div className="mb-3 flex items-end justify-between gap-6 border-b border-[color:var(--menu-border)] pb-3 md:mb-[3vh] md:pb-[1.5vh]">
-                <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-[color:var(--menu-muted)]">
-                  Navigation
-                </p>
-                <div
-                  aria-hidden="true"
-                  className="hidden items-center justify-end opacity-80 transition-opacity duration-300 sm:flex"
-                >
-                  <span
-                    className="font-serif text-[30px] italic leading-none tracking-normal text-[color:var(--menu-text)] opacity-65 md:text-[40px]"
-                    style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
-                  >
-                    I
-                  </span>
-                  <span
-                    className="mx-2 font-serif text-[20px] italic leading-none tracking-normal text-[color:var(--menu-muted)] md:text-[26px]"
-                    style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
-                  >
-                    &amp;
-                  </span>
-                  <span
-                    className="font-serif text-[30px] italic leading-none tracking-normal text-[color:var(--menu-text)] opacity-65 md:text-[40px]"
-                    style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
-                  >
-                    R
+          <div className="fixed inset-0 z-[8990]">
+            {/* Backdrop layer */}
+            <motion.div
+              className="fixed inset-0 bg-black/55 z-[90]"
+              variants={backdropVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              onClick={closeMenu}
+              aria-hidden="true"
+            />
+            
+            {/* Drawer layer */}
+            <motion.div
+              id="drawer-navigation"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu navigasi"
+              className="fixed right-0 top-0 h-[100dvh] w-[min(82vw,380px)] max-w-[380px] z-[100] bg-[#050505]/95 border-l border-[#F5F5F0]/14 overflow-y-auto shadow-[0_0_60px_rgba(0,0,0,0.45)] pt-[max(1.5rem,env(safe-area-inset-top))] pr-[max(1.25rem,env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pl-6"
+              variants={drawerVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <div className="relative flex min-h-full flex-col">
+                {/* Header */}
+                <div className="flex items-center border-b border-[#F5F5F0]/10 pb-4 mb-6">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#A4A4A4]">
+                    Navigation
                   </span>
                 </div>
-              </div>
 
-              <motion.nav
-                aria-label="Navigasi utama"
-                variants={listVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                <ul className="grid gap-0">
-                  {navLinks.map((link) => {
-                    const Icon = link.icon
-
-                    return (
-                      <motion.li key={link.href} variants={itemVariants}>
-                        <a
-                          href={link.href}
-                          data-cursor-label={link.label.toUpperCase()}
-                          className="group grid grid-cols-[2.25rem_2.75rem_minmax(0,1fr)] items-center gap-3 border-b border-[color:var(--menu-border)] py-3 transition-colors duration-300 hover:border-[color:var(--menu-text)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--menu-text)] sm:grid-cols-[3.5rem_3rem_minmax(0,1fr)_auto] sm:gap-5 md:py-[calc(1.1vh+4px)] lg:py-[calc(1.3vh+4px)]"
-                          onClick={closeMenu}
-                        >
-                          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[color:var(--menu-muted)] transition-colors duration-300 group-hover:text-[color:var(--menu-text)]">
-                            {link.number}
-                          </span>
-                          <MenuIconMark Icon={Icon} />
-                          <span
-                            className="font-serif text-[clamp(28px,4.5vh,48px)] leading-[0.9] tracking-normal text-[color:var(--menu-text)] opacity-75 transition-all duration-500 group-hover:translate-x-2 group-hover:opacity-100"
-                            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
+                {/* Nav Links */}
+                <motion.nav
+                  aria-label="Navigasi utama"
+                  variants={listVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="flex-1"
+                >
+                  <ul className="flex flex-col">
+                    {navLinks.map((link) => {
+                      const Icon = link.icon
+                      return (
+                        <motion.li key={link.href} variants={drawerItemVariants}>
+                          <a
+                            href={link.href}
+                            className="group block py-5 border-b border-[#F5F5F0]/10 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5F5F0]/50"
+                            onClick={closeMenu}
                           >
-                            {link.label}
-                          </span>
-                          <span className="col-start-3 max-w-[13rem] pb-1 font-mono text-[10px] uppercase tracking-[0.24em] text-[color:var(--menu-muted)] opacity-80 transition-opacity duration-300 group-hover:opacity-100 sm:col-start-auto sm:text-right">
-                            {link.subtitle}
-                          </span>
-                        </a>
-                      </motion.li>
-                    )
-                  })}
-                </ul>
-              </motion.nav>
+                            <div className="flex items-center gap-4 transition-transform duration-300 group-hover:translate-x-1">
+                              <Icon 
+                                size={18} 
+                                className="text-[#A4A4A4] transition-colors duration-300 group-hover:text-[#F5F5F0]" 
+                              />
+                              <span
+                                className="text-[34px] text-[#F5F5F0]/78 transition-colors duration-300 group-hover:text-[#F5F5F0] pt-1"
+                                style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
+                              >
+                                {link.label}
+                              </span>
+                            </div>
+                          </a>
+                        </motion.li>
+                      )
+                    })}
+                  </ul>
+                </motion.nav>
 
-              <div className="mt-3 flex flex-col gap-3 border-t border-[color:var(--menu-border)] pt-3 font-mono text-[10px] uppercase tracking-[0.28em] text-[color:var(--menu-muted)] md:mt-[3vh] md:pt-[1.5vh] md:flex-row md:items-end md:justify-between">
-                <span>{coupleName}</span>
+                {/* Footer */}
+                <div className="mt-8 border-t border-[#F5F5F0]/10 pt-5 pb-2 text-left">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#A4A4A4]">
+                    {coupleName}
+                  </p>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>

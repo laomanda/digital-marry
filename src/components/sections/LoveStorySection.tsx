@@ -271,7 +271,7 @@ export function LoveStorySection() {
           <span className={`intro-anim font-mono text-[11px] md:text-[12px] tracking-[0.25em] uppercase mb-6 transition-colors duration-500 ${mutedClass}`}>
             Cerita Kami
           </span>
-          <h2 className={`intro-anim font-serif text-[38px] md:text-[56px] lg:text-[72px] leading-[1.06] md:leading-[1.1] font-light max-w-[320px] px-4 md:max-w-2xl transition-colors duration-500 ${headingClass}`}>
+          <h2 className={`intro-anim font-script text-[38px] md:text-[56px] lg:text-[72px] leading-[1.06] md:leading-[1.1] font-light max-w-[320px] px-4 md:max-w-2xl transition-colors duration-500 ${headingClass}`} style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
             Awal Kisah Kami
           </h2>
           <p className="intro-anim mt-6 text-[14px] md:text-[16px] leading-7 font-sans max-w-md px-4 transition-colors duration-500 text-[#F5F5F0]/[0.64] md:text-[#A4A4A4]">

@@ -21,8 +21,8 @@ export const weddingData = {
     date: new Date('2026-06-14T00:00:00+07:00'),
     dateFormatted: '14 . 06 . 2026',
     quote: {
-      text: 'Dan aku akan memilihmu; dalam seratus kehidupan, dalam seratus dunia, dalam versi realita mana pun, aku akan menemukan dan memilihmu.',
-      author: '— Kiersten White',
+      text: 'Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+      author: 'Q.S Ar-Rum : 21',
     },
     openingQuote: 'Dengan segala kerendahan hati dan ketulusan cinta, kami mengundangmu untuk menjadi saksi momen paling berharga dalam hidup kami.',
   },

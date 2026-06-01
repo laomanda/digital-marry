@@ -263,7 +263,8 @@ export default function GiftSection() {
           </span>
           <h2
             data-animate="title"
-            className={`font-serif text-[46px] font-light leading-[1.02] md:text-[78px] ${textClass}`}
+            className={`font-script text-[46px] font-light leading-[1.02] md:text-[78px] ${textClass}`}
+            style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
           >
             Amplop Digital
           </h2>

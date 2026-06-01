@@ -132,7 +132,7 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
             <span className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
               RSVP
             </span>
-            <h2 className={`mb-6 font-serif text-[44px] font-light leading-[1.02] md:text-[64px] ${textClass}`}>
+            <h2 className={`mb-6 font-script text-[44px] font-light leading-[1.02] md:text-[64px] ${textClass}`} style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
               Konfirmasi Kehadiran
             </h2>
             <p className={`mb-8 max-w-md text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>

@@ -101,7 +101,8 @@ export default function CountdownSection() {
             </span>
             <h2
               data-animate="title"
-              className={`font-serif text-[40px] font-light leading-[1.05] transition-colors duration-500 md:text-[64px] lg:text-[76px] ${textClass}`}
+              className={`font-script text-[40px] font-light leading-[1.05] transition-colors duration-500 md:text-[64px] lg:text-[76px] ${textClass}`}
+              style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
             >
               {isPast ? 'Hari Bahagia Telah Tiba' : 'Menghitung Hari'}
             </h2>

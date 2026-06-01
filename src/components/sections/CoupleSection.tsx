@@ -314,10 +314,11 @@ function PersonCard({
       </div>
 
       {/* Info */}
-      <div className={`mt-6 ${side === 'groom' ? 'text-left md:text-right' : 'text-left'}`}>
+      <div className="mt-6 text-center">
         <h3
-          className="font-serif text-[clamp(36px,5vw,64px)] font-light leading-[0.9] transition-colors duration-500 text-[#F5F5F0]"
+          className="font-script text-[clamp(36px,5vw,64px)] font-light leading-[0.9] transition-colors duration-500 text-[#F5F5F0]"
           aria-label={person.fullName}
+          style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
         >
           <SplitName name={person.firstName} />
         </h3>
@@ -326,7 +327,7 @@ function PersonCard({
           {person.fullName}
         </p>
 
-        <div className={`my-4 h-px w-10 transition-colors duration-500 bg-[#F5F5F0]/15 ${side === 'groom' ? 'md:ml-auto' : ''}`} />
+        <div className="mx-auto my-4 h-px w-10 transition-colors duration-500 bg-[#F5F5F0]/15" />
 
         <p className="font-sans text-[11px] uppercase leading-relaxed tracking-[0.16em] transition-colors duration-500 text-[#F5F5F0]/55">
           {person.parents}
@@ -338,7 +339,7 @@ function PersonCard({
             target="_blank"
             rel="noopener noreferrer"
             className={[
-              'mt-4 inline-flex items-center gap-2 transition duration-300',
+              'mt-4 inline-flex items-center justify-center gap-2 transition duration-300',
               'text-[#F5F5F0]/40 hover:text-[#F5F5F0]',
               'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
               'focus-visible:ring-[#F5F5F0] focus-visible:ring-offset-[#050505]',
@@ -584,8 +585,9 @@ export function CoupleSection() {
             The Couple
           </span>
           <h2
-            className={`font-serif text-[clamp(40px,7vw,96px)] font-light leading-[0.92] transition-colors duration-500 ${headingClass}`}
+            className={`font-script text-[clamp(40px,7vw,96px)] font-light leading-[0.92] transition-colors duration-500 ${headingClass}`}
             aria-label={`${weddingData.groom.firstName} & ${weddingData.bride.firstName}`}
+            style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
           >
             <SplitHeaderTitle text={`${weddingData.groom.firstName} & ${weddingData.bride.firstName}`} />
           </h2>

@@ -35,6 +35,7 @@ const config: Config = {
         serif: ['"Instrument Serif"', '"Cormorant Garamond"', 'Georgia', 'serif'],
         sans: ['"Inter"', '"DM Sans"', 'system-ui', 'sans-serif'],
         mono: ['"DM Mono"', 'monospace'],
+        script: ['"Great Vibes"', 'cursive'],
       },
       fontSize: {
         'hero-desktop': ['clamp(80px,9vw,140px)', { lineHeight: '0.9', letterSpacing: '-0.03em' }],

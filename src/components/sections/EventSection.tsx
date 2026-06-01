@@ -505,7 +505,7 @@ export default function EventSection() {
             <span className="mb-5 block font-mono text-[10px] uppercase transition-colors duration-500 [@media(max-height:650px)]:mb-2 [@media(max-height:650px)]:text-[9px] text-[#A4A4A4]">
               Rangkaian Acara
             </span>
-            <h2 className="font-serif text-[44px] font-light leading-[1.02] md:text-[68px] lg:text-[82px] [@media(max-height:650px)]:text-[50px] text-[#F5F5F0]">
+            <h2 className="font-script text-[44px] font-light leading-[1.02] md:text-[68px] lg:text-[82px] [@media(max-height:650px)]:text-[50px] text-[#F5F5F0]" style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
               Detail Acara
             </h2>
             <p className="mt-6 max-w-[560px] text-[15px] leading-7 transition-colors duration-500 md:text-[16px] [@media(max-height:650px)]:mt-3 [@media(max-height:650px)]:max-w-[480px] [@media(max-height:650px)]:text-[13px] [@media(max-height:650px)]:leading-5 text-[#A4A4A4]">

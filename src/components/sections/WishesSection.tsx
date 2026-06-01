@@ -203,7 +203,7 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
           <span data-animate="text" className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
             Doa &amp; Ucapan
           </span>
-          <h2 data-animate="title" className={`mb-6 font-serif text-[44px] font-light leading-[1.02] md:text-[64px] ${textClass}`}>
+          <h2 data-animate="title" className={`mb-6 font-script text-[44px] font-light leading-[1.02] md:text-[64px] ${textClass}`} style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}>
             Ucapan dari Mereka
           </h2>
           <p data-animate="text" className={`max-w-md text-[15px] leading-7 transition-colors duration-500 ${mutedClass}`}>

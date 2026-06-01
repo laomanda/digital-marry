@@ -188,8 +188,10 @@ export default function ClosingSection() {
           
           {/* Accessible Staggered Signature */}
           <h2
-            className={`closing-signature font-serif font-light ${textClass}`}
+            className={`closing-signature font-script font-light ${textClass}`}
             style={{
+              fontFamily: "'Great Vibes', cursive", 
+              fontWeight: 400,
               fontSize: 'clamp(56px, 12vw, 160px)',
               lineHeight: 0.85,
               letterSpacing: '-0.03em',

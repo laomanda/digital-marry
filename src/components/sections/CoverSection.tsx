@@ -310,7 +310,7 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
         <h1
           data-cover-title
           className="mb-4"
-          style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: 'clamp(40px, 8vw, 80px)', lineHeight: 1.1 }}
+          style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400, fontSize: 'clamp(56px, 12vw, 96px)', lineHeight: 1.1 }}
         >
           <LetterSplit text={coupleText} className={`transition-colors duration-500 ${titleClass}`} />
         </h1>

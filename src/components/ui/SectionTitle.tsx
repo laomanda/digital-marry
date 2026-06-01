@@ -22,10 +22,13 @@ export function SectionTitle({ title, subtitle, align = 'center', className, dar
           {subtitle}
         </span>
       )}
-      <h2 className={cn('font-serif text-section-title leading-none', {
-        'text-white': dark,
-        'text-black': !dark,
-      })}>
+      <h2 
+        className={cn('font-script text-section-title leading-none', {
+          'text-white': dark,
+          'text-black': !dark,
+        })}
+        style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
+      >
         {title}
       </h2>
     </div>

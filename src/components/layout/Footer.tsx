@@ -29,7 +29,8 @@ export default function Footer() {
         {/* Couple Signature */}
         <h2
           data-animate="title"
-          className="font-serif text-[32px] md:text-[40px] text-[#F5F5F0] font-light tracking-[-0.02em]"
+          className="font-script text-[32px] md:text-[40px] text-[#F5F5F0] font-light tracking-[-0.02em]"
+          style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400 }}
         >
           {coupleName}
         </h2>
