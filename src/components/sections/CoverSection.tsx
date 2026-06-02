@@ -32,10 +32,28 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search)
-      const toParam = params.get('to') || params.get('u') || params.get('guest')
+      const url = window.location.href
+      let toParam = ''
+      const toMatch = url.match(/[?&](to|u|guest)=([^#]*)/i)
+      if (toMatch && toMatch[2]) {
+        let rawValue = toMatch[2]
+        const cleanMatch = rawValue.match(/^(.*?)(?:&(?:utm_|fbclid|gclid|u=|guest=|to=).*|$)/i)
+        if (cleanMatch) {
+          rawValue = cleanMatch[1]
+        }
+        toParam = rawValue
+      }
+
       if (toParam) {
-        setGuestName(decodeURIComponent(toParam))
+        let decoded = decodeURIComponent(toParam.replace(/\+/g, ' ')).trim()
+        
+        // Add '&' if there are more than 2 words (i.e. more than one '+' sign originally)
+        // and it doesn't already contain standard conjunctions like 'dan', 'and', or '&'
+        if (!/\b(dan|and|&|%26)\b/i.test(decoded)) {
+          decoded = decoded.split(/\s+/).filter(Boolean).join(' & ')
+        }
+        
+        setGuestName(decoded)
       }
     }
   }, [])
@@ -281,13 +299,13 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
               style={{ opacity: 0 }}
             >
               {guestName && (
-                <div className="mb-4 flex flex-col items-center">
-                  <p className="font-montserrat text-[10px] uppercase tracking-[0.24em] text-[#F5F2EC]/55 md:text-[11px]">
+                <div className="my-5 flex flex-col items-center text-center px-4 animate-reveal">
+                  <span className="bg-[#C49A6C] px-3.5 py-1.5 rounded-full border border-[#F5F2EC]/20 font-montserrat text-[10px] font-semibold uppercase tracking-[0.24em] text-[#F5F2EC] shadow-[0_4px_12px_rgba(196,154,108,0.25)]">
                     Kepada Yth. Bapak/Ibu/Saudara/i:
-                  </p>
-                  <p className="mt-2 font-athene text-[22px] font-medium tracking-wide text-[#F5F2EC] drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)] md:text-[25px]">
+                  </span>
+                  <h2 className="mt-4 font-athene text-[28px] font-medium tracking-wide text-[#F5F2EC] drop-shadow-[0_3px_12px_rgba(0,0,0,0.85)] md:text-[34px]">
                     {guestName}
-                  </p>
+                  </h2>
                 </div>
               )}
               <div

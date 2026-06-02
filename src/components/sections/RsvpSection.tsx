@@ -83,10 +83,26 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search)
-      const toParam = params.get('to') || params.get('u') || params.get('guest')
+      const url = window.location.href
+      let toParam = ''
+      const toMatch = url.match(/[?&](to|u|guest)=([^#]*)/i)
+      if (toMatch && toMatch[2]) {
+        let rawValue = toMatch[2]
+        const cleanMatch = rawValue.match(/^(.*?)(?:&(?:utm_|fbclid|gclid|u=|guest=|to=).*|$)/i)
+        if (cleanMatch) {
+          rawValue = cleanMatch[1]
+        }
+        toParam = rawValue
+      }
+
       if (toParam) {
-        setValue('name', decodeURIComponent(toParam))
+        let decoded = decodeURIComponent(toParam.replace(/\+/g, ' ')).trim()
+        
+        if (!/\b(dan|and|&|%26)\b/i.test(decoded)) {
+          decoded = decoded.split(/\s+/).filter(Boolean).join(' & ')
+        }
+        
+        setValue('name', decoded)
       }
     }
   }, [setValue])
