@@ -24,6 +24,7 @@ import GallerySection from './components/sections/GallerySection'
 import GiftSection from './components/sections/GiftSection'
 import ClosingSection from './components/sections/ClosingSection'
 import { useGlobalReveal } from './hooks/useGlobalReveal'
+import { useAosReplayGuard } from './hooks/useAosReplayGuard'
 import { ScrollTrigger } from './lib/gsap'
 
 export default function App() {
@@ -111,6 +112,7 @@ export default function App() {
 
   // Trigger global animations whenever these states change
   useGlobalReveal([isInvitationOpen, isInvitationOpened])
+  useAosReplayGuard([isInvitationOpened, guestWishes.length])
 
   return (
     <SmoothScrollProvider>

@@ -111,88 +111,91 @@ function PersonCard({
   const handle = person.instagram?.replace('@', '')
 
   return (
-    <article
-      data-couple-card
-      data-couple-side={side === 'groom' ? 'left' : 'right'}
+    <div
       data-aos="fade-up"
       data-aos-duration="700"
       data-aos-easing="ease-out-cubic"
       data-aos-delay={aosDelay}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      className={[
-        'group relative flex transform-gpu flex-col transition-opacity duration-500',
-        inactive ? 'opacity-[0.72]' : 'opacity-100',
-      ].join(' ')}
     >
-      <div className="relative isolate aspect-[2/3] min-h-[540px] w-full overflow-hidden rounded-[2px] bg-[#050505] transition-colors duration-500 md:min-h-0">
-        <img
-          src={person.photo}
-          alt={`Portrait of ${person.fullName}`}
-          loading="eager"
-          decoding="async"
-          className={[
-            'absolute inset-0 h-full w-full object-cover object-center',
-            'brightness-[0.98] contrast-[1.03]',
-            'transition-opacity duration-700 ease-out',
-            active ? 'opacity-100' : 'opacity-[0.98]',
-          ].join(' ')}
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/92 via-[#050505]/42 to-transparent transition-colors duration-500 md:from-[#050505]/88 md:via-[#050505]/30" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[58%] bg-[radial-gradient(ellipse_at_bottom,rgba(5,5,5,0.62),transparent_70%)]" />
+      <article
+        data-couple-card
+        data-couple-side={side === 'groom' ? 'left' : 'right'}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+        className={[
+          'group relative flex transform-gpu flex-col transition-opacity duration-500',
+          inactive ? 'opacity-[0.72]' : 'opacity-100',
+        ].join(' ')}
+      >
+        <div className="relative isolate aspect-[2/3] min-h-[540px] w-full overflow-hidden rounded-[2px] bg-[#050505] transition-colors duration-500 md:min-h-0">
+          <img
+            src={person.photo}
+            alt={`Portrait of ${person.fullName}`}
+            loading="eager"
+            decoding="async"
+            className={[
+              'absolute inset-0 h-full w-full object-cover object-center',
+              'brightness-[0.98] contrast-[1.03]',
+              'transition-opacity duration-700 ease-out',
+              active ? 'opacity-100' : 'opacity-[0.98]',
+            ].join(' ')}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/92 via-[#050505]/42 to-transparent transition-colors duration-500 md:from-[#050505]/88 md:via-[#050505]/30" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[58%] bg-[radial-gradient(ellipse_at_bottom,rgba(5,5,5,0.62),transparent_70%)]" />
 
-        <div className="absolute inset-x-0 bottom-0 z-10 p-6 pb-7 text-left sm:p-8 md:p-6 lg:p-7">
-          <div className="relative max-w-[94%] md:max-w-[92%]">
-            <span
-              className="pointer-events-none absolute -left-1 top-[-0.42em] select-none font-athene text-[clamp(72px,19vw,118px)] leading-none text-[#F5F5F0]/[0.045] md:text-[clamp(58px,5.5vw,94px)]"
-              aria-hidden="true"
-            >
-              {person.firstName}
-            </span>
-
-            <h3
-              className="relative font-athene text-[clamp(50px,13.5vw,78px)] leading-[0.88] text-[#F5F5F0] drop-shadow-[0_6px_18px_rgba(0,0,0,0.38)] md:text-[clamp(42px,4.4vw,68px)]"
-              aria-label={person.fullName}
-            >
-              <SplitName name={person.firstName} />
-            </h3>
-
-            <p className="relative mt-3 font-montserrat text-[clamp(17px,4.4vw,24px)] font-semibold leading-tight text-[#F5F5F0] drop-shadow-[0_3px_14px_rgba(0,0,0,0.38)] md:text-[clamp(13px,1.32vw,17px)]">
-              {person.fullName}
-            </p>
-
-            <p className="relative mt-2 max-w-[96%] font-montserrat text-[clamp(16px,4vw,22px)] font-semibold leading-snug text-[#F5F5F0]/82 drop-shadow-[0_3px_14px_rgba(0,0,0,0.38)] md:text-[clamp(12px,1.22vw,15px)]">
-              {person.parents}
-            </p>
-
-            {handle && (
-              <a
-                href={`https://instagram.com/${handle}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={[
-                  'mt-5 inline-flex items-center justify-center gap-2 transition duration-300 md:mt-4',
-                  'text-[#F5F5F0]/62 hover:text-[#F5F5F0]',
-                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
-                  'focus-visible:ring-[#F5F5F0] focus-visible:ring-offset-[#050505]',
-                ].join(' ')}
-                aria-label={`Instagram ${person.fullName}`}
+          <div className="absolute inset-x-0 bottom-0 z-10 p-6 pb-7 text-left sm:p-8 md:p-6 lg:p-7">
+            <div className="relative max-w-[94%] md:max-w-[92%]">
+              <span
+                className="pointer-events-none absolute -left-1 top-[-0.42em] select-none font-athene text-[clamp(72px,19vw,118px)] leading-none text-[#F5F5F0]/[0.045] md:text-[clamp(58px,5.5vw,94px)]"
+                aria-hidden="true"
               >
-                <Instagram size={14} strokeWidth={1.6} />
-                <span className="font-mono text-[10px] tracking-[0.16em] md:text-[9px]">
-                  {person.instagram}
-                </span>
-                <ArrowUpRight
-                  size={13}
-                  strokeWidth={1.6}
-                  className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </a>
-            )}
+                {person.firstName}
+              </span>
+
+              <h3
+                className="relative font-athene text-[clamp(50px,13.5vw,78px)] leading-[0.88] text-[#F5F5F0] drop-shadow-[0_6px_18px_rgba(0,0,0,0.38)] md:text-[clamp(42px,4.4vw,68px)]"
+                aria-label={person.fullName}
+              >
+                <SplitName name={person.firstName} />
+              </h3>
+
+              <p className="relative mt-3 font-montserrat text-[clamp(17px,4.4vw,24px)] font-semibold leading-tight text-[#F5F5F0] drop-shadow-[0_3px_14px_rgba(0,0,0,0.38)] md:text-[clamp(13px,1.32vw,17px)]">
+                {person.fullName}
+              </p>
+
+              <p className="relative mt-2 max-w-[96%] font-montserrat text-[clamp(16px,4vw,22px)] font-semibold leading-snug text-[#F5F5F0]/82 drop-shadow-[0_3px_14px_rgba(0,0,0,0.38)] md:text-[clamp(12px,1.22vw,15px)]">
+                {person.parents}
+              </p>
+
+              {handle && (
+                <a
+                  href={`https://instagram.com/${handle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={[
+                    'mt-5 inline-flex items-center justify-center gap-2 transition duration-300 md:mt-4',
+                    'text-[#F5F5F0]/62 hover:text-[#F5F5F0]',
+                    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
+                    'focus-visible:ring-[#F5F5F0] focus-visible:ring-offset-[#050505]',
+                  ].join(' ')}
+                  aria-label={`Instagram ${person.fullName}`}
+                >
+                  <Instagram size={14} strokeWidth={1.6} />
+                  <span className="font-mono text-[10px] tracking-[0.16em] md:text-[9px]">
+                    {person.instagram}
+                  </span>
+                  <ArrowUpRight
+                    size={13}
+                    strokeWidth={1.6}
+                    className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </a>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </div>
   )
 }
 
@@ -242,10 +245,6 @@ export function CoupleSection() {
           <div
             data-couple-heart
             data-couple-heart-desktop
-            data-aos="fade-in"
-            data-aos-duration="700"
-            data-aos-easing="ease-out-cubic"
-            data-aos-delay="120"
             className="pointer-events-none absolute left-1/2 top-[38%] z-10 hidden -translate-x-1/2 -translate-y-1/2 md:block"
           >
             <EditorialHeart
@@ -266,9 +265,6 @@ export function CoupleSection() {
           <div
             data-couple-heart
             data-couple-heart-mobile
-            data-aos="fade-in"
-            data-aos-duration="700"
-            data-aos-easing="ease-out-cubic"
             className="-my-2 flex items-center justify-center py-1 md:hidden"
           >
             <EditorialHeart

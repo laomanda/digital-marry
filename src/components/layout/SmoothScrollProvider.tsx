@@ -1,4 +1,5 @@
 import { useEffect, ReactNode } from 'react'
+import AOS from 'aos'
 import Lenis from 'lenis'
 import { ScrollTrigger } from '../../lib/gsap'
 
@@ -17,7 +18,17 @@ export default function SmoothScrollProvider({ children }: Props) {
       smoothWheel: true,
     })
 
-    lenis.on('scroll', ScrollTrigger.update)
+    let lastAosRefresh = 0
+
+    lenis.on('scroll', () => {
+      ScrollTrigger.update()
+
+      const now = performance.now()
+      if (now - lastAosRefresh >= 120) {
+        lastAosRefresh = now
+        AOS.refresh()
+      }
+    })
 
     const raf = (time: number) => {
       lenis.raf(time)

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useLayoutEffect, useState } from 'react';
 import { gsap } from '../../lib/gsap';
 import { weddingData } from '../../data/wedding.data';
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
@@ -79,7 +79,7 @@ export function LoveStorySection() {
   }, []);
 
   // --- GSAP Entrance Reveals ---
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = sectionRef.current;
     if (!el || shouldReduceMotion) return;
 
@@ -92,7 +92,6 @@ export function LoveStorySection() {
       const featureImage = el.querySelector<HTMLElement>('.love-feature-image');
       const featureHorizontalLines = gsap.utils.toArray<HTMLElement>('.love-feature-hline');
       const featureVerticalLines = gsap.utils.toArray<HTMLElement>('.love-feature-vline');
-      const featureMarks = gsap.utils.toArray<HTMLElement>('.love-feature-mark');
 
       if (feature && featureImage) {
         const featureTl = gsap.timeline({
@@ -107,31 +106,22 @@ export function LoveStorySection() {
         featureTl
           .fromTo(
             featureImage,
-            { y: 18, opacity: 0.001, scale: 0.985 },
-            { y: 0, opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out', clearProps: 'transform,opacity' }
+            { y: 18, autoAlpha: 0, scale: 0.985, force3D: true },
+            { y: 0, autoAlpha: 1, scale: 1, duration: 0.78, ease: 'power3.out', force3D: true, clearProps: 'transform,opacity,visibility' }
           );
-
-        if (featureMarks.length) {
-          featureTl.fromTo(
-            featureMarks,
-            { opacity: 0, scale: 0.75 },
-            { opacity: 1, scale: 1, duration: 0.45, stagger: 0.04, ease: 'power2.out' },
-            '-=0.55'
-          );
-        }
 
         featureTl
           .fromTo(
             featureHorizontalLines,
-            { scaleX: 0, opacity: 0, transformOrigin: 'center center' },
-            { scaleX: 1, opacity: 1, duration: 0.65, stagger: 0.08, ease: 'power2.out' },
-            '-=0.35'
+            { scaleX: 0, autoAlpha: 0, transformOrigin: 'center center' },
+            { scaleX: 1, autoAlpha: 1, duration: 0.58, stagger: 0.06, ease: 'power2.out', clearProps: 'transform,opacity,visibility' },
+            '-=0.22'
           )
           .fromTo(
             featureVerticalLines,
-            { scaleY: 0, opacity: 0, transformOrigin: 'top center' },
-            { scaleY: 1, opacity: 1, duration: 0.65, ease: 'power2.out' },
-            '-=0.45'
+            { scaleY: 0, autoAlpha: 0, transformOrigin: 'top center' },
+            { scaleY: 1, autoAlpha: 1, duration: 0.58, ease: 'power2.out', clearProps: 'transform,opacity,visibility' },
+            '-=0.38'
           );
       }
 
@@ -144,10 +134,10 @@ export function LoveStorySection() {
           gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
           gsap.to(path, {
             strokeDashoffset: 0,
-            duration: 1.6,
+            duration: 1.2,
             ease: 'power2.out',
             scrollTrigger: {
-              trigger: '.desktop-path-highlight',
+              trigger: path,
               start: 'top 72%',
               toggleActions: 'play none none none',
               once: true
@@ -160,9 +150,9 @@ export function LoveStorySection() {
         
         desktopItems.forEach((item) => {
           const align = item.getAttribute('data-align');
-          const dot = item.querySelector('.desktop-dot');
-          const connector = item.querySelector('.desktop-connector');
-          const cardWrapper = item.querySelector('.desktop-card-wrapper');
+          const dot = item.querySelector('.desktop-dot-core');
+          const connector = item.querySelector('.desktop-connector-line');
+          const cardReveal = item.querySelector('.desktop-card-reveal');
           
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -175,8 +165,8 @@ export function LoveStorySection() {
           
           if (dot) {
             tl.fromTo(dot, 
-              { scale: 0.65, opacity: 0 },
-              { scale: 1, opacity: 1, duration: 0.35, ease: 'power2.out', clearProps: 'transform,opacity' },
+              { scale: 0.72, autoAlpha: 0, force3D: true },
+              { scale: 1, autoAlpha: 1, duration: 0.32, ease: 'power2.out', force3D: true, clearProps: 'transform,opacity,visibility' },
               0
             );
           }
@@ -184,16 +174,16 @@ export function LoveStorySection() {
           if (connector) {
             const origin = align === 'right' ? 'left center' : 'right center';
             tl.fromTo(connector,
-              { scaleX: 0, opacity: 0, transformOrigin: origin },
-              { scaleX: 1, opacity: 1, duration: 0.45, ease: 'power2.out', clearProps: 'transform,opacity' },
+              { scaleX: 0, autoAlpha: 0, transformOrigin: origin },
+              { scaleX: 1, autoAlpha: 1, duration: 0.38, ease: 'power2.out', clearProps: 'transform,opacity,visibility' },
               0.1
             );
           }
           
-          if (cardWrapper) {
-            tl.fromTo(cardWrapper,
-              { y: 24, opacity: 0 },
-              { y: 0, opacity: 1, duration: 0.62, ease: 'power2.out', clearProps: 'transform,opacity' },
+          if (cardReveal) {
+            tl.fromTo(cardReveal,
+              { y: 18, autoAlpha: 0, force3D: true },
+              { y: 0, autoAlpha: 1, duration: 0.52, ease: 'power2.out', force3D: true, clearProps: 'transform,opacity,visibility' },
               0.15
             );
           }
@@ -236,18 +226,18 @@ export function LoveStorySection() {
       
       closingTl.fromTo('.closing-line',
         { scaleY: 0 },
-        { scaleY: 1, duration: 0.65, ease: 'power2.out', transformOrigin: 'top center', clearProps: 'transform' }
+        { scaleY: 1, duration: 0.52, ease: 'power2.out', transformOrigin: 'top center', clearProps: 'transform' }
       );
       
       closingTl.fromTo('.closing-dot',
-        { scale: 0.7, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.35, ease: 'power2.out', clearProps: 'transform,opacity' },
+        { scale: 0.7, autoAlpha: 0 },
+        { scale: 1, autoAlpha: 1, duration: 0.3, ease: 'power2.out', clearProps: 'transform,opacity,visibility' },
         '-=0.4'
       );
       
       closingTl.fromTo('.closing-note',
-        { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.55, ease: 'power2.out', clearProps: 'transform,opacity' },
+        { y: 14, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.48, ease: 'power2.out', clearProps: 'transform,opacity,visibility' },
         '-=0.3'
       );
 
@@ -257,7 +247,7 @@ export function LoveStorySection() {
       ctx.revert();
       mm.revert();
     };
-  }, [shouldReduceMotion, shouldReduceHeavyMotion, backgroundImageOpacity]);
+  }, [shouldReduceMotion]);
 
   return (
     <section
@@ -294,7 +284,7 @@ export function LoveStorySection() {
         <div className="love-feature relative z-10 mx-auto mb-7 flex w-[calc(100vw-28px)] max-w-[1180px] flex-col items-center px-0 sm:mb-9 md:mb-16 lg:mb-24">
           <div className="love-feature-hline mx-auto mb-5 h-px w-24 bg-gradient-to-r from-transparent via-[#F5F5F0]/28 to-transparent md:mb-7 md:w-40" aria-hidden="true" />
           <div className="group relative mx-auto w-full overflow-visible">
-            <div className="love-feature-image relative mx-auto aspect-[869/599] w-full overflow-visible will-change-transform">
+            <div className="love-feature-image relative mx-auto aspect-[869/599] w-full overflow-visible will-change-transform transform-gpu">
               <img
                 src={loveStoryFeatureImage}
                 alt="Jalan Menyatunya Dua Hati"
@@ -303,7 +293,7 @@ export function LoveStorySection() {
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
-                className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_24px_64px_rgba(0,0,0,0.36)] transition-transform duration-700 group-hover:scale-[1.008] motion-reduce:transition-none"
+                className="absolute inset-0 h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.008] motion-reduce:transition-none"
               />
             </div>
           </div>
@@ -433,18 +423,26 @@ export function LoveStorySection() {
                     >
                       {/* Horizontal Connector from Dot toward Card */}
                       <div
-                        className="desktop-connector absolute top-0 -translate-y-1/2 h-[2px] w-10"
+                        className="desktop-connector absolute top-0 -translate-y-1/2 h-[2px] w-10 overflow-hidden"
                         aria-hidden="true"
                         style={{
                           [connectorDir === 'right' ? 'left' : 'right']: '6px',
-                          background: connectorDir === 'right'
-                            ? 'linear-gradient(to right, rgba(245,245,240,0.24), transparent)'
-                            : 'linear-gradient(to left, rgba(245,245,240,0.24), transparent)'
                         }}
-                      />
+                      >
+                        <div
+                          className="desktop-connector-line h-full w-full transform-gpu will-change-transform"
+                          style={{
+                            background: connectorDir === 'right'
+                              ? 'linear-gradient(to right, rgba(245,245,240,0.24), transparent)'
+                              : 'linear-gradient(to left, rgba(245,245,240,0.24), transparent)'
+                          }}
+                        />
+                      </div>
 
                       {/* Fixed Anchor Dot */}
-                      <div className="desktop-dot absolute w-[10px] h-[10px] rounded-full bg-[#111111] border border-[#F5F5F0]/40 group-hover:bg-[#F5F5F0] group-hover:scale-125 group-hover:shadow-[0_0_12px_rgba(245,245,240,0.5)] transition-all duration-500 -translate-x-1/2 -translate-y-1/2" />
+                      <div className="desktop-dot absolute -translate-x-1/2 -translate-y-1/2">
+                        <div className="desktop-dot-core h-[10px] w-[10px] rounded-full border border-[#F5F5F0]/40 bg-[#111111] transition-[background-color,border-color,box-shadow] duration-500 will-change-transform group-hover:bg-[#F5F5F0] group-hover:shadow-[0_0_12px_rgba(245,245,240,0.5)]" />
+                      </div>
 
                       {/* Content Card Wrapper */}
                       <div
@@ -453,28 +451,30 @@ export function LoveStorySection() {
                         }`}
                       >
                         {/* Story Artwork Card */}
-                        <figure className="desktop-card relative w-[min(43vw,460px)] overflow-hidden rounded-[2px] shadow-[0_20px_46px_rgba(0,0,0,0.38)] transition-all duration-500 ease-out group-hover:-translate-y-[6px] group-hover:shadow-[0_28px_64px_rgba(0,0,0,0.52)] xl:w-[min(44vw,580px)] 2xl:w-[620px]">
-                          <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
-                            <div 
-                              className="absolute top-0 h-full w-[250%]"
-                              style={{
-                                left: '-75%',
-                                background: 'linear-gradient(115deg, transparent 40%, rgba(245,245,240,0.06) 45%, rgba(245,245,240,0.22) 50%, rgba(245,245,240,0.06) 55%, transparent 60%)',
-                                mixBlendMode: 'plus-lighter'
-                              }}
-                            />
-                          </div>
+                        <div className="desktop-card-reveal transform-gpu will-change-transform">
+                          <figure className="desktop-card relative w-[min(43vw,460px)] overflow-hidden rounded-[2px] shadow-[0_20px_46px_rgba(0,0,0,0.38)] transition-[box-shadow,transform] duration-500 ease-out group-hover:-translate-y-[6px] group-hover:shadow-[0_28px_64px_rgba(0,0,0,0.52)] xl:w-[min(44vw,580px)] 2xl:w-[620px]">
+                            <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
+                              <div
+                                className="absolute top-0 h-full w-[250%]"
+                                style={{
+                                  left: '-75%',
+                                  background: 'linear-gradient(115deg, transparent 40%, rgba(245,245,240,0.06) 45%, rgba(245,245,240,0.22) 50%, rgba(245,245,240,0.06) 55%, transparent 60%)',
+                                  mixBlendMode: 'plus-lighter'
+                                }}
+                              />
+                            </div>
 
-                          <div className="relative z-10 overflow-hidden rounded-[2px]">
-                            <img
-                              src={imageUrl}
-                              alt={`${story.title} - ${story.date || `Cerita ${i + 1}`}`}
-                              className="block h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.012]"
-                              loading="lazy"
-                              decoding="async"
-                            />
-                          </div>
-                        </figure>
+                            <div className="relative z-10 overflow-hidden rounded-[2px]">
+                              <img
+                                src={imageUrl}
+                                alt={`${story.title} - ${story.date || `Cerita ${i + 1}`}`}
+                                className="block h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.012]"
+                                loading="eager"
+                                decoding="async"
+                              />
+                            </div>
+                          </figure>
+                        </div>
                       </div>
                     </div>
                   );

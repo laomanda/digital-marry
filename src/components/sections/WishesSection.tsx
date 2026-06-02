@@ -31,16 +31,22 @@ function WishMonogram({ name }: { name: string }) {
 function CompactWishCard({
   wish,
   onHoverChange,
+  className = '',
+  layout = 'marquee',
 }: {
   wish: GuestWish
   onHoverChange?: (isHovered: boolean) => void
+  className?: string
+  layout?: 'marquee' | 'mobile'
 }) {
   const isNew = wish.source === 'rsvp'
 
   const getCardClass = () => {
-    const base = 'group/card relative flex h-[184px] w-[320px] shrink-0 overflow-hidden border p-5 transition-all duration-500 hover:-translate-y-1 sm:w-[350px] sm:p-6 lg:w-[380px]';
+    const heightClass = 'h-[220px] sm:h-[230px]';
+    const widthClass = 'w-[280px] sm:w-[350px] lg:w-[380px]';
+    const base = `group/card relative flex ${heightClass} ${widthClass} max-w-full shrink-0 overflow-hidden border p-5 transition-all duration-500 hover:-translate-y-1 sm:p-6`;
     const state = `bg-[#F5F5F0]/[0.035] hover:border-[#F5F5F0]/28 ${isNew ? 'border-[#F5F5F0]/18' : 'border-[#F5F5F0]/12'}`;
-    return `${base} ${state}`;
+    return `${base} ${state} ${className}`;
   }
 
   const textClass = 'text-[#F5F5F0]';
@@ -115,7 +121,7 @@ function CompactWishCard({
           style={{
             display: '-webkit-box',
             WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 3,
           }}
         >
           {wish.message}
@@ -236,45 +242,47 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
           </div>
         ) : (
           <div
-            className="relative -mx-4 space-y-4 sm:-mx-8"
+            className="relative"
             data-aos="fade-up"
             data-aos-duration="700"
             data-aos-easing="ease-out-cubic"
             data-aos-delay="80"
           >
-            {rows.map((row, rowIndex) => {
-              const direction = rowIndex % 2 === 0 ? 'wishes-marquee-left' : 'wishes-marquee-right'
-              const duration = rowIndex === 1 ? 82 : rowIndex === 2 ? 94 : 74
-              const displayRow = [...row, ...row]
+            <div className="-mx-4 space-y-4 sm:-mx-8">
+              {rows.map((row, rowIndex) => {
+                const direction = rowIndex % 2 === 0 ? 'wishes-marquee-left' : 'wishes-marquee-right'
+                const duration = rowIndex === 1 ? 82 : rowIndex === 2 ? 94 : 74
+                const displayRow = [...row, ...row]
 
-              return (
-                <div
-                  key={`wish-row-${rowIndex}`}
-                  className="group/row overflow-hidden py-1 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
-                >
+                return (
                   <div
-                    className="flex w-max gap-4 group-hover/row:[animation-play-state:paused]"
-                    style={{
-                      animation: `${direction} ${duration}s linear infinite`,
-                      animationPlayState: pausedRowIndex === rowIndex ? 'paused' : 'running',
-                    }}
+                    key={`wish-row-${rowIndex}`}
+                    className="group/row overflow-visible py-2 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
                   >
-                    {displayRow.map((wish, index) => (
-                      <CompactWishCard
-                        key={`${wish.id}-${rowIndex}-${index}`}
-                        wish={wish}
-                        onHoverChange={(isHovered) => {
-                          setPausedRowIndex((current) => {
-                            if (isHovered) return rowIndex
-                            return current === rowIndex ? null : current
-                          })
-                        }}
-                      />
-                    ))}
+                    <div
+                      className="flex w-max gap-4 group-hover/row:[animation-play-state:paused]"
+                      style={{
+                        animation: `${direction} ${duration}s linear infinite`,
+                        animationPlayState: pausedRowIndex === rowIndex ? 'paused' : 'running',
+                      }}
+                    >
+                      {displayRow.map((wish, index) => (
+                        <CompactWishCard
+                          key={`${wish.id}-${rowIndex}-${index}`}
+                          wish={wish}
+                          onHoverChange={(isHovered) => {
+                            setPausedRowIndex((current) => {
+                              if (isHovered) return rowIndex
+                              return current === rowIndex ? null : current
+                            })
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
         )}
       </div>
