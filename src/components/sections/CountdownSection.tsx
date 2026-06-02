@@ -103,7 +103,7 @@ export default function CountdownSection() {
               Menuju Hari Bahagia
             </span>
             <h2
-              className={`font-athene text-[40px] leading-[1.05] transition-colors duration-500 md:text-[64px] lg:text-[76px] ${textClass}`}
+              className="font-athene text-[40px] leading-[1.05] transition-colors duration-500 md:text-[64px] lg:text-[76px] text-[#d3a575]"
             >
               {isPast ? 'Hari Bahagia Telah Tiba' : 'Menghitung Hari'}
             </h2>

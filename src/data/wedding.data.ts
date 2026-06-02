@@ -178,10 +178,7 @@ export const weddingData = {
       attending: true,
     },
   ],
-  closingQuote: {
-    text: 'Pernikahan adalah awal dari sebuah taman yang harus kalian rawat bersama setiap harinya.',
-    author: '— Mark Twain',
-  },
+
   navigation: [
     { name: 'Home', href: '#hero' },
     { name: 'Couple', href: '#couple' },
