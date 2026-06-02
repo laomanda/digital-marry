@@ -45,7 +45,7 @@ function MobileEventLayout({ events }: MobileEventLayoutProps) {
       {events.map((event, index) => {
         const { dayName, day, month, year } = parseDate(event.date)
         const isAkad = event.id === 'akad'
-        const title = isAkad ? 'HOLY MATRIMONY' : 'RECEPTION'
+        const title = isAkad ? 'AKAD NIKAH' : 'RESEPSI'
 
         return (
           <div key={event.id} className="flex flex-col items-center">
