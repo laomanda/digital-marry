@@ -249,8 +249,7 @@ export default function GiftSection() {
       id="gift"
       data-section
       data-theme="dark"
-      data-global-reveal="true"
-      className={`relative overflow-hidden py-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
+      className={`relative overflow-hidden pb-28 pt-24 transition-colors duration-500 md:pb-36 md:pt-32 ${sectionClass}`}
     >
       <div className="pointer-events-none absolute inset-0 opacity-60" aria-hidden="true">
         <div className="absolute left-1/2 top-24 h-px w-[min(760px,78vw)] -translate-x-1/2 transition-colors duration-500 bg-[#F5F5F0]/[0.06]" />
@@ -434,8 +433,14 @@ export default function GiftSection() {
         )}
       </AnimatePresence>
 
+      <div className="pointer-events-none absolute bottom-14 left-1/2 z-[2] flex -translate-x-1/2 items-center gap-5 md:bottom-16" aria-hidden="true">
+        <span className="h-px w-[min(120px,24vw)] bg-[#F5F5F0]/[0.08]" />
+        <span className="h-1.5 w-1.5 rounded-full bg-[#F5F5F0]/35" />
+        <span className="h-px w-[min(120px,24vw)] bg-[#F5F5F0]/[0.08]" />
+      </div>
+
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-44 bg-gradient-to-b md:h-56 transition-colors duration-500 from-transparent via-[#050505]/80 to-[#050505]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-32 bg-gradient-to-b from-transparent via-[#050505]/72 to-[#050505] transition-colors duration-500 md:h-40"
         aria-hidden="true"
       />
     </section>

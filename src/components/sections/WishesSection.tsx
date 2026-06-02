@@ -73,7 +73,6 @@ function CompactWishCard({
           style={{
             left: '-75%',
             background: 'linear-gradient(115deg, transparent 40%, rgba(245,245,240,0.06) 45%, rgba(245,245,240,0.22) 50%, rgba(245,245,240,0.06) 55%, transparent 60%)',
-            animation: 'card-shine-sweep 1.6s ease-in-out infinite',
             mixBlendMode: 'plus-lighter'
           }}
         />
@@ -175,7 +174,6 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
       id="wishes"
       data-section
       data-theme="dark"
-      data-global-reveal="true"
       className={`overflow-hidden py-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
     >
       <style>
@@ -188,11 +186,6 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
           @keyframes wishes-marquee-right {
             from { transform: translate3d(-50%, 0, 0); }
             to { transform: translate3d(0, 0, 0); }
-          }
-
-          @keyframes card-shine-sweep {
-            0% { transform: translate3d(-120%, 0, 0); }
-            100% { transform: translate3d(120%, 0, 0); }
           }
         `}
       </style>

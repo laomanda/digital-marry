@@ -54,7 +54,7 @@ function AnimatedDigits({ value, pad = true, shouldReduceMotion }: AnimatedDigit
 
 export default function CountdownSection() {
   const { days, hours, minutes, seconds, isPast } = useCountdown(weddingData.wedding.date);
-  const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe();
+  const { shouldReduceMotion } = useReducedMotionSafe();
 
   const timeUnits = [
     { label: 'Jam', value: hours },
@@ -87,7 +87,6 @@ export default function CountdownSection() {
       id="countdown"
       data-section
       data-theme="dark"
-      data-global-reveal="true"
       className={`relative overflow-hidden py-20 md:py-32 lg:py-40 transition-colors duration-500 ${sectionBgClass}`}
     >
       <Container>
@@ -136,10 +135,8 @@ export default function CountdownSection() {
                   className={`absolute inset-6 rounded-full border transition-colors duration-700 ${innerRingClass}`}
                   aria-hidden="true"
                 />
-                <motion.div
+                <div
                   className="absolute inset-3 rounded-full opacity-40 transition-opacity duration-700 group-hover/days:opacity-70"
-                  animate={shouldReduceHeavyMotion ? undefined : { rotate: 360 }}
-                  transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
                   aria-hidden="true"
                 >
                   {tickMarks.map((tick) => (
@@ -155,7 +152,7 @@ export default function CountdownSection() {
                       />
                     </span>
                   ))}
-                </motion.div>
+                </div>
 
                 <div className="relative z-10 flex max-w-[300px] flex-col items-center px-8 text-center">
                   <span className={`mb-5 h-px w-20 transition-colors duration-500 ${shortDividerClass}`} aria-hidden="true" />
@@ -182,10 +179,8 @@ export default function CountdownSection() {
                     className={`absolute inset-6 rounded-full border transition-colors duration-700 ${innerRingClass}`}
                     aria-hidden="true"
                   />
-                  <motion.div
+                  <div
                     className="absolute inset-3 rounded-full opacity-35 transition-opacity duration-700 group-hover/days:opacity-70"
-                    animate={shouldReduceHeavyMotion ? undefined : { rotate: 360 }}
-                    transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
                     aria-hidden="true"
                   >
                     {tickMarks.map((tick) => (
@@ -201,7 +196,7 @@ export default function CountdownSection() {
                         />
                       </span>
                     ))}
-                  </motion.div>
+                  </div>
 
                   <div className="relative z-10 flex flex-col items-center px-8 text-center">
                     <span className={`font-serif text-[clamp(96px,16vw,180px)] font-light leading-none opacity-95 tabular-nums lining-nums transition duration-700 group-hover/days:scale-[1.02] group-hover/days:opacity-100 ${textClass}`}>

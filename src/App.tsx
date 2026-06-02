@@ -25,7 +25,7 @@ function LazySection({ children, id, heightDesk, heightMob }: { children: React.
     const el = ref.current
     if (!el) return
     
-    const rootMargin = isMobile ? '200px 0px' : '600px 0px'
+    const rootMargin = isMobile ? '900px 0px' : '1400px 0px'
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setIsVisible(true)
@@ -38,8 +38,28 @@ function LazySection({ children, id, heightDesk, heightMob }: { children: React.
   }, [isVisible, isMobile])
 
   return (
-    <div id={id} ref={ref} style={{ minHeight: isVisible ? undefined : (isMobile ? heightMob : heightDesk) }}>
+    <div
+      id={id}
+      ref={ref}
+      className="bg-[#050505]"
+      style={{ minHeight: isVisible ? undefined : (isMobile ? heightMob : heightDesk) }}
+    >
       {isVisible ? children : null}
+    </div>
+  )
+}
+
+function SectionFallback({ heightDesk, heightMob }: { heightDesk: string, heightMob: string }) {
+  const { isMobile } = useReducedMotionSafe()
+
+  return (
+    <div
+      className="relative overflow-hidden bg-[#050505]"
+      style={{ minHeight: isMobile ? heightMob : heightDesk }}
+      aria-hidden="true"
+    >
+      <div className="absolute left-1/2 top-1/2 h-px w-[min(520px,72vw)] -translate-x-1/2 bg-[#F5F5F0]/[0.06]" />
+      <div className="absolute left-1/2 top-[calc(50%+20px)] h-px w-[min(220px,42vw)] -translate-x-1/2 bg-[#F5F5F0]/[0.035]" />
     </div>
   )
 }
@@ -134,32 +154,48 @@ export default function App() {
         <CoupleSection />
         
         {isInvitationOpen && (
-          <Suspense fallback={<div style={{ minHeight: '100vh' }} aria-hidden="true" />}>
+          <>
             <LazySection id="love-story" heightDesk="1200px" heightMob="900px">
-              <LoveStorySection />
+              <Suspense fallback={<SectionFallback heightDesk="1200px" heightMob="900px" />}>
+                <LoveStorySection />
+              </Suspense>
             </LazySection>
             <LazySection id="countdown" heightDesk="800px" heightMob="800px">
-              <CountdownSection />
+              <Suspense fallback={<SectionFallback heightDesk="800px" heightMob="800px" />}>
+                <CountdownSection />
+              </Suspense>
             </LazySection>
             <LazySection id="event" heightDesk="1000px" heightMob="1000px">
-              <EventSection />
+              <Suspense fallback={<SectionFallback heightDesk="1000px" heightMob="1000px" />}>
+                <EventSection />
+              </Suspense>
             </LazySection>
             <LazySection id="rsvp" heightDesk="900px" heightMob="900px">
-              <RsvpSection onWishSubmit={handleAddWish} />
+              <Suspense fallback={<SectionFallback heightDesk="900px" heightMob="900px" />}>
+                <RsvpSection onWishSubmit={handleAddWish} />
+              </Suspense>
             </LazySection>
             <LazySection id="wishes" heightDesk="800px" heightMob="800px">
-              <WishesSection guestWishes={guestWishes} />
+              <Suspense fallback={<SectionFallback heightDesk="800px" heightMob="800px" />}>
+                <WishesSection guestWishes={guestWishes} />
+              </Suspense>
             </LazySection>
             <LazySection id="gallery" heightDesk="800px" heightMob="800px">
-              <GallerySection />
+              <Suspense fallback={<SectionFallback heightDesk="800px" heightMob="800px" />}>
+                <GallerySection />
+              </Suspense>
             </LazySection>
             <LazySection id="gift" heightDesk="900px" heightMob="900px">
-              <GiftSection />
+              <Suspense fallback={<SectionFallback heightDesk="900px" heightMob="900px" />}>
+                <GiftSection />
+              </Suspense>
             </LazySection>
             <LazySection id="closing" heightDesk="900px" heightMob="900px">
-              <ClosingSection />
+              <Suspense fallback={<SectionFallback heightDesk="900px" heightMob="900px" />}>
+                <ClosingSection />
+              </Suspense>
             </LazySection>
-          </Suspense>
+          </>
         )}
       </main>
     </SmoothScrollProvider>

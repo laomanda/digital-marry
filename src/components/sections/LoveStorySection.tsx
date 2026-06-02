@@ -16,8 +16,6 @@ export function LoveStorySection() {
   });
 
   const sectionBgClass = 'bg-[#111111]';
-  const headingClass = 'text-[#F5F5F0]';
-  const mutedClass = 'text-[#A4A4A4]';
 
   const rawStoryData = weddingData.loveStory?.length
     ? weddingData.loveStory
@@ -73,40 +71,28 @@ export function LoveStorySection() {
     
     const ctx = gsap.context(() => {
       
-      // 1. Intro Header Animation
-      gsap.from('.intro-anim', {
-        y: 28,
-        opacity: 0,
-        duration: 0.9,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 82%',
-          toggleActions: 'play none none none'
-        }
-      });
-
-      // 2. Cinematic bridge image before the timeline
+      // 1. Cinematic title image before the timeline
+      const feature = el.querySelector<HTMLElement>('.love-feature');
       const featureImage = el.querySelector<HTMLElement>('.love-feature-image');
       const featureHorizontalLines = gsap.utils.toArray<HTMLElement>('.love-feature-hline');
       const featureVerticalLines = gsap.utils.toArray<HTMLElement>('.love-feature-vline');
       const featureMarks = gsap.utils.toArray<HTMLElement>('.love-feature-mark');
 
-      if (featureImage) {
+      if (feature && featureImage) {
         const featureTl = gsap.timeline({
           scrollTrigger: {
-            trigger: '.love-feature',
-            start: 'top 78%',
-            toggleActions: 'play none none none'
+            trigger: feature,
+            start: 'top 82%',
+            toggleActions: 'play none none none',
+            once: true
           }
         });
 
         featureTl
           .fromTo(
             featureImage,
-            { y: 28, opacity: 0, scale: 0.96, filter: shouldReduceHeavyMotion ? 'none' : 'blur(6px)' },
-            { y: 0, opacity: 1, scale: 1, filter: 'none', duration: 1, ease: 'power3.out' }
+            { y: 18, opacity: 0.001, scale: 0.985 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out', clearProps: 'transform,opacity' }
           );
 
         if (featureMarks.length) {
@@ -133,7 +119,7 @@ export function LoveStorySection() {
           );
       }
 
-      // 3. Desktop SVG Path Draw & Desktop Cards
+      // 2. Desktop SVG Path Draw & Desktop Cards
       mm.add("(min-width: 1024px)", () => {
         // SVG path highlight draw
         const path = el.querySelector('.desktop-path-highlight') as SVGPathElement;
@@ -147,42 +133,10 @@ export function LoveStorySection() {
             scrollTrigger: {
               trigger: '.desktop-path-highlight',
               start: 'top 72%',
-              toggleActions: 'play none none none'
+              toggleActions: 'play none none none',
+              once: true
             }
           });
-        }
-
-        // Background reveal
-        gsap.fromTo('.love-story-bg',
-          { opacity: 0, scale: 1.02 },
-          { 
-            opacity: backgroundImageOpacity, 
-            scale: 1, 
-            duration: 1.2, 
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 82%',
-              toggleActions: 'play none none none'
-            }
-          }
-        );
-
-        // Smooth Parallax Scroll Effect (only if heavy motion is allowed)
-        if (!shouldReduceHeavyMotion) {
-          gsap.fromTo('.love-story-bg',
-            { yPercent: -10 },
-            {
-              yPercent: 10,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true
-              }
-            }
-          );
         }
 
         // Desktop item entrance reveals
@@ -198,14 +152,15 @@ export function LoveStorySection() {
             scrollTrigger: {
               trigger: item,
               start: 'top 84%',
-              toggleActions: 'play none none none'
+              toggleActions: 'play none none none',
+              once: true
             }
           });
           
           if (dot) {
             tl.fromTo(dot, 
               { scale: 0.65, opacity: 0 },
-              { scale: 1, opacity: 1, duration: 0.35 },
+              { scale: 1, opacity: 1, duration: 0.35, ease: 'power2.out', clearProps: 'transform,opacity' },
               0
             );
           }
@@ -214,62 +169,69 @@ export function LoveStorySection() {
             const origin = align === 'right' ? 'left center' : 'right center';
             tl.fromTo(connector,
               { scaleX: 0, opacity: 0, transformOrigin: origin },
-              { scaleX: 1, opacity: 1, duration: 0.45 },
+              { scaleX: 1, opacity: 1, duration: 0.45, ease: 'power2.out', clearProps: 'transform,opacity' },
               0.1
             );
           }
           
           if (cardWrapper) {
             tl.fromTo(cardWrapper,
-              { y: 36, opacity: 0 },
-              { y: 0, opacity: 1, duration: 0.75, ease: 'power3.out' },
+              { y: 24, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.62, ease: 'power2.out', clearProps: 'transform,opacity' },
               0.15
             );
           }
         });
       });
 
-      // 4. Mobile Animation
+      // 3. Mobile Animation
       mm.add("(max-width: 1023px)", () => {
-        if (shouldReduceHeavyMotion) return;
-        
-        gsap.from('.mobile-item', {
-          y: 20,
-          opacity: 0,
-          stagger: 0.08,
-          duration: 0.55,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.mobile-timeline-container',
-            start: 'top 86%',
-            toggleActions: 'play none none none'
-          }
+        const mobileItems = gsap.utils.toArray<HTMLElement>('.mobile-item', el);
+
+        mobileItems.forEach((item) => {
+          gsap.fromTo(item,
+            { y: 18, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.52,
+              ease: 'power2.out',
+              clearProps: 'transform,opacity',
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 88%',
+                toggleActions: 'play none none none',
+                once: true
+              }
+            }
+          );
         });
       });
 
-      // 5. Closing Note Animation
+      // 4. Closing Note Animation
       const closingTl = gsap.timeline({
         scrollTrigger: {
           trigger: '.closing-note-container',
           start: 'top 88%',
-          toggleActions: 'play none none none'
+          toggleActions: 'play none none none',
+          once: true
         }
       });
       
       closingTl.fromTo('.closing-line',
         { scaleY: 0 },
-        { scaleY: 1, duration: 0.8, ease: 'power3.out', transformOrigin: 'top center' }
+        { scaleY: 1, duration: 0.65, ease: 'power2.out', transformOrigin: 'top center', clearProps: 'transform' }
       );
       
       closingTl.fromTo('.closing-dot',
         { scale: 0.7, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.4, ease: 'power3.out' },
+        { scale: 1, opacity: 1, duration: 0.35, ease: 'power2.out', clearProps: 'transform,opacity' },
         '-=0.4'
       );
       
       closingTl.fromTo('.closing-note',
         { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+        { y: 0, opacity: 1, duration: 0.55, ease: 'power2.out', clearProps: 'transform,opacity' },
         '-=0.3'
       );
 
@@ -281,8 +243,6 @@ export function LoveStorySection() {
     };
   }, [shouldReduceMotion, shouldReduceHeavyMotion, backgroundImageOpacity]);
 
-  const showMobileCSSOrb = !prefersReducedMotion && !shouldReduceMotion && (!shouldReduceHeavyMotion || isMobile);
-
   return (
     <section
       id="love-story"
@@ -292,28 +252,12 @@ export function LoveStorySection() {
       className={`py-20 sm:py-24 md:py-32 lg:py-48 relative -mt-px overflow-hidden transition-colors duration-500 ${sectionBgClass}`}
       ref={sectionRef}
     >
-      <style>
-        {`
-          @keyframes love-story-mobile-orb {
-            0% { transform: translate3d(-50%, -20px, 0); opacity: 0; }
-            15% { opacity: 0.8; }
-            85% { opacity: 0.8; }
-            100% { transform: translate3d(-50%, 100%, 0); opacity: 0; }
-          }
-
-          @keyframes card-shine-sweep {
-            0% { transform: translate3d(-120%, 0, 0); }
-            100% { transform: translate3d(120%, 0, 0); }
-          }
-        `}
-      </style>
-
-      {/* Cinematic Static Background Image with Parallax Overflow */}
+      {/* Cinematic static background image */}
       <img
         src={loveStoryBackground}
         loading="lazy"
         decoding="async"
-        className="love-story-bg absolute -top-[10%] left-0 w-full h-[120%] object-cover pointer-events-none"
+        className="love-story-bg absolute inset-0 h-full w-full object-cover pointer-events-none"
         style={{ opacity: backgroundImageOpacity }}
         alt=""
         aria-hidden="true"
@@ -330,31 +274,20 @@ export function LoveStorySection() {
       <div className="absolute bottom-0 left-0 right-0 h-40 md:h-64 z-[2] bg-gradient-to-t transition-colors duration-1000 pointer-events-none from-[#050505] to-[#050505]/0" />
 
       <Container>
-        {/* Intro Header */}
-        <div className="flex flex-col items-center text-center mb-10 lg:mb-20 relative z-10">
-          <span className={`intro-anim font-mono text-[11px] md:text-[12px] tracking-[0.25em] uppercase mb-6 transition-colors duration-500 ${mutedClass}`}>
-            Cerita Kami
-          </span>
-          <h2 className={`intro-anim font-athene text-[38px] md:text-[56px] lg:text-[72px] leading-[1.06] md:leading-[1.1] max-w-[320px] px-4 md:max-w-2xl transition-colors duration-500 ${headingClass}`}>
-            Awal Kisah Kami
-          </h2>
-          <p className="intro-anim mt-6 max-w-md px-4 font-montserrat text-[14px] font-semibold leading-7 transition-colors duration-500 text-[#F5F5F0]/[0.64] md:text-[16px] md:text-[#A4A4A4]">
-            Setiap cerita memiliki awal, dan inilah bagian kecil dari perjalanan kami.
-          </p>
-        </div>
-
-        {/* Cinematic image bridge before the story flow */}
+        {/* Cinematic title image before the story flow */}
         <div className="love-feature relative z-10 mx-auto mb-16 max-w-[920px] px-2 md:mb-24 lg:mb-32">
           <div className="love-feature-hline mx-auto mb-7 h-px w-20 bg-gradient-to-r from-transparent via-[#F5F5F0]/28 to-transparent md:w-32" aria-hidden="true" />
           <div className="group relative mx-auto overflow-hidden">
-            <div className="love-feature-image relative overflow-hidden">
+            <div className="love-feature-image relative aspect-[4314/2116] overflow-hidden will-change-transform">
               <img
                 src={loveStoryFeatureImage}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
+                alt="Jalan Menyatunya Dua Hati"
+                width={4314}
+                height={2116}
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
-                className="h-auto w-full object-contain transition-transform duration-700 group-hover:scale-[1.01]"
+                className="absolute inset-0 h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.01] motion-reduce:transition-none"
               />
             </div>
           </div>
@@ -377,15 +310,6 @@ export function LoveStorySection() {
               <div className="absolute left-[30px] top-8 bottom-0 w-[2px] -translate-x-1/2 bg-[#F5F5F0]/12" aria-hidden="true">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-[#F5F5F0]/26 to-transparent" />
                 
-                {/* Optional CSS Decorative Orb */}
-                {showMobileCSSOrb && (
-                  <div 
-                    className="absolute top-0 left-1/2 w-[8px] h-[8px] rounded-full border border-[#F5F5F0]/30 bg-[#111111] shadow-[0_0_6px_rgba(245,245,240,0.12)] flex items-center justify-center -translate-x-1/2 opacity-75"
-                    style={{ animation: 'love-story-mobile-orb 6s ease-in-out infinite' }}
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#F5F5F0]/80" />
-                  </div>
-                )}
               </div>
 
               {storyData.map((story: any, i: number) => {
@@ -418,7 +342,6 @@ export function LoveStorySection() {
                             style={{
                               left: '-75%',
                               background: 'linear-gradient(115deg, transparent 40%, rgba(245,245,240,0.06) 45%, rgba(245,245,240,0.22) 50%, rgba(245,245,240,0.06) 55%, transparent 60%)',
-                              animation: 'card-shine-sweep 1.6s ease-in-out infinite',
                               mixBlendMode: 'plus-lighter'
                             }}
                           />
@@ -452,18 +375,10 @@ export function LoveStorySection() {
                 );
               })}
 
-              {/* Mobile Closing Note: Beautiful, left-aligned terminal node in perfect coordinate alignment */}
-              <div className="mobile-closing-note relative w-full flex items-center mt-6">
-                {/* Horizontal Connector pointing to note */}
-                <div 
-                  className="mobile-connector absolute left-[30px] top-1/2 h-[2px] w-[30px] -translate-y-1/2 z-0 opacity-40" 
-                  aria-hidden="true"
-                  style={{ background: 'linear-gradient(to right, rgba(245,245,240,0.32), rgba(245,245,240,0.14), transparent)' }}
-                />
-                
-                {/* Closing Note Text Left Aligned (Exact same coordinates as cards) */}
-                <div className="w-full pl-[60px] pr-3 relative z-10">
-                  <span className="block font-athene text-[18px] tracking-wide text-[#D6D6D0]/80 md:text-[22px]">
+              {/* Mobile Closing Note */}
+              <div className="mobile-closing-note relative mt-8 flex w-full justify-center px-6 text-center">
+                <div className="relative z-10 max-w-[300px]">
+                  <span className="block font-athene text-[18px] leading-tight tracking-wide text-[#D6D6D0]/80">
                     Kini, kami melangkah bersama.
                   </span>
                 </div>
@@ -548,7 +463,6 @@ export function LoveStorySection() {
                               style={{
                                 left: '-75%',
                                 background: 'linear-gradient(115deg, transparent 40%, rgba(245,245,240,0.06) 45%, rgba(245,245,240,0.22) 50%, rgba(245,245,240,0.06) 55%, transparent 60%)',
-                                animation: 'card-shine-sweep 1.6s ease-in-out infinite',
                                 mixBlendMode: 'plus-lighter'
                               }}
                             />

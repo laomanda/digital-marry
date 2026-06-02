@@ -238,7 +238,7 @@ function SplitName({ name }: { name: string }) {
           key={`${ch}-${i}`}
           data-couple-char
           aria-hidden="true"
-          className="inline-block"
+          className="inline-block will-change-transform"
           style={{ opacity: 0 }}
         >
           {ch === ' ' ? '\u00A0' : ch}
@@ -272,15 +272,15 @@ function PersonCard({
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       className={[
-        'group relative flex flex-col transition-opacity duration-500',
+        'group relative flex transform-gpu flex-col transition-opacity duration-500 will-change-transform',
         inactive ? 'opacity-[0.72]' : 'opacity-100',
       ].join(' ')}
     >
-      {/* Portrait */}
+      {/* Portrait with editorial text overlay */}
       <div
         className={[
-          'relative aspect-[4/5] w-full overflow-hidden transition-colors duration-500',
-          'bg-[#1a1a1a]',
+          'relative isolate aspect-[2/3] min-h-[540px] w-full overflow-hidden rounded-[2px] transition-colors duration-500 md:min-h-0',
+          'bg-[#050505]',
           'border',
           active 
             ? 'border-[#F5F5F0]/50' 
@@ -293,67 +293,65 @@ function PersonCard({
           loading="eager"
           decoding="async"
           className={[
-            'absolute inset-0 h-full w-full object-cover',
-            'brightness-[0.88] contrast-[1.05]',
-            'transition-transform duration-700 ease-out',
-            active ? 'scale-[1.04]' : 'scale-100',
+            'absolute inset-0 h-full w-full object-cover object-center',
+            'brightness-[0.98] contrast-[1.03]',
+            'transition-[filter,opacity] duration-700 ease-out',
+            active ? 'opacity-100 brightness-[1.03]' : 'opacity-[0.98]',
           ].join(' ')}
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent to-transparent transition-colors duration-500 from-[#050505]/40" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/92 via-[#050505]/42 to-transparent transition-colors duration-500 md:from-[#050505]/88 md:via-[#050505]/30" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[58%] bg-[radial-gradient(ellipse_at_bottom,rgba(5,5,5,0.62),transparent_70%)]" />
 
-        {/* Corner marks */}
-        <span className="absolute left-3 top-3 h-6 w-6 border-l border-t transition-colors duration-500 border-[#F5F5F0]/30" aria-hidden="true" />
-        <span className="absolute right-3 top-3 h-6 w-6 border-r border-t transition-colors duration-500 border-[#F5F5F0]/30" aria-hidden="true" />
-        <span className="absolute bottom-3 left-3 h-6 w-6 border-b border-l transition-colors duration-500 border-[#F5F5F0]/30" aria-hidden="true" />
-        <span className="absolute bottom-3 right-3 h-6 w-6 border-b border-r transition-colors duration-500 border-[#F5F5F0]/30" aria-hidden="true" />
+        <div className="absolute inset-x-0 bottom-0 z-10 p-6 pb-7 text-left sm:p-8 md:p-6 lg:p-7">
+          <div className="relative max-w-[94%] md:max-w-[92%]">
+            <span
+              className="pointer-events-none absolute -left-1 top-[-0.42em] select-none font-athene text-[clamp(72px,19vw,118px)] leading-none text-[#F5F5F0]/[0.055] md:text-[clamp(58px,5.5vw,94px)]"
+              aria-hidden="true"
+            >
+              {person.firstName}
+            </span>
 
-        {/* Role badge */}
-        <span className="absolute left-4 top-4 font-mono text-[9px] uppercase tracking-[0.3em] transition-colors duration-500 text-[#F5F5F0]/50">
-          {side === 'bride' ? 'Bride' : 'Groom'}
-        </span>
-      </div>
+            <h3
+              className="relative font-athene text-[clamp(50px,13.5vw,78px)] leading-[0.88] text-[#F5F5F0] drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] md:text-[clamp(42px,4.4vw,68px)]"
+              aria-label={person.fullName}
+            >
+              <SplitName name={person.firstName} />
+            </h3>
 
-      {/* Info */}
-      <div className="mt-6 text-center">
-        <h3
-          className="font-athene text-[clamp(36px,5vw,64px)] leading-[0.9] transition-colors duration-500 text-[#F5F5F0]"
-          aria-label={person.fullName}
-        >
-          <SplitName name={person.firstName} />
-        </h3>
+            <p className="relative mt-3 font-montserrat text-[clamp(17px,4.4vw,24px)] font-semibold leading-tight text-[#F5F5F0] drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)] md:text-[clamp(13px,1.32vw,17px)]">
+              {person.fullName}
+            </p>
 
-        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors duration-500 text-[#F5F5F0]/45">
-          {person.fullName}
-        </p>
+            <p className="relative mt-2 max-w-[96%] font-montserrat text-[clamp(16px,4vw,22px)] font-semibold leading-snug text-[#F5F5F0]/90 drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)] md:text-[clamp(12px,1.22vw,15px)]">
+              {person.parents}
+            </p>
 
-        <div className="mx-auto my-4 h-px w-10 transition-colors duration-500 bg-[#F5F5F0]/15" />
+            <div className="mt-5 h-px w-full bg-[#F5F5F0]/55 shadow-[0_0_18px_rgba(245,245,240,0.10)] md:mt-4" aria-hidden="true" />
 
-        <p className="font-montserrat text-[11px] font-semibold uppercase leading-relaxed tracking-[0.16em] transition-colors duration-500 text-[#F5F5F0]/55">
-          {person.parents}
-        </p>
-
-        {handle && (
-          <a
-            href={`https://instagram.com/${handle}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={[
-              'mt-4 inline-flex items-center justify-center gap-2 transition duration-300',
-              'text-[#F5F5F0]/40 hover:text-[#F5F5F0]',
-              'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
-              'focus-visible:ring-[#F5F5F0] focus-visible:ring-offset-[#050505]',
-            ].join(' ')}
-            aria-label={`Instagram ${person.fullName}`}
-          >
-            <Instagram size={14} strokeWidth={1.5} />
-            <span className="font-mono text-[10px] tracking-[0.15em]">{person.instagram}</span>
-            <ArrowUpRight
-              size={13}
-              strokeWidth={1.5}
-              className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </a>
-        )}
+            {handle && (
+              <a
+                href={`https://instagram.com/${handle}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={[
+                  'mt-4 inline-flex items-center justify-center gap-2 transition duration-300 md:mt-3',
+                  'text-[#F5F5F0]/72 hover:text-[#F5F5F0]',
+                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
+                  'focus-visible:ring-[#F5F5F0] focus-visible:ring-offset-[#050505]',
+                ].join(' ')}
+                aria-label={`Instagram ${person.fullName}`}
+              >
+                <Instagram size={14} strokeWidth={1.6} />
+                <span className="font-mono text-[10px] tracking-[0.16em] md:text-[9px]">{person.instagram}</span>
+                <ArrowUpRight
+                  size={13}
+                  strokeWidth={1.6}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </a>
+            )}
+          </div>
+        </div>
       </div>
     </article>
   )
@@ -370,195 +368,159 @@ export function CoupleSection() {
 
   useEffect(() => {
     const el = sectionRef.current
-    if (!el || shouldReduceHeavyMotion) {
-      // Make everything visible immediately
-      el?.querySelectorAll<HTMLElement>('[data-couple-char], [data-couple-header-char]').forEach((c) => {
-        c.style.opacity = '1'
+    if (!el) return
+
+    const showStatic = () => {
+      gsap.set(el.querySelectorAll('[data-couple-header-label], [data-couple-header-sub]'), {
+        opacity: 1,
+        y: 0,
       })
-      el?.querySelectorAll<HTMLElement>('[data-couple-header-label], [data-couple-header-sub]').forEach((s) => {
-        s.style.opacity = '1'
+      gsap.set(el.querySelectorAll('[data-couple-header-char], [data-couple-char]'), {
+        opacity: 1,
+        y: 0,
       })
-      const headerLine = el?.querySelector<HTMLElement>('[data-couple-header-line]')
-      if (headerLine) {
-        headerLine.style.opacity = '1'
-        headerLine.style.transform = 'scaleX(1)'
-      }
+      gsap.set(el.querySelector('[data-couple-header-line]'), {
+        opacity: 1,
+        scaleX: 1,
+      })
+      gsap.set(el.querySelectorAll('[data-couple-card], [data-couple-heart]'), {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        xPercent: 0,
+        scale: 1,
+      })
+    }
+
+    if (shouldReduceMotion || shouldReduceHeavyMotion) {
+      showStatic()
       return
     }
 
+    let mm: ReturnType<typeof gsap.matchMedia> | null = null
+
     const ctx = gsap.context(() => {
-      // 1. Main Header Staggered Entrance Timeline (All Devices)
-      // If heavy motion is reduced (e.g. mobile or user preference), skip all heavy ScrollTrigger timelines
-      // and rely on static or lightweight CSS-based reveals.
-      if (shouldReduceHeavyMotion) {
-        // Force initial visual states to be completely visible on mobile immediately
-        gsap.set('[data-couple-header-label]', { opacity: 1, y: 0 })
-        gsap.set('[data-couple-header-char]', { opacity: 1, y: 0 })
-        gsap.set('[data-couple-header-line]', { scaleX: 1, opacity: 1 })
-        gsap.set('[data-couple-header-sub]', { opacity: 1, y: 0 })
-        gsap.set('[data-couple-side]', { opacity: 1, xPercent: 0, scale: 1 })
-        gsap.set('[data-couple-char]', { opacity: 1, y: 0 })
-        gsap.set('[data-couple-heart]', { opacity: 1, scale: 1 })
-        
-        return
-      }
+      // 1. Main header reveal.
       const headerTl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
-          start: 'top 80%',
+          start: 'top 82%',
           toggleActions: 'play none none none',
+          once: true,
         },
       })
 
       headerTl
         .fromTo('[data-couple-header-label]',
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', clearProps: 'transform,opacity' }
         )
         .fromTo('[data-couple-header-char]',
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, stagger: 0.03, duration: 0.8, ease: 'power3.out' },
-          '-=0.5'
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, stagger: 0.025, duration: 0.55, ease: 'power2.out', clearProps: 'transform,opacity' },
+          '-=0.35'
         )
         .fromTo('[data-couple-header-line]',
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 0.6, ease: 'power2.out', transformOrigin: 'center center' },
-          '-=0.4'
+          { scaleX: 1, opacity: 1, duration: 0.5, ease: 'power2.out', transformOrigin: 'center center', clearProps: 'transform,opacity' },
+          '-=0.25'
         )
         .fromTo('[data-couple-header-sub]',
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
-          '-=0.4'
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', clearProps: 'transform,opacity' },
+          '-=0.25'
         )
 
-      const mm = gsap.matchMedia()
+      mm = gsap.matchMedia()
 
       // ─── DESKTOP (lg >= 1024px) — Scroll-Driven Convergence ───
       mm.add("(min-width: 1024px)", () => {
         const leftCard = el.querySelector('[data-couple-side="left"]')
         const rightCard = el.querySelector('[data-couple-side="right"]')
-        const centerHeart = el.querySelector('[data-couple-heart]')
+        const centerHeart = el.querySelector('[data-couple-heart-desktop]')
+        const leftChars = leftCard?.querySelectorAll('[data-couple-char]')
+        const rightChars = rightCard?.querySelectorAll('[data-couple-char]')
+        const nameChars = [
+          ...Array.from(leftChars || []),
+          ...Array.from(rightChars || []),
+        ]
 
         // Set initial convergence states: portraits far apart, low opacity, slightly scaled down
-        gsap.set(leftCard, { xPercent: -26, opacity: 0.75, scale: 0.96 })
-        gsap.set(rightCard, { xPercent: 26, opacity: 0.75, scale: 0.96 })
-        gsap.set(centerHeart, { opacity: 0.15, scale: 0.86 })
+        gsap.set(leftCard, { xPercent: -12, opacity: 0, scale: 0.985, force3D: true, willChange: 'transform, opacity' })
+        gsap.set(rightCard, { xPercent: 12, opacity: 0, scale: 0.985, force3D: true, willChange: 'transform, opacity' })
+        gsap.set(centerHeart, { opacity: 0, scale: 0.92, force3D: true, willChange: 'transform, opacity' })
+        gsap.set(nameChars, { opacity: 0, y: 14 })
 
-        // Flag to execute the "sealed moment" exactly once per sweep
-        let hasSealed = false
-
-        // Scroll convergence scrub timeline
+        // One-shot reveal timeline. Avoid scroll-scrub so transforms never fight the user's scroll.
         const convergenceTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: el,
             start: 'top 78%',
-            end: 'center center',
-            scrub: 1.2,
-            onUpdate: (self) => {
-              // Trigger the "sealed moment" once convergence completes (>= 92% scroll progress)
-              if (self.progress >= 0.92) {
-                if (!hasSealed) {
-                  hasSealed = true
-
-                  // United magnetic bump animation for portraits (Bride bumps right, Groom bumps left)
-                  gsap.timeline()
-                    .to(leftCard, { x: 12, scale: 1.015, duration: 0.2, ease: 'power2.out' })
-                    .to(leftCard, { x: 0, scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.6)' })
-
-                  gsap.timeline()
-                    .to(rightCard, { x: -12, scale: 1.015, duration: 0.2, ease: 'power2.out' })
-                    .to(rightCard, { x: 0, scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.6)' })
-
-                  // Faint elegant seal pulse
-                  gsap.timeline()
-                    .to(centerHeart, { scale: 1.12, opacity: 1, duration: 0.25, ease: 'power2.out' })
-                    .to(centerHeart, { scale: 1, opacity: 0.85, duration: 0.45, ease: 'power2.inOut' })
-
-                  // Reveal name letters for both cards exactly when sealing is reached
-                  const leftChars = leftCard?.querySelectorAll('[data-couple-char]')
-                  const rightChars = rightCard?.querySelectorAll('[data-couple-char]')
-
-                  if (leftChars?.length) {
-                    animate(leftChars, {
-                      opacity: [0, 1],
-                      translateY: [24, 0],
-                      duration: 700,
-                      delay: (_el: Element, idx: number) => idx * 30,
-                      easing: 'outExpo',
-                    })
-                  }
-                  if (rightChars?.length) {
-                    animate(rightChars, {
-                      opacity: [0, 1],
-                      translateY: [24, 0],
-                      duration: 700,
-                      delay: (_el: Element, idx: number) => idx * 30,
-                      easing: 'outExpo',
-                    })
-                  }
-                }
-              } else if (self.progress < 0.85) {
-                // Reset flag when scrolling back up
-                hasSealed = false
-              }
-            },
+            once: true,
           },
         })
 
         // Convergence tween mapping: portraits align perfectly to center (xPercent 0)
         convergenceTimeline
-          .to(leftCard, { xPercent: 0, opacity: 1, scale: 1, ease: 'none' }, 0)
-          .to(rightCard, { xPercent: 0, opacity: 1, scale: 1, ease: 'none' }, 0)
-          .to(centerHeart, { opacity: 0.85, scale: 1, ease: 'none' }, 0)
+          .to(leftCard, { xPercent: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out', clearProps: 'transform,opacity,willChange' }, 0)
+          .to(rightCard, { xPercent: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out', clearProps: 'transform,opacity,willChange' }, 0.08)
+          .to(centerHeart, { opacity: 0.85, scale: 1, duration: 0.55, ease: 'power2.out', clearProps: 'transform,opacity,willChange' }, 0.28)
+          .to(nameChars, { opacity: 1, y: 0, stagger: 0.025, duration: 0.45, ease: 'power2.out', clearProps: 'transform,opacity' }, 0.38)
       })
 
       // ─── MOBILE/TABLET (< 1024px) — Clean Stacked Fallback ───
       mm.add("(max-width: 1023px)", () => {
-        const cards = gsap.utils.toArray<HTMLElement>('[data-couple-card]')
-        cards.forEach((card, i) => {
-          gsap.from(card, {
-            opacity: 0,
-            y: 40,
-            duration: 1.0,
-            ease: 'power3.out',
+        const cards = gsap.utils.toArray<HTMLElement>('[data-couple-card]', el)
+        const mobileHeart = el.querySelector<HTMLElement>('[data-couple-heart-mobile]')
+
+        cards.forEach((card) => {
+          const chars = card.querySelectorAll<HTMLElement>('[data-couple-char]')
+          const cardTl = gsap.timeline({
             scrollTrigger: {
-              trigger: el,
-              start: 'top 65%',
+              trigger: card,
+              start: 'top 86%',
               toggleActions: 'play none none none',
-            },
-            delay: i * 0.2,
-            onComplete: () => {
-              const chars = card.querySelectorAll('[data-couple-char]')
-              if (chars.length) {
-                animate(chars, {
-                  opacity: [0, 1],
-                  translateY: [24, 0],
-                  duration: 700,
-                  delay: (_el: Element, idx: number) => idx * 35,
-                  easing: 'outExpo',
-                })
-              }
+              once: true,
             },
           })
+
+          cardTl
+            .fromTo(card,
+              { opacity: 0, y: 24, scale: 0.99 },
+              { opacity: 1, y: 0, scale: 1, duration: 0.62, ease: 'power2.out', clearProps: 'transform,opacity,willChange' }
+            )
+            .to(chars,
+              { opacity: 1, y: 0, stagger: 0.03, duration: 0.42, ease: 'power2.out', clearProps: 'transform,opacity' },
+              '-=0.28'
+            )
         })
 
-        gsap.from('[data-couple-heart]', {
-          opacity: 0,
-          scale: 0.7,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 65%',
-            toggleActions: 'play none none none',
-          },
-          delay: 0.25,
-        })
+        if (mobileHeart) {
+          gsap.fromTo(mobileHeart,
+            { opacity: 0, scale: 0.92 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.5,
+              ease: 'power2.out',
+              clearProps: 'transform,opacity,willChange',
+              scrollTrigger: {
+                trigger: mobileHeart,
+                start: 'top 88%',
+                toggleActions: 'play none none none',
+                once: true,
+              },
+            }
+          )
+        }
       })
     }, el)
 
-    return () => ctx.revert()
-  }, [shouldReduceMotion])
+    return () => {
+      mm?.revert()
+      ctx.revert()
+    }
+  }, [shouldReduceMotion, shouldReduceHeavyMotion])
 
   return (
     <section
@@ -605,10 +567,11 @@ export function CoupleSection() {
         </div>
 
         {/* Cards grid */}
-        <div className="relative mx-auto mt-16 grid max-w-[960px] grid-cols-1 gap-8 md:mt-20 md:grid-cols-2 md:gap-5 lg:gap-8">
+        <div className="relative mx-auto mt-16 grid max-w-[1100px] grid-cols-1 gap-8 md:mt-20 md:grid-cols-2 md:gap-6 lg:gap-8">
           {/* Desktop heart — centered between portraits */}
           <div
             data-couple-heart
+            data-couple-heart-desktop
             className="pointer-events-none absolute left-1/2 top-[38%] z-10 hidden -translate-x-1/2 -translate-y-1/2 md:block"
           >
             <EditorialHeart
@@ -631,6 +594,7 @@ export function CoupleSection() {
           {/* Mobile heart — between stacked cards */}
           <div
             data-couple-heart
+            data-couple-heart-mobile
             className="-my-2 flex items-center justify-center py-1 md:hidden"
           >
             <EditorialHeart

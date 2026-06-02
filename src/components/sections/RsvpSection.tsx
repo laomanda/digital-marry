@@ -122,7 +122,6 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
       id="rsvp" 
       data-section 
       data-theme="dark" 
-      data-global-reveal="true" 
       className={`overflow-hidden py-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
     >
       <div className="container-base mx-auto max-w-6xl">
