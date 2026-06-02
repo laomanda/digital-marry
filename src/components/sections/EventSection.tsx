@@ -1,12 +1,125 @@
-import { useEffect, useRef, useState, type RefObject } from 'react'
+import { useLayoutEffect, useRef, useState, memo, type RefObject } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Calendar, Clock, MapPin } from 'lucide-react'
 import eventBg from '../../assets/lainnya/bg-event.webp'
+import galeri5 from '../../assets/lainnya/foto/galeri-5.webp'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 
 type EventItem = (typeof weddingData.events)[number]
+
+const parseDate = (dateStr: string) => {
+  const parts = dateStr.split(',')
+  const dayName = parts[0]?.trim().toUpperCase() || 'MINGGU'
+  
+  const rest = parts[1]?.trim() || ''
+  const dateParts = rest.split(' ')
+  const day = dateParts[0] || '14'
+  const month = dateParts[1]?.toUpperCase() || 'JUNI'
+  const year = dateParts[2] || '2026'
+
+  return { dayName, day, month, year }
+}
+
+const formatAddress = (addressStr: string) => {
+  if (addressStr.includes('Kabupaten')) {
+    const parts = addressStr.split('Kabupaten')
+    return (
+      <>
+        {parts[0]?.trim()} <br />
+        Kabupaten {parts[1]?.trim()}
+      </>
+    )
+  }
+  return addressStr
+}
+
+interface MobileEventLayoutProps {
+  events: EventItem[]
+}
+
+function MobileEventLayout({ events }: MobileEventLayoutProps) {
+  return (
+    <div className="w-full max-w-[540px] mx-auto px-4 py-8 lg:hidden">
+      {events.map((event, index) => {
+        const { dayName, day, month, year } = parseDate(event.date)
+        const isAkad = event.id === 'akad'
+        const title = isAkad ? 'HOLY MATRIMONY' : 'RECEPTION'
+
+        return (
+          <div key={event.id} className="flex flex-col items-center">
+            {/* Event Title */}
+            <h3 className="font-athene text-[20px] xs:text-[22px] sm:text-[24px] leading-tight text-[#F5F5F0] tracking-[0.08em] uppercase text-center mb-6 font-medium">
+              {title}
+            </h3>
+
+            {/* Date and Time Grid */}
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 xs:gap-3 sm:gap-4 w-full max-w-[420px] mx-auto mb-6">
+              {/* Left Column - Day */}
+              <div className="border-y border-[#F5F5F0]/30 py-2 text-center flex items-center justify-center min-h-[34px] w-full">
+                <span className="font-athene text-[8px] xs:text-[9px] tracking-[0.18em] text-[#F5F5F0]">
+                  {dayName}
+                </span>
+              </div>
+
+              {/* Center Column - Date Stack */}
+              <div className="flex flex-col items-center justify-center px-3 sm:px-4 text-center min-w-[56px] xs:min-w-[64px]">
+                <span className="font-athene text-[7px] xs:text-[8px] tracking-[0.25em] text-[#F5F5F0]/70 uppercase leading-none mb-1">
+                  {month}
+                </span>
+                <span className="font-athene text-[20px] xs:text-[24px] sm:text-[28px] font-medium leading-none text-[#F5F5F0] py-0.5">
+                  {day}
+                </span>
+                <span className="font-athene text-[7px] xs:text-[8px] tracking-[0.25em] text-[#F5F5F0]/70 uppercase leading-none mt-1">
+                  {year}
+                </span>
+              </div>
+
+              {/* Right Column - Time */}
+              <div className="border-y border-[#F5F5F0]/30 py-2 text-center flex items-center justify-center min-h-[34px] w-full">
+                <span className="font-montserrat text-[7px] xs:text-[8px] font-medium tracking-[0.05em] text-[#F5F5F0] whitespace-nowrap">
+                  {event.time.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            {/* Address */}
+            <div className="max-w-[340px] mx-auto text-center font-montserrat tracking-wide px-4">
+              <p className="text-[10px] sm:text-[11px] font-semibold text-[#F5F5F0] mb-1">
+                {event.venue}
+              </p>
+              <p className="text-[9px] sm:text-[10px] font-normal leading-[1.6] text-[#F5F5F0]/85">
+                {formatAddress(event.address)}
+              </p>
+            </div>
+
+            {/* Google Maps Button */}
+            {event.mapsUrl && (
+              <div className="mt-5 flex justify-center">
+                <a
+                  href={event.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center bg-[#F5F5F0]/20 backdrop-blur-sm hover:bg-[#F5F5F0]/30 active:scale-95 text-[#F5F5F0] px-5 py-2 rounded-full font-montserrat text-[8px] font-semibold tracking-[0.18em] transition-all duration-300"
+                >
+                  GOOGLE MAPS
+                </a>
+              </div>
+            )}
+
+            {/* Separator - show only between events */}
+            {index < events.length - 1 && (
+              <div className="flex justify-center my-10 w-full">
+                <div className="h-16 w-[1.5px] bg-[#F5F5F0]/30" />
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
 
 interface EventCardProps {
   event: EventItem
@@ -201,13 +314,14 @@ function HorizontalStage({
   if (!firstEvent || !secondEvent) return null
 
   return (
-    <div ref={stageRef} className="relative hidden h-[clamp(620px,82vh,780px)] min-h-[620px] overflow-x-hidden overflow-y-visible lg:block [@media(max-height:650px)]:h-[560px] [@media(max-height:650px)]:min-h-[560px]">
-      <div
-        ref={trackRef}
-        data-horizontal-track
-        className="relative flex h-full w-[210vw] transform-gpu items-start"
-      >
-        <svg
+    <div className="gsap-pin-wrapper w-full relative">
+      <div ref={stageRef} className="relative hidden h-[clamp(620px,82vh,780px)] min-h-[620px] overflow-x-hidden overflow-y-visible lg:block [@media(max-height:650px)]:h-[560px] [@media(max-height:650px)]:min-h-[560px]">
+        <div
+          ref={trackRef}
+          data-horizontal-track
+          className="relative flex h-full w-[210vw] transform-gpu items-start"
+        >
+          <svg
           className="pointer-events-none absolute left-0 top-[calc(clamp(84px,13vh,138px)-98px)] z-10 h-[220px] w-full [@media(max-height:650px)]:top-[-54px]"
           viewBox="0 0 2100 220"
           preserveAspectRatio="none"
@@ -291,6 +405,7 @@ function HorizontalStage({
             />
           </div>
         </div>
+        </div>
       </div>
     </div>
   )
@@ -361,7 +476,7 @@ function StaticTimeline({
   )
 }
 
-export default function EventSection() {
+const EventSection = memo(function EventSection() {
   const events = weddingData.events ?? []
   const { shouldReduceHeavyMotion, shouldReduceMotion } = useReducedMotionSafe()
   const sectionRef = useRef<HTMLElement | null>(null)
@@ -369,7 +484,7 @@ export default function EventSection() {
   const trackRef = useRef<HTMLDivElement | null>(null)
   const [activeEventId, setActiveEventId] = useState(events[0]?.id || '')
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (shouldReduceHeavyMotion) return
 
     const root = sectionRef.current
@@ -437,18 +552,27 @@ export default function EventSection() {
       className="relative overflow-hidden bg-[#050505] py-24 text-[#F5F5F0] transition-colors duration-500 md:py-32 lg:py-24"
     >
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+        {/* Mobile Background */}
+        <img
+          src={galeri5}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-[0.34] lg:hidden"
+          style={{ filter: 'grayscale(1) contrast(1.04) brightness(0.80)' }}
+        />
+        {/* Desktop Background */}
         <img
           src={eventBg}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-[0.36] md:opacity-[0.46] lg:opacity-[0.52]"
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-[0.46] lg:opacity-[0.52] hidden lg:block"
           style={{ filter: 'grayscale(1) contrast(1.04) brightness(0.82)' }}
         />
-        <div className="absolute inset-0 bg-[#050505]/72 transition-colors duration-500 md:bg-[#050505]/62" />
+        <div className="absolute inset-0 bg-[#050505]/72 transition-colors duration-500 md:bg-[#050505]/62 lg:bg-[#050505]/62" />
         <div
           className="absolute inset-0 transition-colors duration-500"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(5,5,5,0.18) 0%, rgba(5,5,5,0.78) 72%, #050505 100%)',
+            background: 'radial-gradient(ellipse at center, rgba(5,5,5,0.15) 0%, rgba(5,5,5,0.80) 75%, #050505 100%)',
           }}
         />
       </div>
@@ -456,10 +580,8 @@ export default function EventSection() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-36 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-transparent transition-colors duration-500 md:h-48" aria-hidden="true" />
 
       <div className="relative z-10">
-        <div className="container-base">
-          <div className={`mx-auto flex max-w-[720px] flex-col items-center text-center ${
-            shouldReduceHeavyMotion ? 'mb-12 md:mb-16' : 'mb-12 md:mb-16 lg:mb-0'
-          }`}>
+        <div className="container-base hidden lg:block">
+          <div className="mx-auto flex max-w-[720px] flex-col items-center text-center">
             <span className="mb-5 block font-mono text-[10px] uppercase text-[#A4A4A4] transition-colors duration-500">
               Rangkaian Acara
             </span>
@@ -486,14 +608,22 @@ export default function EventSection() {
       </div>
 
       <div className="container-base relative z-10">
-        <StaticTimeline
-          events={events}
-          activeEventId={activeEventId}
-          setActiveEventId={setActiveEventId}
-          shouldReduceMotion={shouldReduceMotion}
-          className={shouldReduceHeavyMotion ? 'mt-12 md:mt-16' : 'mt-12 md:mt-16 lg:hidden'}
-        />
+        {/* Mobile Redesigned Layout */}
+        <MobileEventLayout events={events} />
+
+        {/* Desktop Fallback Timeline (only shown if motion is reduced and screen is lg) */}
+        {shouldReduceHeavyMotion && (
+          <StaticTimeline
+            events={events}
+            activeEventId={activeEventId}
+            setActiveEventId={setActiveEventId}
+            shouldReduceMotion={shouldReduceMotion}
+            className="mt-12 md:mt-16 hidden lg:block"
+          />
+        )}
       </div>
     </section>
   )
-}
+})
+
+export default EventSection

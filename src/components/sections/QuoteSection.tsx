@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { Container } from '../ui/Container'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
@@ -40,89 +39,7 @@ export function QuoteSection() {
   const quoteText = weddingData.wedding.quote.text
   const quoteAuthor = weddingData.wedding.quote.author
 
-  useEffect(() => {
-    const section = sectionRef.current
-    const contentElement = contentRef.current
-    if (!section || !contentElement) return
 
-    const ctx = gsap.context(() => {
-      const partElements = section.querySelectorAll<HTMLElement>('[data-quote-part]')
-
-      gsap.set(markRef.current, { opacity: 0.04, scale: 1, rotate: 0 })
-
-      if (shouldReduceMotion || shouldReduceHeavyMotion) {
-        gsap.set(contentElement, {
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          rotate: 0,
-          scale: 1,
-          transformOrigin: '50% 50%',
-          clearProps: 'willChange',
-        })
-        gsap.set(partElements, { opacity: 1, y: 0, filter: 'blur(0px)', clearProps: 'willChange' })
-        return
-      }
-
-      gsap.set(contentElement, {
-        opacity: 0.18,
-        y: 28,
-        filter: shouldReduceHeavyMotion ? 'none' : 'blur(5px)',
-        rotate: 2,
-        scale: 0.985,
-        transformOrigin: '50% 50%',
-        willChange: 'opacity, transform, filter',
-      })
-
-      gsap.set(partElements, {
-        opacity: 0.32,
-        y: 14,
-        filter: shouldReduceHeavyMotion ? 'none' : 'blur(3px)',
-        willChange: 'opacity, transform, filter',
-      })
-
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 76%',
-          once: true,
-          toggleActions: 'play none none none',
-        },
-        defaults: { ease: 'power3.out' },
-      })
-
-      timeline.to(
-        contentElement,
-        {
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          rotate: 0,
-          scale: 1,
-          duration: 0.9,
-          clearProps: 'willChange',
-        },
-        0,
-      )
-
-      timeline.to(
-        partElements,
-        {
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          duration: 0.75,
-          stagger: 0.05,
-          clearProps: 'willChange',
-        },
-        0.12,
-      )
-    }, section)
-
-    return () => {
-      ctx.revert()
-    }
-  }, [shouldReduceMotion, shouldReduceHeavyMotion])
 
   return (
     <section
@@ -157,19 +74,19 @@ export function QuoteSection() {
           <div
             data-animate="line"
             data-quote-part
-            data-no-global-reveal="true"
+            
             className={`mx-auto mb-5 h-px w-16 origin-center transition-colors duration-500 md:mb-6 md:w-20 ${lineStrongClass}`}
           />
 
           <div
             data-quote-part
-            data-no-global-reveal="true"
+            
             className="mb-auto grid w-full grid-cols-[1fr_auto_1fr] items-center gap-3 md:gap-4"
           >
             <span className={`h-px transition-colors duration-500 ${lineSoftClass}`} aria-hidden="true" />
             <span
               data-animate="text"
-              data-no-global-reveal="true"
+              
               className={`font-mono text-[9px] uppercase tracking-[0.26em] transition-colors duration-500 md:text-[10px] ${mutedClass}`}
             >
               A Sacred Promise
@@ -179,7 +96,7 @@ export function QuoteSection() {
 
           <motion.blockquote
             data-quote-part
-            data-no-global-reveal="true"
+            
             className="relative"
             aria-label={quoteText}
             onHoverStart={() => setIsQuoteHovered(true)}
@@ -203,7 +120,7 @@ export function QuoteSection() {
             </motion.span>
 
             <p
-              data-no-global-reveal="true"
+              
               data-quote-text
               className={`relative z-10 font-montserrat text-[clamp(13px,3.6vw,19px)] font-semibold leading-[1.62] tracking-normal transition-colors duration-500 ${textClass}`}
               style={{ textShadow: '0 2px 16px rgba(0,0,0,0.55)' }}
@@ -215,7 +132,7 @@ export function QuoteSection() {
           <div
             data-animate="text"
             data-quote-part
-            data-no-global-reveal="true"
+            
             className="mt-7 md:mt-8"
           >
             <span className={`font-mono text-[10px] uppercase tracking-[0.24em] transition-colors duration-500 md:text-[11px] ${mutedClass}`}>
@@ -226,14 +143,14 @@ export function QuoteSection() {
           <div
             data-animate="line"
             data-quote-part
-            data-no-global-reveal="true"
+            
             className={`mx-auto mt-6 h-px w-16 origin-center transition-colors duration-500 md:mt-7 md:w-20 ${lineStrongClass}`}
           />
 
           <div
             data-animate="text"
             data-quote-part
-            data-no-global-reveal="true"
+            
             className={`absolute bottom-8 right-8 hidden font-mono text-[9px] uppercase tracking-[0.24em] transition-colors duration-500 lg:block ${decorClass}`}
             aria-hidden="true"
           >
@@ -245,3 +162,5 @@ export function QuoteSection() {
     </section>
   )
 }
+
+

@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { GuestWish } from './types/wish'
 import { supabase } from './lib/supabase'
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider'
@@ -12,70 +12,21 @@ import { CoverSection } from './components/sections/CoverSection'
 import HeroSection from './components/sections/HeroSection'
 import { QuoteSection } from './components/sections/QuoteSection'
 import { CoupleSection } from './components/sections/CoupleSection'
+import { LoveStorySection } from './components/sections/LoveStorySection'
+import CountdownSection from './components/sections/CountdownSection'
+import EventSection from './components/sections/EventSection'
+import RsvpSection from './components/sections/RsvpSection'
+import LiveStreamSection from './components/sections/LiveStreamSection'
+import WishesSection from './components/sections/WishesSection'
+import GallerySection from './components/sections/GallerySection'
+import GiftSection from './components/sections/GiftSection'
+import ClosingSection from './components/sections/ClosingSection'
 import { useGlobalReveal } from './hooks/useGlobalReveal'
-import { useReducedMotionSafe } from './hooks/useReducedMotionSafe'
-
-function LazySection({ children, id, heightDesk, heightMob }: { children: React.ReactNode, id?: string, heightDesk: string, heightMob: string }) {
-  const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-  const { isMobile } = useReducedMotionSafe()
-
-  useEffect(() => {
-    if (isVisible) return
-    const el = ref.current
-    if (!el) return
-    
-    const rootMargin = isMobile ? '900px 0px' : '1400px 0px'
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true)
-        observer.disconnect()
-      }
-    }, { rootMargin })
-    
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [isVisible, isMobile])
-
-  return (
-    <div
-      id={id}
-      ref={ref}
-      className="bg-[#050505]"
-      style={{ minHeight: isVisible ? undefined : (isMobile ? heightMob : heightDesk) }}
-    >
-      {isVisible ? children : null}
-    </div>
-  )
-}
-
-function SectionFallback({ heightDesk, heightMob }: { heightDesk: string, heightMob: string }) {
-  const { isMobile } = useReducedMotionSafe()
-
-  return (
-    <div
-      className="relative overflow-hidden bg-[#050505]"
-      style={{ minHeight: isMobile ? heightMob : heightDesk }}
-      aria-hidden="true"
-    >
-      <div className="absolute left-1/2 top-1/2 h-px w-[min(520px,72vw)] -translate-x-1/2 bg-[#F5F5F0]/[0.06]" />
-      <div className="absolute left-1/2 top-[calc(50%+20px)] h-px w-[min(220px,42vw)] -translate-x-1/2 bg-[#F5F5F0]/[0.035]" />
-    </div>
-  )
-}
-
-// Lazy-loaded heavy sections below the fold
-const LoveStorySection = lazy(() => import('./components/sections/LoveStorySection').then(m => ({ default: m.LoveStorySection })))
-const CountdownSection = lazy(() => import('./components/sections/CountdownSection'))
-const EventSection = lazy(() => import('./components/sections/EventSection'))
-const RsvpSection = lazy(() => import('./components/sections/RsvpSection'))
-const WishesSection = lazy(() => import('./components/sections/WishesSection'))
-const GallerySection = lazy(() => import('./components/sections/GallerySection'))
-const GiftSection = lazy(() => import('./components/sections/GiftSection'))
-const ClosingSection = lazy(() => import('./components/sections/ClosingSection'))
+import { ScrollTrigger } from './lib/gsap'
 
 export default function App() {
   const [isInvitationOpen, setIsInvitationOpen] = useState(false)
+  const [isInvitationOpened, setIsInvitationOpened] = useState(false)
   const [isPreloaderDone, setIsPreloaderDone] = useState(false)
   const [guestWishes, setGuestWishes] = useState<GuestWish[]>([])
 
@@ -107,6 +58,16 @@ export default function App() {
     fetchWishes()
   }, [isInvitationOpen])
 
+  useEffect(() => {
+    if (isInvitationOpened) {
+      // Small delay to ensure CoverSection exit is completely done and DOM has reflowed
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh()
+      }, 150)
+      return () => clearTimeout(timer)
+    }
+  }, [isInvitationOpened])
+
   const handleAddWish = async (wish: GuestWish) => {
     // Optimistic UI Update
     setGuestWishes((prev) => [wish, ...prev])
@@ -129,7 +90,9 @@ export default function App() {
       console.error('Error inserting wish', err)
     }
   }
-  useGlobalReveal()
+
+  // Trigger global animations whenever these states change
+  useGlobalReveal([isInvitationOpen, isInvitationOpened])
 
   return (
     <SmoothScrollProvider>
@@ -142,7 +105,7 @@ export default function App() {
 
       <CoverSection
         onOpen={() => setIsInvitationOpen(true)}
-        onOpened={() => setIsInvitationOpen(true)}
+        onOpened={() => setIsInvitationOpened(true)}
         isPreloaderDone={isPreloaderDone}
       />
       <MusicToggle visible={isInvitationOpen} />
@@ -155,46 +118,15 @@ export default function App() {
         
         {isInvitationOpen && (
           <>
-            <LazySection id="love-story" heightDesk="1200px" heightMob="900px">
-              <Suspense fallback={<SectionFallback heightDesk="1200px" heightMob="900px" />}>
-                <LoveStorySection />
-              </Suspense>
-            </LazySection>
-            <LazySection id="countdown" heightDesk="800px" heightMob="800px">
-              <Suspense fallback={<SectionFallback heightDesk="800px" heightMob="800px" />}>
-                <CountdownSection />
-              </Suspense>
-            </LazySection>
-            <LazySection id="event" heightDesk="1000px" heightMob="1000px">
-              <Suspense fallback={<SectionFallback heightDesk="1000px" heightMob="1000px" />}>
-                <EventSection />
-              </Suspense>
-            </LazySection>
-            <LazySection id="rsvp" heightDesk="900px" heightMob="900px">
-              <Suspense fallback={<SectionFallback heightDesk="900px" heightMob="900px" />}>
-                <RsvpSection onWishSubmit={handleAddWish} />
-              </Suspense>
-            </LazySection>
-            <LazySection id="wishes" heightDesk="800px" heightMob="800px">
-              <Suspense fallback={<SectionFallback heightDesk="800px" heightMob="800px" />}>
-                <WishesSection guestWishes={guestWishes} />
-              </Suspense>
-            </LazySection>
-            <LazySection id="gallery" heightDesk="800px" heightMob="800px">
-              <Suspense fallback={<SectionFallback heightDesk="800px" heightMob="800px" />}>
-                <GallerySection />
-              </Suspense>
-            </LazySection>
-            <LazySection id="gift" heightDesk="900px" heightMob="900px">
-              <Suspense fallback={<SectionFallback heightDesk="900px" heightMob="900px" />}>
-                <GiftSection />
-              </Suspense>
-            </LazySection>
-            <LazySection id="closing" heightDesk="900px" heightMob="900px">
-              <Suspense fallback={<SectionFallback heightDesk="900px" heightMob="900px" />}>
-                <ClosingSection />
-              </Suspense>
-            </LazySection>
+            <div id="love-story"><LoveStorySection /></div>
+            <div id="countdown"><CountdownSection /></div>
+            <div id="event"><EventSection /></div>
+            <div id="rsvp"><RsvpSection onWishSubmit={handleAddWish} /></div>
+            <div id="live-stream"><LiveStreamSection /></div>
+            <div id="wishes"><WishesSection guestWishes={guestWishes} /></div>
+            <div id="gallery"><GallerySection /></div>
+            <div id="gift"><GiftSection /></div>
+            <div id="closing"><ClosingSection /></div>
           </>
         )}
       </main>

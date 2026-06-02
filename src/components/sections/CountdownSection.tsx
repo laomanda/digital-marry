@@ -86,6 +86,7 @@ export default function CountdownSection() {
     <section
       id="countdown"
       data-section
+      data-global-reveal="true"
       data-theme="dark"
       className={`relative overflow-hidden py-20 md:py-32 lg:py-40 transition-colors duration-500 ${sectionBgClass}`}
     >
@@ -241,3 +242,4 @@ export default function CountdownSection() {
     </section>
   );
 }
+

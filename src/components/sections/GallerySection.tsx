@@ -82,24 +82,26 @@ export default function GallerySection() {
           <div className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r transition-colors duration-500 border-[#F5F5F0]/20" aria-hidden="true" />
 
           <div className="relative z-10 mx-auto flex max-w-[620px] flex-col items-center">
-            <span className={`mb-5 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
+            <span data-animate="title" className={`mb-5 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
               Galeri
             </span>
-            <h2 className={`mb-6 font-athene text-[48px] leading-[1.02] md:text-[78px] ${textClass}`}>
+            <h2 data-animate="title" className={`mb-6 font-athene text-[48px] leading-[1.02] md:text-[78px] ${textClass}`}>
               Momen Berharga
             </h2>
-            <p className={`mb-9 max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
+            <p data-animate="text" className={`mb-9 max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
               Beberapa potongan cerita yang kami simpan sebagai kenangan.
             </p>
-            <button
-              ref={entranceButtonRef}
-              type="button"
-              onClick={() => setIsGalleryOpen(true)}
-              className={`group inline-flex items-center gap-4 border px-6 py-4 font-mono text-[10px] uppercase transition-colors duration-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 ${textClass} border-[#F5F5F0]/16 hover:border-[#F5F5F0]/45 focus-visible:outline-[#F5F5F0]`}
-            >
-              <span>Masuk Galeri</span>
-              <ArrowRight size={15} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-            </button>
+            <div data-animate="fadeUp">
+              <button
+                ref={entranceButtonRef}
+                type="button"
+                onClick={() => setIsGalleryOpen(true)}
+                className={`group inline-flex items-center gap-4 border px-6 py-4 font-mono text-[10px] uppercase transition-colors duration-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 ${textClass} border-[#F5F5F0]/16 hover:border-[#F5F5F0]/45 focus-visible:outline-[#F5F5F0]`}
+              >
+                <span>Masuk Galeri</span>
+                <ArrowRight size={15} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -154,3 +156,5 @@ export default function GallerySection() {
     </section>
   )
 }
+
+

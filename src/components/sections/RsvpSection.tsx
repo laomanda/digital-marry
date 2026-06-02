@@ -120,7 +120,8 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
   return (
     <section 
       id="rsvp" 
-      data-section 
+      data-section
+      data-global-reveal="true" 
       data-theme="dark" 
       className={`overflow-hidden py-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
     >
@@ -347,3 +348,4 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
     </section>
   )
 }
+

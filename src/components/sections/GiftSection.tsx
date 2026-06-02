@@ -248,6 +248,7 @@ export default function GiftSection() {
     <section
       id="gift"
       data-section
+      data-global-reveal="true"
       data-theme="dark"
       className={`relative overflow-hidden pb-28 pt-24 transition-colors duration-500 md:pb-36 md:pt-32 ${sectionClass}`}
     >
@@ -446,3 +447,4 @@ export default function GiftSection() {
     </section>
   )
 }
+

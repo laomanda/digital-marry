@@ -3,7 +3,7 @@ import { gsap } from '../lib/gsap'
 import { motionPresets } from '../lib/motionPresets'
 import { useReducedMotionSafe } from './useReducedMotionSafe'
 
-export function useGlobalReveal() {
+export function useGlobalReveal(deps: React.DependencyList = []) {
   const { shouldReduceMotion } = useReducedMotionSafe()
 
   useEffect(() => {
@@ -91,5 +91,5 @@ export function useGlobalReveal() {
     })
 
     return () => ctx.revert()
-  }, [shouldReduceMotion])
+  }, [shouldReduceMotion, ...deps])
 }
