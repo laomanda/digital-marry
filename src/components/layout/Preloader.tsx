@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
@@ -18,10 +18,7 @@ const getLoadingLabel = (progress: number) => {
 
 export default function Preloader({ onComplete }: PreloaderProps) {
   const [isExiting, setIsExiting] = useState(false)
-  const logoFillRef = useRef<HTMLImageElement | null>(null)
-  const progressBarRef = useRef<HTMLSpanElement | null>(null)
-  const progressTextRef = useRef<HTMLSpanElement | null>(null)
-  const labelRef = useRef<HTMLSpanElement | null>(null)
+  const [progress, setProgress] = useState(0)
   const { isMobile, shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe()
 
   const rootClasses = 'bg-[#050505] text-[#F5F5F0]'
@@ -49,95 +46,43 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     document.documentElement.style.overflow = 'hidden'
     document.body.style.touchAction = 'none'
 
-    let startTime: number | null = null
-    let animationFrameId = 0
+    const startTime = Date.now()
     let holdTimeout: ReturnType<typeof setTimeout> | null = null
     let exitTimeout: ReturnType<typeof setTimeout> | null = null
-    let lastIntegerProgress = -1
-    let lastLabel = ''
+    let intervalId: ReturnType<typeof setInterval> | null = null
 
-    const setProgressDom = (value: number) => {
-      const clamped = Math.min(100, Math.max(0, value))
-      const ratio = clamped / 100
-      const integerProgress = Math.floor(clamped)
-
-      if (progressBarRef.current) {
-        progressBarRef.current.style.transform = `scaleX(${ratio})`
+    // Update the progress text reactively
+    const intervalDuration = preloaderDuration / 100
+    intervalId = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const currentProgress = Math.min(100, Math.floor((elapsed / preloaderDuration) * 100))
+      setProgress(currentProgress)
+      
+      if (currentProgress >= 100) {
+        if (intervalId) clearInterval(intervalId)
       }
+    }, intervalDuration)
 
-      if (logoFillRef.current) {
-        if (isLightweightMotion) {
-          logoFillRef.current.style.opacity = String(0.22 + ratio * 0.78)
-          logoFillRef.current.style.transform = `scale(${0.985 + ratio * 0.015})`
-        } else {
-          logoFillRef.current.style.clipPath = `inset(${100 - clamped}% 0 0 0)`
-        }
-      }
-
-      if (integerProgress !== lastIntegerProgress) {
-        lastIntegerProgress = integerProgress
-        if (progressTextRef.current) {
-          progressTextRef.current.textContent = String(integerProgress).padStart(3, '0')
-        }
-
-        const nextLabel = getLoadingLabel(integerProgress)
-        if (nextLabel !== lastLabel) {
-          lastLabel = nextLabel
-          if (labelRef.current) {
-            labelRef.current.textContent = nextLabel
-          }
-        }
-      }
-    }
-
-    const animateLoader = (timestamp: number) => {
-      if (!startTime) startTime = timestamp
-      const elapsed = timestamp - startTime
-      const t = Math.min(elapsed / preloaderDuration, 1)
-      const easedProgress = prefersReducedMotionRuntime
-        ? t
-        : isMobileViewport
-          ? 1 - Math.pow(1 - t, 2.2)
-          : 1 - Math.pow(1 - t, 3.4)
-
-      setProgressDom(easedProgress * 100)
-
-      if (t < 1) {
-        animationFrameId = requestAnimationFrame(animateLoader)
-        return
-      }
-
-      holdTimeout = setTimeout(() => {
-        setIsExiting(true)
-        exitTimeout = setTimeout(() => {
-          document.body.style.overflow = previousBodyOverflow
-          document.documentElement.style.overflow = previousHtmlOverflow
-          document.body.style.touchAction = previousBodyTouchAction
-          onComplete()
-        }, exitDurationMs)
-      }, completedHoldDuration)
-    }
-
-    setProgressDom(0)
-    animationFrameId = requestAnimationFrame(animateLoader)
+    // Wait for animation to finish + custom completed hold duration
+    holdTimeout = setTimeout(() => {
+      setIsExiting(true)
+      exitTimeout = setTimeout(() => {
+        document.body.style.overflow = previousBodyOverflow
+        document.documentElement.style.overflow = previousHtmlOverflow
+        document.body.style.touchAction = previousBodyTouchAction
+        onComplete()
+      }, exitDurationMs)
+    }, preloaderDuration + completedHoldDuration)
 
     return () => {
-      cancelAnimationFrame(animationFrameId)
+      if (intervalId) clearInterval(intervalId)
       if (holdTimeout) clearTimeout(holdTimeout)
       if (exitTimeout) clearTimeout(exitTimeout)
       document.body.style.overflow = previousBodyOverflow
       document.documentElement.style.overflow = previousHtmlOverflow
       document.body.style.touchAction = previousBodyTouchAction
     }
-  }, [
-    completedHoldDuration,
-    exitDurationMs,
-    isLightweightMotion,
-    isMobileViewport,
-    onComplete,
-    prefersReducedMotionRuntime,
-    preloaderDuration,
-  ])
+  }, [completedHoldDuration, exitDurationMs, onComplete, preloaderDuration])
 
   return (
     <div
@@ -147,6 +92,39 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       role="status"
       aria-label="Loading wedding invitation"
     >
+      {/* High-performance hardware-accelerated CSS animations */}
+      <style>
+        {`
+          @keyframes logo-fill-anim {
+            from {
+              opacity: 0.14;
+              transform: scale(0.985);
+            }
+            to {
+              opacity: 0.9;
+              transform: scale(1.008);
+            }
+          }
+
+          @keyframes progress-bar-anim {
+            from {
+              transform: scaleX(0);
+            }
+            to {
+              transform: scaleX(1);
+            }
+          }
+
+          .animate-logo-fill {
+            animation: logo-fill-anim ${preloaderDuration}ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          }
+
+          .animate-progress-bar {
+            animation: progress-bar-anim ${preloaderDuration}ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          }
+        `}
+      </style>
+
       <div className={`pointer-events-none absolute inset-0 z-0 opacity-80 transition-colors duration-500 ${vignetteClass}`} aria-hidden="true" />
 
       <div className="absolute right-6 top-7 z-10 overflow-hidden md:right-12 md:top-12">
@@ -179,17 +157,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           />
 
           <img
-            ref={logoFillRef}
             src={logo}
             alt="Wedding logo"
             width="400"
             height="400"
             fetchPriority="high"
             decoding="async"
-            className="pointer-events-none relative h-full w-full select-none object-contain opacity-90"
+            className="pointer-events-none relative h-full w-full select-none object-contain animate-logo-fill"
             style={{
-              clipPath: isLightweightMotion ? 'none' : 'inset(100% 0 0 0)',
-              transform: 'scale(0.985)',
               transformOrigin: 'center center',
             }}
           />
@@ -197,8 +172,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
         <div className="mt-8 h-px w-[min(220px,56vw)] overflow-hidden bg-[#F5F5F0]/10 md:mt-10">
           <span
-            ref={progressBarRef}
-            className="block h-full origin-left scale-x-0 bg-[#F5F5F0]/80"
+            className="block h-full origin-left scale-x-0 bg-[#F5F5F0]/80 animate-progress-bar"
             aria-hidden="true"
           />
         </div>
@@ -213,20 +187,18 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         >
           <div className="flex items-baseline gap-2">
             <span
-              ref={progressTextRef}
               className={`font-serif text-4xl font-light italic tracking-widest tabular-nums lining-nums transition-colors duration-500 md:text-5xl lg:text-6xl ${progressTextClass}`}
             >
-              000
+              {String(progress).padStart(3, '0')}
             </span>
             <span className={`font-serif text-lg italic transition-colors duration-500 md:text-xl ${mutedTextClass}`}>%</span>
           </div>
         </motion.div>
 
         <span
-          ref={labelRef}
           className={`block min-h-[16px] whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.42em] transition-colors duration-500 md:text-[9px] ${mutedTextClass}`}
         >
-          Initializing
+          {getLoadingLabel(progress)}
         </span>
       </div>
     </div>
