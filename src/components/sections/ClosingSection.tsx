@@ -29,10 +29,10 @@ export default function ClosingSection() {
         data-aos="fade-up"
         data-aos-duration="1000"
       >
-        <h2 className="font-athene text-[34px] leading-[1.15] md:text-[56px] lg:text-[72px] uppercase tracking-wide">
-          Dengan Penuh Rasa Syukur<br />
-          Atas Kehadiran Dan<br />
-          Doa Restu Anda
+        <h2 className="font-athene text-[5.5vw] sm:text-[34px] leading-[1.15] md:text-[56px] lg:text-[72px] uppercase tracking-wide">
+          <span className="whitespace-nowrap">Dengan Penuh Rasa Syukur</span><br />
+          <span className="whitespace-nowrap">Atas Kehadiran Dan</span><br />
+          <span className="whitespace-nowrap">Doa Restu Anda</span>
         </h2>
         <p className="max-w-[600px] font-montserrat text-[13px] md:text-[15px] leading-relaxed text-[#F5F5F0]/90">
           Kami tidak sabar untuk berbagi momen spesial ini bersama Anda. Kehadiran Anda akan membuat hari kami menjadi lebih bermakna.
