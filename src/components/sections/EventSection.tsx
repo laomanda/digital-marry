@@ -41,7 +41,7 @@ interface MobileEventLayoutProps {
 
 function MobileEventLayout({ events }: MobileEventLayoutProps) {
   return (
-    <div className="w-full max-w-[540px] mx-auto px-4 py-8 lg:hidden">
+    <div className="w-full max-w-[540px] mx-auto px-4 pt-8 pb-0 lg:hidden">
       {events.map((event, index) => {
         const { dayName, day, month, year } = parseDate(event.date)
         const isAkad = event.id === 'akad'
@@ -549,7 +549,7 @@ const EventSection = memo(function EventSection() {
       id="event"
       data-section
       data-theme="dark"
-      className="relative overflow-hidden bg-[#050505] py-24 text-[#F5F5F0] transition-colors duration-500 md:py-32 lg:py-24"
+      className="relative overflow-hidden bg-[#050505] pt-24 pb-4 text-[#F5F5F0] transition-colors duration-500 md:py-32 lg:py-24"
     >
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
         {/* Mobile Background */}
