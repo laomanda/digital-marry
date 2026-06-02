@@ -281,10 +281,10 @@ export function LoveStorySection() {
 
       <Container>
         {/* Cinematic title image before the story flow */}
-        <div className="love-feature relative z-10 mx-auto mb-7 flex w-[calc(100vw-28px)] max-w-[1180px] flex-col items-center px-0 sm:mb-9 md:mb-16 lg:mb-24">
+        <div className="love-feature relative z-10 mx-auto mb-7 flex w-[calc(100vw-28px)] max-w-[1320px] flex-col items-center px-0 sm:mb-9 md:mb-16 lg:mb-24">
           <div className="love-feature-hline mx-auto mb-5 h-px w-24 bg-gradient-to-r from-transparent via-[#F5F5F0]/28 to-transparent md:mb-7 md:w-40" aria-hidden="true" />
           <div className="group relative mx-auto w-full overflow-visible">
-            <div className="love-feature-image relative mx-auto aspect-[869/599] w-full overflow-visible will-change-transform transform-gpu">
+            <div className="love-feature-image relative mx-auto aspect-[869/599] w-full max-w-[340px] sm:max-w-[420px] md:max-w-[640px] lg:max-w-[720px] overflow-hidden rounded-[4px] will-change-transform transform-gpu">
               <img
                 src={loveStoryFeatureImage}
                 alt="Jalan Menyatunya Dua Hati"
@@ -293,7 +293,7 @@ export function LoveStorySection() {
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
-                className="absolute inset-0 h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.008] motion-reduce:transition-none"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.025] motion-reduce:transition-none"
               />
             </div>
           </div>
