@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { animate } from 'animejs'
-import { gsap, ScrollTrigger } from '../../lib/gsap'
+import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import heroImageLocal from '../../assets/lainnya/foto/hero-section.webp'
@@ -37,10 +36,10 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
   const contentRef = useRef<HTMLDivElement>(null)
   const nameRef = useRef<HTMLHeadingElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
-  const { shouldReduceMotion } = useReducedMotionSafe()
+  const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe()
   const overlayIntroOpacity = 0.15
   const overlayInitialOpacity = 0.45
-  const overlayScrollOpacity = 0.35
+  const overlayScrollOpacity = 0.28
 
   const rootClass = 'bg-[#050505]'
   const textClass = 'text-[#F5F5F0]'
@@ -86,43 +85,39 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
         return
       }
 
-      gsap.set(bgRef.current, { x: 0, y: 0 })
-      gsap.set(bgScale, { opacity: 1, scale: 1.12, y: 0 })
+      gsap.set(bgRef.current, { x: 0, y: 0, force3D: true })
+      gsap.set(bgScale, { opacity: 1, scale: shouldReduceHeavyMotion ? 1 : 1.055, y: 0, force3D: true })
       gsap.set(overlayRef.current, { opacity: overlayInitialOpacity })
-      gsap.set(contentRef.current, { opacity: 1, y: 0 })
-      if (animatedElements.length) gsap.set(animatedElements, { opacity: 0, y: 18 })
+      gsap.set(contentRef.current, { opacity: 1, y: 0, force3D: true })
+      if (animatedElements.length) gsap.set(animatedElements, { opacity: 0, y: 18, force3D: true })
       if (lines.length) gsap.set(lines, { opacity: 0, scaleX: 0, transformOrigin: 'left center' })
-      if (chars.length) gsap.set(chars, { opacity: 0, y: 40 })
-      if (scrollIndicator) gsap.set(scrollIndicator, { opacity: 0, y: 12 })
+      if (chars.length) gsap.set(chars, { opacity: 0, y: 24, force3D: true })
+      if (scrollIndicator) gsap.set(scrollIndicator, { opacity: 0, y: 10, force3D: true })
 
-      const createScrollTimeline = () => {
-        if (!isActive || !bgScale || !contentRef.current || !overlayRef.current) return
-
+      if (!shouldReduceHeavyMotion && bgScale && contentRef.current && overlayRef.current) {
         scrollTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: root,
             start: 'top top',
             end: 'bottom top',
-            scrub: 0.9,
+            scrub: 0.45,
+            invalidateOnRefresh: true,
           },
         })
 
         scrollTimeline
-          .to(bgScale, { scale: 1.08, y: 72, ease: 'none' }, 0)
-          .to(contentRef.current, { opacity: 0.08, y: -56, ease: 'none' }, 0)
+          .to(bgScale, { scale: 1.025, y: 34, ease: 'none', force3D: true }, 0)
+          .to(contentRef.current, { opacity: 0.22, y: -24, ease: 'none', force3D: true }, 0)
           .to(overlayRef.current, { opacity: overlayScrollOpacity, ease: 'none' }, 0)
-
-        ScrollTrigger.refresh()
       }
 
       const intro = gsap.timeline({
         delay: 0.16,
-        onComplete: createScrollTimeline,
       })
 
       intro
-        .to(bgScale, { scale: 1, duration: 2.35, ease: 'power3.out' }, 0)
-        .to(overlayRef.current, { opacity: overlayIntroOpacity, duration: 1.8, ease: 'power2.out' }, 0.08)
+        .to(bgScale, { scale: 1, duration: shouldReduceHeavyMotion ? 0.85 : 1.45, ease: 'power3.out', force3D: true }, 0)
+        .to(overlayRef.current, { opacity: overlayIntroOpacity, duration: 1.0, ease: 'power2.out' }, 0.06)
 
       if (lines.length) {
         intro.to(
@@ -130,11 +125,11 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
           {
             opacity: 1,
             scaleX: 1,
-            duration: 0.9,
-            stagger: 0.12,
+            duration: 0.65,
+            stagger: 0.08,
             ease: 'power2.out',
           },
-          0.48,
+          0.36,
         )
       }
 
@@ -144,43 +139,56 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
           {
             opacity: 1,
             y: 0,
-            duration: 0.78,
-            stagger: 0.1,
+            duration: 0.58,
+            stagger: 0.08,
             ease: 'power3.out',
+            force3D: true,
           },
-          0.68,
+          0.52,
         )
       }
 
-      intro.call(
-        () => {
-          if (!chars.length) return
-
-          animate(chars, {
-            opacity: [0, 1],
-            translateY: [40, 0],
-            duration: 950,
-            delay: (_el: Element, index: number) => index * 34,
-            ease: 'outExpo',
-          })
-        },
-        [],
-        0.96,
-      )
-
-      if (scrollIndicator) {
-        intro.to(scrollIndicator, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 2.05)
+      if (chars.length) {
+        intro.to(
+          chars,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.026,
+            ease: 'power3.out',
+            force3D: true,
+          },
+          0.72,
+        )
       }
 
+      if (scrollIndicator) {
+        intro.to(scrollIndicator, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', force3D: true }, 1.42)
+      }
+
+      intro.call(() => {
+        if (!isActive) return
+        if (shouldReduceHeavyMotion && contentRef.current) {
+          gsap.set(contentRef.current, { clearProps: 'willChange' })
+        }
+      })
+
       const canUsePointerDepth =
-        window.matchMedia('(hover: hover) and (pointer: fine)').matches && bgRef.current
+        !shouldReduceHeavyMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches && bgRef.current
 
       if (canUsePointerDepth && bgRef.current) {
-        const moveX = gsap.quickTo(bgRef.current, 'x', { duration: 0.75, ease: 'power3.out' })
-        const moveY = gsap.quickTo(bgRef.current, 'y', { duration: 0.75, ease: 'power3.out' })
-        const maxDepth = 12
+        const moveX = gsap.quickTo(bgRef.current, 'x', { duration: 0.55, ease: 'power3.out' })
+        const moveY = gsap.quickTo(bgRef.current, 'y', { duration: 0.55, ease: 'power3.out' })
+        const maxDepth = 7
+        let pointerFrame = 0
+        let latestPointer: PointerEvent | null = null
 
-        const handlePointerMove = (event: PointerEvent) => {
+        const updatePointerDepth = () => {
+          pointerFrame = 0
+          const event = latestPointer
+          if (!event) return
+
           const rect = root.getBoundingClientRect()
           if (rect.bottom < 0 || rect.top > window.innerHeight) return
 
@@ -191,7 +199,17 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
           moveY(y)
         }
 
+        const handlePointerMove = (event: PointerEvent) => {
+          latestPointer = event
+          if (!pointerFrame) pointerFrame = window.requestAnimationFrame(updatePointerDepth)
+        }
+
         const resetPointerDepth = () => {
+          latestPointer = null
+          if (pointerFrame) {
+            window.cancelAnimationFrame(pointerFrame)
+            pointerFrame = 0
+          }
           moveX(0)
           moveY(0)
         }
@@ -200,6 +218,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
         root.addEventListener('pointerleave', resetPointerDepth)
 
         cleanupPointerDepth = () => {
+          resetPointerDepth()
           window.removeEventListener('pointermove', handlePointerMove)
           root.removeEventListener('pointerleave', resetPointerDepth)
         }
@@ -224,7 +243,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
       scrollTimeline?.kill()
       ctx.revert()
     }
-  }, [isInvitationOpen, shouldReduceMotion])
+  }, [isInvitationOpen, shouldReduceMotion, shouldReduceHeavyMotion])
 
   return (
     <section
