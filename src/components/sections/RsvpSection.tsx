@@ -121,13 +121,17 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
     <section 
       id="rsvp" 
       data-section
-      data-global-reveal="true" 
       data-theme="dark" 
       className={`overflow-hidden pt-12 pb-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
     >
       <div className="container-base mx-auto max-w-6xl">
         <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
-          <div className="flex flex-col lg:sticky lg:top-28" data-animate="title">
+          <div
+            className="flex flex-col lg:sticky lg:top-28"
+            data-aos="fade-right"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+          >
             <div className="mb-8 h-12 w-px bg-[#F5F5F0]/15" aria-hidden="true" />
             <span className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
               RSVP
@@ -146,7 +150,13 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
             </div>
           </div>
 
-          <div data-animate="card" className="group relative">
+          <div
+            className="group relative"
+            data-aos="fade-left"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+            data-aos-delay="80"
+          >
             <div className="absolute inset-0 border transition-colors duration-500 border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.032] group-hover:border-[#F5F5F0]/20" aria-hidden="true" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br via-transparent to-transparent opacity-80 from-[#F5F5F0]/[0.055]" aria-hidden="true" />
             <div className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t transition-colors duration-500 border-[#F5F5F0]/35" aria-hidden="true" />

@@ -248,7 +248,6 @@ export default function GiftSection() {
     <section
       id="gift"
       data-section
-      data-global-reveal="true"
       data-theme="dark"
       className={`relative overflow-hidden pb-28 pt-24 transition-colors duration-500 md:pb-36 md:pt-32 ${sectionClass}`}
     >
@@ -257,17 +256,21 @@ export default function GiftSection() {
       </div>
 
       <div className="container-base relative z-10 mx-auto max-w-[1180px]">
-        <header className="mx-auto max-w-2xl text-center">
-          <span data-animate="text" className={`mb-4 block font-mono text-[10px] uppercase tracking-[0.38em] transition-colors duration-500 ${mutedClass}`}>
+        <header
+          className="mx-auto max-w-2xl text-center"
+          data-aos="fade-up"
+          data-aos-duration="700"
+          data-aos-easing="ease-out-cubic"
+        >
+          <span className={`mb-4 block font-mono text-[10px] uppercase tracking-[0.38em] transition-colors duration-500 ${mutedClass}`}>
             Hadiah
           </span>
           <h2
-            data-animate="title"
             className={`font-athene text-[46px] leading-[1.02] md:text-[78px] ${textClass}`}
           >
             Amplop Digital
           </h2>
-          <p data-animate="text" className={`mx-auto mt-6 max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
+          <p className={`mx-auto mt-6 max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
             Doa dan kehadiran Anda adalah hadiah terbaik bagi kami.
           </p>
         </header>
@@ -275,7 +278,13 @@ export default function GiftSection() {
         <div className="relative mx-auto mt-14 grid max-w-6xl items-center gap-8 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(360px,440px)] lg:gap-14">
           <div className="pointer-events-none absolute left-[48%] top-1/2 hidden h-px w-20 lg:block transition-colors duration-500 bg-[#F5F5F0]/12" aria-hidden="true" />
 
-          <div data-animate="card" className="relative flex min-h-[320px] flex-col items-center justify-center py-12 sm:min-h-[380px]">
+          <div
+            className="relative flex min-h-[320px] flex-col items-center justify-center py-12 sm:min-h-[380px]"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+            data-aos-delay="80"
+          >
             <Folder
               color="#CFCAC0"
               size={isMobile ? 1.18 : 1.68}
@@ -298,7 +307,13 @@ export default function GiftSection() {
             </p>
           </div>
 
-          <div data-animate="card" className="relative">
+          <div
+            className="relative"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+            data-aos-delay="120"
+          >
             <AnimatePresence mode="wait">
               {selectedGift ? (
                 <motion.div

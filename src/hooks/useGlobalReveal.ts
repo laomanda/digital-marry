@@ -65,8 +65,7 @@ export function useGlobalReveal(deps: React.DependencyList = []) {
           scrollTrigger: {
             trigger: root,
             start: 'top 82%',
-            once: true,
-            toggleActions: 'play none none none',
+            toggleActions: 'play reverse play reverse',
           },
         })
 

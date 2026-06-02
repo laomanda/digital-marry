@@ -9,30 +9,34 @@ export default function LiveStreamSection() {
     <section 
       id="live-stream" 
       data-section
-      data-global-reveal="true" 
       data-theme="dark" 
       className={`relative overflow-hidden py-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
     >
       <div className="absolute left-1/2 top-0 h-px w-[min(520px,72vw)] -translate-x-1/2 bg-[#F5F5F0]/[0.06]" />
       
-      <div className="container-base mx-auto max-w-4xl text-center flex flex-col items-center relative z-10">
-        <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-full border transition-colors duration-500 border-[#F5F5F0]/15 bg-[#F5F5F0]/[0.02]" data-animate="title">
+      <div
+        className="container-base mx-auto max-w-4xl text-center flex flex-col items-center relative z-10"
+        data-aos="fade-up"
+        data-aos-duration="700"
+        data-aos-easing="ease-out-cubic"
+      >
+        <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-full border transition-colors duration-500 border-[#F5F5F0]/15 bg-[#F5F5F0]/[0.02]">
           <Youtube size={28} className={textClass} strokeWidth={1.2} aria-hidden="true" />
         </div>
         
-        <span className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`} data-animate="title">
+        <span className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
           Virtual Wedding
         </span>
         
-        <h2 className={`mb-6 font-athene text-[44px] leading-[1.02] md:text-[56px] ${textClass}`} data-animate="title">
+        <h2 className={`mb-6 font-athene text-[44px] leading-[1.02] md:text-[56px] ${textClass}`}>
           Live Streaming
         </h2>
         
-        <p className={`mb-10 max-w-xl mx-auto font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`} data-animate="title">
+        <p className={`mb-10 max-w-xl mx-auto font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
           Bagi keluarga dan sahabat yang tidak dapat hadir secara langsung, kami mengundang Anda untuk bergabung secara virtual dalam momen bahagia kami.
         </p>
 
-        <div data-animate="title">
+        <div>
           <a
             href="https://youtube.com" 
             target="_blank"

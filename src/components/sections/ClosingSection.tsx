@@ -10,7 +10,6 @@ export default function ClosingSection() {
     <section
       id="closing"
       data-section
-      data-global-reveal="true"
       data-theme="dark"
       data-wow="true"
       className="relative -mt-px flex min-h-screen w-full flex-col justify-end overflow-hidden bg-[#050505] px-6 pb-32 pt-32 text-[#F5F5F0] transition-colors duration-500 md:px-12 md:pb-40"
@@ -36,21 +35,32 @@ export default function ClosingSection() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-28 bg-gradient-to-b from-[#050505] via-[#050505]/54 to-transparent md:h-36" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto flex min-h-[60vh] w-full max-w-[1400px] flex-col justify-between gap-24">
-        <div className="flex flex-col items-center gap-6 text-center md:ml-auto md:mr-12 md:max-w-[600px] md:items-start md:text-left">
-          <span data-animate="title" className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#A4A4A4] transition-colors duration-500 md:text-[10px]">
+        <div
+          className="flex flex-col items-center gap-6 text-center md:ml-auto md:mr-12 md:max-w-[600px] md:items-start md:text-left"
+          data-aos="fade-up"
+          data-aos-duration="700"
+          data-aos-easing="ease-out-cubic"
+        >
+          <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#A4A4A4] transition-colors duration-500 md:text-[10px]">
             Terima Kasih
           </span>
 
-          <p data-animate="title" className="font-montserrat text-[19px] font-semibold leading-relaxed text-[#F5F5F0] md:text-[26px]">
+          <p className="font-montserrat text-[19px] font-semibold leading-relaxed text-[#F5F5F0] md:text-[26px]">
             &ldquo;{weddingData.closingQuote.text}&rdquo;
           </p>
 
-          <p data-animate="title" className="mt-1 font-montserrat text-[11px] font-semibold uppercase tracking-[0.3em] text-[#A4A4A4] transition-colors duration-500 md:text-[12px]">
+          <p className="mt-1 font-montserrat text-[11px] font-semibold uppercase tracking-[0.3em] text-[#A4A4A4] transition-colors duration-500 md:text-[12px]">
             - {weddingData.closingQuote.author}
           </p>
         </div>
 
-        <div className="mt-auto flex flex-col items-center gap-8 text-center md:items-start md:text-left">
+        <div
+          className="mt-auto flex flex-col items-center gap-8 text-center md:items-start md:text-left"
+          data-aos="fade-up"
+          data-aos-duration="700"
+          data-aos-easing="ease-out-cubic"
+          data-aos-delay="80"
+        >
           <h2
             className="whitespace-nowrap font-athene text-[#F5F5F0]"
             style={{

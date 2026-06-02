@@ -191,34 +191,57 @@ export default function WishesSection({ guestWishes = [] }: WishesSectionProps) 
       </style>
 
       <div className="container-base">
-        <div className="mx-auto mb-14 flex max-w-[680px] flex-col items-center text-center md:mb-16">
-          <div data-animate="line" className="mb-8 h-12 w-px transition-colors duration-500 bg-[#F5F5F0]/15" aria-hidden="true" />
-          <span data-animate="text" className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
+        <div
+          className="mx-auto mb-14 flex max-w-[680px] flex-col items-center text-center md:mb-16"
+          data-aos="fade-up"
+          data-aos-duration="700"
+          data-aos-easing="ease-out-cubic"
+        >
+          <div className="mb-8 h-12 w-px transition-colors duration-500 bg-[#F5F5F0]/15" aria-hidden="true" />
+          <span className={`mb-4 font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}>
             Doa &amp; Ucapan
           </span>
-          <h2 data-animate="title" className={`mb-6 font-athene text-[44px] leading-[1.02] md:text-[64px] ${textClass}`}>
+          <h2 className={`mb-6 font-athene text-[44px] leading-[1.02] md:text-[64px] ${textClass}`}>
             Ucapan dari Mereka
           </h2>
-          <p data-animate="text" className={`max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
+          <p className={`max-w-md font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
             Terima kasih atas setiap doa dan ucapan yang telah diberikan.
           </p>
         </div>
 
         {allWishes.length === 0 ? (
-          <div className="mx-auto max-w-[420px] border p-8 text-center transition-colors duration-500 border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.035]">
+          <div
+            className="mx-auto max-w-[420px] border p-8 text-center transition-colors duration-500 border-[#F5F5F0]/12 bg-[#F5F5F0]/[0.035]"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+            data-aos-delay="80"
+          >
             <p className={`mb-3 font-athene text-[30px] transition-colors duration-500 ${textClass}`}>Belum ada ucapan.</p>
             <p className={`font-montserrat text-[14px] font-semibold leading-7 transition-colors duration-500 ${mutedClass}`}>
               Jadilah yang pertama mengirim doa untuk kami.
             </p>
           </div>
         ) : shouldReduceMotion ? (
-          <div className="mx-auto flex max-w-[1120px] flex-wrap justify-center gap-4" data-animate="card">
+          <div
+            className="mx-auto flex max-w-[1120px] flex-wrap justify-center gap-4"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+            data-aos-delay="80"
+          >
             {allWishes.map((wish) => (
               <CompactWishCard key={wish.id} wish={wish} />
             ))}
           </div>
         ) : (
-          <div className="relative -mx-4 space-y-4 sm:-mx-8" data-animate="card">
+          <div
+            className="relative -mx-4 space-y-4 sm:-mx-8"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+            data-aos-delay="80"
+          >
             {rows.map((row, rowIndex) => {
               const direction = rowIndex % 2 === 0 ? 'wishes-marquee-left' : 'wishes-marquee-right'
               const duration = rowIndex === 1 ? 82 : rowIndex === 2 ? 94 : 74

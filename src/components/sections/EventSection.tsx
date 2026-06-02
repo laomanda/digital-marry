@@ -48,7 +48,14 @@ function MobileEventLayout({ events }: MobileEventLayoutProps) {
         const title = isAkad ? 'AKAD NIKAH' : 'RESEPSI'
 
         return (
-          <div key={event.id} className="flex flex-col items-center">
+          <div
+            key={event.id}
+            className="flex flex-col items-center"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+            data-aos-delay={index * 80}
+          >
             {/* Event Title */}
             <h3 className="font-athene text-[20px] xs:text-[22px] sm:text-[24px] leading-tight text-[#F5F5F0] tracking-[0.08em] uppercase text-center mb-6 font-medium">
               {title}
@@ -581,7 +588,12 @@ const EventSection = memo(function EventSection() {
 
       <div className="relative z-10">
         <div className="container-base hidden lg:block">
-          <div className="mx-auto flex max-w-[720px] flex-col items-center text-center">
+          <div
+            className="mx-auto flex max-w-[720px] flex-col items-center text-center"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+          >
             <span className="mb-5 block font-mono text-[10px] uppercase text-[#A4A4A4] transition-colors duration-500">
               Rangkaian Acara
             </span>

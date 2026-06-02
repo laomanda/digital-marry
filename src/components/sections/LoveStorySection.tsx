@@ -350,7 +350,7 @@ export function LoveStorySection() {
 
                     {/* Story Artwork Card */}
                     <div className="mobile-card relative z-10 w-full pl-[44px] pr-0 sm:pl-[58px]">
-                      <figure className="relative w-full overflow-hidden rounded-[2px] border border-[#F5F5F0]/16 bg-[#050505]/82 p-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.38)] transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_24px_52px_rgba(0,0,0,0.50)] active:scale-[0.99] sm:p-3">
+                      <figure className="relative w-full overflow-hidden rounded-[2px] shadow-[0_18px_40px_rgba(0,0,0,0.38)] transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_24px_52px_rgba(0,0,0,0.50)] active:scale-[0.99]">
                         <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
                           <div 
                             className="absolute top-0 h-full w-[250%]"
@@ -453,7 +453,7 @@ export function LoveStorySection() {
                         }`}
                       >
                         {/* Story Artwork Card */}
-                        <figure className="desktop-card relative w-[min(43vw,460px)] overflow-hidden rounded-[2px] border border-[#F5F5F0]/16 bg-[#050505]/82 p-3 shadow-[0_20px_46px_rgba(0,0,0,0.38)] transition-all duration-500 ease-out group-hover:-translate-y-[6px] group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_28px_64px_rgba(0,0,0,0.52)] xl:w-[min(44vw,580px)] xl:p-3.5 2xl:w-[620px]">
+                        <figure className="desktop-card relative w-[min(43vw,460px)] overflow-hidden rounded-[2px] shadow-[0_20px_46px_rgba(0,0,0,0.38)] transition-all duration-500 ease-out group-hover:-translate-y-[6px] group-hover:shadow-[0_28px_64px_rgba(0,0,0,0.52)] xl:w-[min(44vw,580px)] 2xl:w-[620px]">
                           <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
                             <div 
                               className="absolute top-0 h-full w-[250%]"

@@ -86,27 +86,28 @@ export default function CountdownSection() {
     <section
       id="countdown"
       data-section
-      data-global-reveal="true"
       data-theme="dark"
       className={`relative overflow-hidden py-20 md:py-32 lg:py-40 transition-colors duration-500 ${sectionBgClass}`}
     >
       <Container>
         <div className="relative mx-auto flex w-full max-w-[1080px] flex-col items-center">
-          <div className="mb-10 flex w-full max-w-[720px] flex-col items-center text-center md:mb-16">
+          <div
+            className="mb-10 flex w-full max-w-[720px] flex-col items-center text-center md:mb-16"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+          >
             <span
-              data-animate="text"
               className={`mb-5 block font-mono text-[10px] uppercase transition-colors duration-500 ${mutedClass}`}
             >
               Menuju Hari Bahagia
             </span>
             <h2
-              data-animate="title"
               className={`font-athene text-[40px] leading-[1.05] transition-colors duration-500 md:text-[64px] lg:text-[76px] ${textClass}`}
             >
               {isPast ? 'Hari Bahagia Telah Tiba' : 'Menghitung Hari'}
             </h2>
             <p
-              data-animate="text"
               className={`mt-5 max-w-[520px] font-montserrat text-[15px] font-semibold leading-7 transition-colors duration-500 md:mt-6 md:text-[16px] ${mutedClass}`}
             >
               {isPast
@@ -116,7 +117,10 @@ export default function CountdownSection() {
           </div>
 
           <div
-            data-animate="card"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out-cubic"
+            data-aos-delay="80"
             role="timer"
             aria-label={timerAriaLabel}
             className="relative flex w-full flex-col items-center"

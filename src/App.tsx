@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 import { GuestWish } from './types/wish'
 import { supabase } from './lib/supabase'
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider'
@@ -29,6 +31,21 @@ export default function App() {
   const [isInvitationOpened, setIsInvitationOpened] = useState(false)
   const [isPreloaderDone, setIsPreloaderDone] = useState(false)
   const [guestWishes, setGuestWishes] = useState<GuestWish[]>([])
+
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: 'ease-out-cubic',
+      once: false,
+      mirror: true,
+      offset: 80,
+      delay: 0,
+      anchorPlacement: 'top-bottom',
+      disable: () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    })
+
+    AOS.refreshHard()
+  }, [])
 
   useEffect(() => {
     // Defer Supabase request until invitation is open to prevent render-blocking the critical path
@@ -63,6 +80,7 @@ export default function App() {
       // Small delay to ensure CoverSection exit is completely done and DOM has reflowed
       const timer = setTimeout(() => {
         ScrollTrigger.refresh()
+        AOS.refreshHard()
       }, 150)
       return () => clearTimeout(timer)
     }
