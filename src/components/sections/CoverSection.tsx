@@ -28,6 +28,18 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
   const exitTlRef = useRef<gsap.core.Timeline | null>(null)
   const { shouldReduceMotion } = useReducedMotionSafe()
 
+  const [guestName, setGuestName] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const toParam = params.get('to') || params.get('u') || params.get('guest')
+      if (toParam) {
+        setGuestName(decodeURIComponent(toParam))
+      }
+    }
+  }, [])
+
   // Lock scroll while cover is active
   useScrollLock(!isOpened)
 
@@ -268,6 +280,16 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
               className="mb-4 flex flex-col items-center"
               style={{ opacity: 0 }}
             >
+              {guestName && (
+                <div className="mb-4 flex flex-col items-center">
+                  <p className="font-montserrat text-[10px] uppercase tracking-[0.24em] text-[#F5F2EC]/55 md:text-[11px]">
+                    Kepada Yth. Bapak/Ibu/Saudara/i:
+                  </p>
+                  <p className="mt-2 font-athene text-[22px] font-medium tracking-wide text-[#F5F2EC] drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)] md:text-[25px]">
+                    {guestName}
+                  </p>
+                </div>
+              )}
               <div
                 data-cover-line
                 className={`mt-4 h-px w-full origin-center transition-colors duration-500 ${lineClass}`}

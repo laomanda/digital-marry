@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -80,6 +80,16 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
 
   const attendanceValue = watch('attendance')
   const guestCountValue = watch('guestCount')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const toParam = params.get('to') || params.get('u') || params.get('guest')
+      if (toParam) {
+        setValue('name', decodeURIComponent(toParam))
+      }
+    }
+  }, [setValue])
 
   const onSubmit = async (_data: FormValues) => {
     // Simulate API delay
