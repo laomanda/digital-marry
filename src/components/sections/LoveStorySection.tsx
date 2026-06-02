@@ -291,39 +291,39 @@ export function LoveStorySection() {
 
       <Container>
         {/* Cinematic title image before the story flow */}
-        <div className="love-feature relative z-10 mx-auto mb-16 max-w-[920px] px-2 md:mb-24 lg:mb-32">
-          <div className="love-feature-hline mx-auto mb-7 h-px w-20 bg-gradient-to-r from-transparent via-[#F5F5F0]/28 to-transparent md:w-32" aria-hidden="true" />
-          <div className="group relative mx-auto overflow-hidden">
-            <div className="love-feature-image relative aspect-[4314/2116] overflow-hidden will-change-transform">
+        <div className="love-feature relative z-10 mx-auto mb-7 flex w-[calc(100vw-28px)] max-w-[1180px] flex-col items-center px-0 sm:mb-9 md:mb-16 lg:mb-24">
+          <div className="love-feature-hline mx-auto mb-5 h-px w-24 bg-gradient-to-r from-transparent via-[#F5F5F0]/28 to-transparent md:mb-7 md:w-40" aria-hidden="true" />
+          <div className="group relative mx-auto w-full overflow-visible">
+            <div className="love-feature-image relative mx-auto aspect-[869/599] w-full overflow-visible will-change-transform">
               <img
                 src={loveStoryFeatureImage}
                 alt="Jalan Menyatunya Dua Hati"
-                width={4314}
-                height={2116}
+                width={869}
+                height={599}
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
-                className="absolute inset-0 h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.01] motion-reduce:transition-none"
+                className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_24px_64px_rgba(0,0,0,0.36)] transition-transform duration-700 group-hover:scale-[1.008] motion-reduce:transition-none"
               />
             </div>
           </div>
 
-          <div className="mt-7 flex flex-col items-center" aria-hidden="true">
-            <div className="love-feature-vline h-12 w-px origin-top bg-gradient-to-b from-[#F5F5F0]/26 to-transparent md:h-16" />
-            <div className="mt-2 h-[7px] w-[7px] rounded-full border border-[#F5F5F0]/24 bg-[#F5F5F0]/55 shadow-[0_0_14px_rgba(245,245,240,0.16)]" />
+          <div className="mt-4 flex flex-col items-center md:mt-6" aria-hidden="true">
+            <div className="love-feature-vline h-7 w-px origin-top bg-gradient-to-b from-[#F5F5F0]/26 to-transparent md:h-12" />
+            <div className="mt-1.5 h-[7px] w-[7px] rounded-full border border-[#F5F5F0]/24 bg-[#F5F5F0]/55 shadow-[0_0_14px_rgba(245,245,240,0.16)]" />
           </div>
         </div>
 
         {/* TIMELINE CONTAINER */}
-        <div 
-          className="relative max-w-[1100px] mx-auto w-full z-10"
-          style={{ height: isMobile ? 'auto' : '2600px' }}
+        <div
+          className="relative mx-auto w-full max-w-[1260px] z-10"
+          style={{ height: isMobile ? 'auto' : '2700px' }}
         >
           {isMobile ? (
             /* --- MOBILE TIMELINE (Static CSS, No Scroll State, Lightweight) --- */
-            <div className="mobile-timeline-container relative max-w-[520px] mx-auto w-full flex flex-col gap-10 pt-4 pb-8">
+            <div className="mobile-timeline-container relative mx-auto flex w-full max-w-[680px] flex-col gap-12 pt-0 pb-8 sm:gap-14">
               {/* Static Vertical Line System */}
-              <div className="absolute left-[30px] top-8 bottom-0 w-[2px] -translate-x-1/2 bg-[#F5F5F0]/12" aria-hidden="true">
+              <div className="absolute left-[22px] top-8 bottom-0 w-[2px] -translate-x-1/2 bg-[#F5F5F0]/12 sm:left-[28px]" aria-hidden="true">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-[#F5F5F0]/26 to-transparent" />
                 
               </div>
@@ -333,7 +333,7 @@ export function LoveStorySection() {
                 return (
                   <div key={story.id || i} className="mobile-item relative w-full flex items-start group">
                     {/* Dot with Tick Marks */}
-                    <div className="mobile-dot absolute left-[30px] top-8 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center" aria-hidden="true">
+                    <div className="mobile-dot absolute left-[22px] top-8 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center sm:left-[28px]" aria-hidden="true">
                       {/* Outer Dot */}
                       <div className="w-4 h-4 rounded-full bg-[#111111] border border-[#F5F5F0]/32 shadow-[0_0_0_4px_#111111,0_0_8px_rgba(245,245,240,0.12)] flex items-center justify-center group-hover:border-[#F5F5F0]/60 group-hover:scale-110 group-hover:shadow-[0_0_12px_rgba(245,245,240,0.28),0_0_0_4px_#111111] transition-all duration-500">
                         {/* Inner Dot */}
@@ -343,14 +343,14 @@ export function LoveStorySection() {
                     
                     {/* Horizontal Connector */}
                     <div 
-                      className="mobile-connector absolute left-[30px] top-8 h-[2px] w-[30px] -translate-y-1/2 z-0 opacity-75 group-hover:opacity-100 transition-opacity duration-500" 
+                      className="mobile-connector absolute left-[22px] top-8 h-[2px] w-[24px] -translate-y-1/2 z-0 opacity-75 group-hover:opacity-100 transition-opacity duration-500 sm:left-[28px] sm:w-[30px]"
                       aria-hidden="true"
                       style={{ background: 'linear-gradient(to right, rgba(245,245,240,0.32), rgba(245,245,240,0.14), transparent)' }}
                     />
 
                     {/* Story Artwork Card */}
-                    <div className="mobile-card w-full pl-[60px] pr-3 relative z-10">
-                      <figure className="w-full rounded-[2px] border border-[#F5F5F0]/16 bg-[#050505]/82 p-2 shadow-[0_14px_34px_rgba(0,0,0,0.34)] relative overflow-hidden transition-all duration-500 ease-out group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_20px_42px_rgba(0,0,0,0.46)] group-hover:-translate-y-1 active:scale-[0.99]">
+                    <div className="mobile-card relative z-10 w-full pl-[44px] pr-0 sm:pl-[58px]">
+                      <figure className="relative w-full overflow-hidden rounded-[2px] border border-[#F5F5F0]/16 bg-[#050505]/82 p-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.38)] transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_24px_52px_rgba(0,0,0,0.50)] active:scale-[0.99] sm:p-3">
                         <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
                           <div 
                             className="absolute top-0 h-full w-[250%]"
@@ -449,11 +449,11 @@ export function LoveStorySection() {
                       {/* Content Card Wrapper */}
                       <div
                         className={`desktop-card-wrapper absolute top-1/2 -translate-y-1/2 z-10 ${
-                          node.align === 'right' ? 'left-8 xl:left-12' : 'right-8 xl:right-12'
+                          node.align === 'right' ? 'left-8 xl:left-14' : 'right-8 xl:right-14'
                         }`}
                       >
                         {/* Story Artwork Card */}
-                        <figure className="desktop-card relative w-[360px] overflow-hidden rounded-[2px] border border-[#F5F5F0]/16 bg-[#050505]/82 p-2 shadow-[0_16px_38px_rgba(0,0,0,0.34)] transition-all duration-500 ease-out group-hover:-translate-y-[6px] group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_22px_48px_rgba(0,0,0,0.50)] xl:w-[440px]">
+                        <figure className="desktop-card relative w-[min(43vw,460px)] overflow-hidden rounded-[2px] border border-[#F5F5F0]/16 bg-[#050505]/82 p-3 shadow-[0_20px_46px_rgba(0,0,0,0.38)] transition-all duration-500 ease-out group-hover:-translate-y-[6px] group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_28px_64px_rgba(0,0,0,0.52)] xl:w-[min(44vw,580px)] xl:p-3.5 2xl:w-[620px]">
                           <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
                             <div 
                               className="absolute top-0 h-full w-[250%]"
