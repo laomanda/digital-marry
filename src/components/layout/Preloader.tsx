@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import logo from '../../assets/logo-400.webp'
@@ -17,7 +17,7 @@ const getLoadingLabel = (progress: number) => {
 }
 
 export default function Preloader({ onComplete }: PreloaderProps) {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isExiting, setIsExiting] = useState(false)
   const logoFillRef = useRef<HTMLImageElement | null>(null)
   const progressBarRef = useRef<HTMLSpanElement | null>(null)
   const progressTextRef = useRef<HTMLSpanElement | null>(null)
@@ -108,7 +108,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       }
 
       holdTimeout = setTimeout(() => {
-        setIsVisible(false)
+        setIsExiting(true)
         exitTimeout = setTimeout(() => {
           document.body.style.overflow = previousBodyOverflow
           document.documentElement.style.overflow = previousHtmlOverflow
@@ -140,102 +140,95 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   ])
 
   return (
-    <AnimatePresence>
-      {isVisible && (
+    <div
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden transition-all duration-[480ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${rootClasses} ${
+        isExiting ? 'opacity-0 pointer-events-none' : 'opacity-100'
+      }`}
+      role="status"
+      aria-label="Loading wedding invitation"
+    >
+      <div className={`pointer-events-none absolute inset-0 z-0 opacity-80 transition-colors duration-500 ${vignetteClass}`} aria-hidden="true" />
+
+      <div className="absolute right-6 top-7 z-10 overflow-hidden md:right-12 md:top-12">
         <motion.div
-          className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${rootClasses}`}
-          initial={{ opacity: 1 }}
-          exit={{
-            opacity: 0,
-            transition: { duration: exitDuration, ease: [0.22, 1, 0.36, 1] },
-          }}
-          role="status"
-          aria-label="Loading wedding invitation"
+          initial={isLightweightMotion ? false : { y: '100%', opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.12, duration: 0.55, ease: 'easeOut' }}
+          className={`font-mono text-[9px] uppercase tracking-[0.34em] transition-colors duration-500 md:text-[10px] ${mutedTextClass}`}
         >
-          <div className={`pointer-events-none absolute inset-0 z-0 opacity-80 transition-colors duration-500 ${vignetteClass}`} aria-hidden="true" />
+          {weddingData.wedding.dateFormatted}
+        </motion.div>
+      </div>
 
-          <div className="absolute right-6 top-7 z-10 overflow-hidden md:right-12 md:top-12">
-            <motion.div
-              initial={isLightweightMotion ? false : { y: '100%', opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.12, duration: 0.55, ease: 'easeOut' }}
-              className={`font-mono text-[9px] uppercase tracking-[0.34em] transition-colors duration-500 md:text-[10px] ${mutedTextClass}`}
-            >
-              {weddingData.wedding.dateFormatted}
-            </motion.div>
-          </div>
+      <div className="relative z-10 mt-8 flex w-full flex-1 flex-col items-center justify-center px-6">
+        <motion.div
+          className="relative flex h-auto max-h-[44vh] w-[min(72vw,260px)] items-center justify-center md:w-[min(65vw,420px)]"
+          initial={isLightweightMotion ? false : { scale: 0.96, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: isLightweightMotion ? 0 : 0.9, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <img
+            src={logo}
+            alt=""
+            width="400"
+            height="400"
+            fetchPriority="high"
+            decoding="async"
+            className="pointer-events-none absolute h-full w-full select-none object-contain opacity-14 grayscale"
+            aria-hidden="true"
+          />
 
-          <div className="relative z-10 mt-8 flex w-full flex-1 flex-col items-center justify-center px-6">
-            <motion.div
-              className="relative flex h-auto max-h-[44vh] w-[min(72vw,260px)] items-center justify-center md:w-[min(65vw,420px)]"
-              initial={isLightweightMotion ? false : { scale: 0.96, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: isLightweightMotion ? 0 : 0.9, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <img
-                src={logo}
-                alt=""
-                width="400"
-                height="400"
-                fetchPriority="high"
-                decoding="async"
-                className="pointer-events-none absolute h-full w-full select-none object-contain opacity-14 grayscale"
-                aria-hidden="true"
-              />
+          <img
+            ref={logoFillRef}
+            src={logo}
+            alt="Wedding logo"
+            width="400"
+            height="400"
+            fetchPriority="high"
+            decoding="async"
+            className="pointer-events-none relative h-full w-full select-none object-contain opacity-90"
+            style={{
+              clipPath: isLightweightMotion ? 'none' : 'inset(100% 0 0 0)',
+              transform: 'scale(0.985)',
+              transformOrigin: 'center center',
+            }}
+          />
+        </motion.div>
 
-              <img
-                ref={logoFillRef}
-                src={logo}
-                alt="Wedding logo"
-                width="400"
-                height="400"
-                fetchPriority="high"
-                decoding="async"
-                className="pointer-events-none relative h-full w-full select-none object-contain opacity-25"
-                style={{
-                  clipPath: isLightweightMotion ? 'none' : 'inset(100% 0 0 0)',
-                  transform: 'scale(0.985)',
-                  transformOrigin: 'center center',
-                }}
-              />
-            </motion.div>
+        <div className="mt-8 h-px w-[min(220px,56vw)] overflow-hidden bg-[#F5F5F0]/10 md:mt-10">
+          <span
+            ref={progressBarRef}
+            className="block h-full origin-left scale-x-0 bg-[#F5F5F0]/80"
+            aria-hidden="true"
+          />
+        </div>
+      </div>
 
-            <div className="mt-8 h-px w-[min(220px,56vw)] overflow-hidden bg-[#F5F5F0]/10 md:mt-10">
-              <span
-                ref={progressBarRef}
-                className="block h-full origin-left scale-x-0 bg-[#F5F5F0]/80"
-                aria-hidden="true"
-              />
-            </div>
-          </div>
-
-          <div className="absolute bottom-10 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col items-center gap-5 md:bottom-16">
-            <motion.div
-              className="flex flex-col items-center gap-2"
-              initial={isLightweightMotion ? false : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.18, duration: 0.55, ease: 'easeOut' }}
-            >
-              <div className="flex items-baseline gap-2">
-                <span
-                  ref={progressTextRef}
-                  className={`font-serif text-4xl font-light italic tracking-widest tabular-nums lining-nums transition-colors duration-500 md:text-5xl lg:text-6xl ${progressTextClass}`}
-                >
-                  000
-                </span>
-                <span className={`font-serif text-lg italic transition-colors duration-500 md:text-xl ${mutedTextClass}`}>%</span>
-              </div>
-            </motion.div>
-
+      <div className="absolute bottom-10 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col items-center gap-5 md:bottom-16">
+        <motion.div
+          className="flex flex-col items-center gap-2"
+          initial={isLightweightMotion ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18, duration: 0.55, ease: 'easeOut' }}
+        >
+          <div className="flex items-baseline gap-2">
             <span
-              ref={labelRef}
-              className={`block min-h-[16px] whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.42em] transition-colors duration-500 md:text-[9px] ${mutedTextClass}`}
+              ref={progressTextRef}
+              className={`font-serif text-4xl font-light italic tracking-widest tabular-nums lining-nums transition-colors duration-500 md:text-5xl lg:text-6xl ${progressTextClass}`}
             >
-              Initializing
+              000
             </span>
+            <span className={`font-serif text-lg italic transition-colors duration-500 md:text-xl ${mutedTextClass}`}>%</span>
           </div>
         </motion.div>
-      )}
-    </AnimatePresence>
+
+        <span
+          ref={labelRef}
+          className={`block min-h-[16px] whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.42em] transition-colors duration-500 md:text-[9px] ${mutedTextClass}`}
+        >
+          Initializing
+        </span>
+      </div>
+    </div>
   )
 }
