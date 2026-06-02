@@ -6,8 +6,6 @@ import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import { Container } from '../ui/Container'
 
-
-
 /* ─── Editorial Heart SVG ─── */
 const HEART_D =
   'M60 108 C60 108 8 78 8 38 C8 17.5 22 4 38 4 C49 4 56.5 11 60 18 C63.5 11 71 4 82 4 C98 4 112 17.5 112 38 C112 78 60 108 60 108Z'

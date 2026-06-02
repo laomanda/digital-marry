@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { gsap, ScrollTrigger } from '../../lib/gsap'
+import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { Container } from '../ui/Container'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
+import quoteBackground from '../../assets/lainnya/foto/galeri-6.webp'
 
 function QuoteWords({ text }: { text: string }) {
   return (
@@ -30,7 +31,7 @@ export function QuoteSection() {
 
   const sectionClass = 'bg-[#050505] text-[#F5F5F0]'
   const textClass = 'text-[#F5F5F0]'
-  const mutedClass = 'text-[rgba(245,245,240,0.58)]'
+  const mutedClass = 'text-[rgba(245,245,240,0.68)]'
   const lineStrongClass = 'bg-[rgba(245,245,240,0.15)]'
   const lineSoftClass = 'bg-[rgba(245,245,240,0.10)]'
   const decorClass = 'text-[#F5F5F0]/35'
@@ -49,7 +50,7 @@ export function QuoteSection() {
 
       gsap.set(markRef.current, { opacity: 0.04, scale: 1, rotate: 0 })
 
-      if (shouldReduceMotion) {
+      if (shouldReduceMotion || shouldReduceHeavyMotion) {
         gsap.set(contentElement, {
           opacity: 1,
           y: 0,
@@ -57,8 +58,9 @@ export function QuoteSection() {
           rotate: 0,
           scale: 1,
           transformOrigin: '50% 50%',
+          clearProps: 'willChange',
         })
-        gsap.set(partElements, { opacity: 1, y: 0, filter: 'blur(0px)' })
+        gsap.set(partElements, { opacity: 1, y: 0, filter: 'blur(0px)', clearProps: 'willChange' })
         return
       }
 
@@ -82,10 +84,11 @@ export function QuoteSection() {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: 'top bottom-=12%',
-          end: 'center center',
-          scrub: true,
+          start: 'top 76%',
+          once: true,
+          toggleActions: 'play none none none',
         },
+        defaults: { ease: 'power3.out' },
       })
 
       timeline.to(
@@ -93,10 +96,11 @@ export function QuoteSection() {
         {
           opacity: 1,
           y: 0,
-          filter: shouldReduceHeavyMotion ? 'none' : 'blur(0px)',
+          filter: 'blur(0px)',
           rotate: 0,
           scale: 1,
-          ease: 'none',
+          duration: 0.9,
+          clearProps: 'willChange',
         },
         0,
       )
@@ -106,14 +110,13 @@ export function QuoteSection() {
         {
           opacity: 1,
           y: 0,
-          filter: shouldReduceHeavyMotion ? 'none' : 'blur(0px)',
-          ease: 'none',
+          filter: 'blur(0px)',
+          duration: 0.75,
           stagger: 0.05,
+          clearProps: 'willChange',
         },
-        0.04,
+        0.12,
       )
-
-      ScrollTrigger.refresh()
     }, section)
 
     return () => {
@@ -127,31 +130,47 @@ export function QuoteSection() {
       id="quote"
       data-section
       data-theme="dark"
-      data-global-reveal="true"
-      className={`relative overflow-hidden px-0 py-24 md:py-32 lg:py-40 transition-colors duration-500 ${sectionClass}`}
+      className={`relative overflow-hidden px-0 py-12 transition-colors duration-500 sm:py-14 md:py-16 lg:py-20 ${sectionClass}`}
     >
-      <Container>
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,245,240,0.05),rgba(5,5,5,0)_54%)]" />
+      </div>
+
+      <Container className="relative z-10">
         <div
           ref={contentRef}
-          className="relative mx-auto flex max-w-[900px] flex-col items-center px-4 text-center md:px-0"
+          className="relative mx-auto flex aspect-[9/16] flex-col overflow-hidden text-center shadow-[0_28px_80px_rgba(0,0,0,0.42)]"
+          style={{ width: 'min(88vw, calc((100svh - 96px) * 9 / 16), 520px)' }}
         >
+          <img
+            src={quoteBackground}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/72" aria-hidden="true" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_42%,rgba(0,0,0,0.58)_100%)]" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-[14px] border border-white/22 sm:inset-[18px]" aria-hidden="true" />
+
+          <div className="relative z-10 flex h-full flex-col px-7 py-8 sm:px-8 sm:py-9 md:px-10 md:py-11">
           <div
             data-animate="line"
             data-quote-part
             data-no-global-reveal="true"
-            className={`mb-8 h-px w-20 origin-center transition-colors duration-500 md:mb-10 md:w-28 ${lineStrongClass}`}
+            className={`mx-auto mb-5 h-px w-16 origin-center transition-colors duration-500 md:mb-6 md:w-20 ${lineStrongClass}`}
           />
 
           <div
             data-quote-part
             data-no-global-reveal="true"
-            className="mb-8 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-4 md:mb-10"
+            className="mb-auto grid w-full grid-cols-[1fr_auto_1fr] items-center gap-3 md:gap-4"
           >
             <span className={`h-px transition-colors duration-500 ${lineSoftClass}`} aria-hidden="true" />
             <span
               data-animate="text"
               data-no-global-reveal="true"
-              className={`font-mono text-[10px] uppercase tracking-[0.32em] transition-colors duration-500 md:text-[11px] ${mutedClass}`}
+              className={`font-mono text-[9px] uppercase tracking-[0.26em] transition-colors duration-500 md:text-[10px] ${mutedClass}`}
             >
               A Sacred Promise
             </span>
@@ -169,15 +188,15 @@ export function QuoteSection() {
             <motion.span
               ref={markRef}
               aria-hidden="true"
-              className={`pointer-events-none absolute left-1/2 top-[-0.52em] select-none font-serif text-[150px] font-light leading-none transition-colors duration-500 md:text-[220px] ${quoteMarkClass}`}
+              className={`pointer-events-none absolute left-1/2 top-[-0.58em] select-none font-serif text-[118px] font-light leading-none transition-colors duration-500 md:text-[150px] ${quoteMarkClass}`}
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 x: '-50%',
-                opacity: shouldReduceMotion ? 0.04 : 0,
-                scale: shouldReduceMotion ? 1 : 0.96,
-                rotate: shouldReduceMotion ? 0 : -1.5,
+                opacity: shouldReduceMotion || shouldReduceHeavyMotion ? 0.04 : 0,
+                scale: shouldReduceMotion || shouldReduceHeavyMotion ? 1 : 0.96,
+                rotate: shouldReduceMotion || shouldReduceHeavyMotion ? 0 : -1.5,
               }}
-              animate={{ opacity: isQuoteHovered ? 0.065 : shouldReduceMotion ? 0.04 : undefined }}
+              animate={{ opacity: isQuoteHovered ? 0.065 : shouldReduceMotion || shouldReduceHeavyMotion ? 0.04 : undefined }}
               transition={{ duration: 0.32, ease: 'easeOut' }}
             >
               &ldquo;
@@ -186,7 +205,8 @@ export function QuoteSection() {
             <p
               data-no-global-reveal="true"
               data-quote-text
-              className={`relative z-10 font-montserrat text-[clamp(18px,2.6vw,30px)] font-semibold leading-[1.5] tracking-normal transition-colors duration-500 ${textClass}`}
+              className={`relative z-10 font-montserrat text-[clamp(13px,3.6vw,19px)] font-semibold leading-[1.62] tracking-normal transition-colors duration-500 ${textClass}`}
+              style={{ textShadow: '0 2px 16px rgba(0,0,0,0.55)' }}
             >
               <QuoteWords text={quoteText} />
             </p>
@@ -196,9 +216,9 @@ export function QuoteSection() {
             data-animate="text"
             data-quote-part
             data-no-global-reveal="true"
-            className="mt-10 md:mt-12"
+            className="mt-7 md:mt-8"
           >
-            <span className={`font-mono text-[11px] uppercase tracking-[0.28em] transition-colors duration-500 md:text-[12px] ${mutedClass}`}>
+            <span className={`font-mono text-[10px] uppercase tracking-[0.24em] transition-colors duration-500 md:text-[11px] ${mutedClass}`}>
               {quoteAuthor}
             </span>
           </div>
@@ -207,17 +227,18 @@ export function QuoteSection() {
             data-animate="line"
             data-quote-part
             data-no-global-reveal="true"
-            className={`mt-10 h-px w-20 origin-center transition-colors duration-500 md:mt-12 md:w-28 ${lineStrongClass}`}
+            className={`mx-auto mt-6 h-px w-16 origin-center transition-colors duration-500 md:mt-7 md:w-20 ${lineStrongClass}`}
           />
 
           <div
             data-animate="text"
             data-quote-part
             data-no-global-reveal="true"
-            className={`absolute -left-2 top-0 hidden font-mono text-[10px] uppercase tracking-[0.26em] transition-colors duration-500 lg:block ${decorClass}`}
+            className={`absolute bottom-8 right-8 hidden font-mono text-[9px] uppercase tracking-[0.24em] transition-colors duration-500 lg:block ${decorClass}`}
             aria-hidden="true"
           >
             02 / Promise
+          </div>
           </div>
         </div>
       </Container>

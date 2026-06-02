@@ -1,97 +1,143 @@
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { weddingData } from '../../data/wedding.data';
+import { useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import logo from '../../assets/logo-400.webp';
+import logo from '../../assets/logo-400.webp'
 
 interface PreloaderProps {
-  onComplete: () => void;
+  onComplete: () => void
+}
+
+const getLoadingLabel = (progress: number) => {
+  if (progress >= 100) return 'Ready'
+  if (progress > 75) return 'Opening Invitation'
+  if (progress > 45) return 'Curating Memories'
+  if (progress > 15) return 'Menyiapkan Undangan'
+  return 'Initializing'
 }
 
 export default function Preloader({ onComplete }: PreloaderProps) {
-  const [progress, setProgress] = useState(0);
-  const [rawProgress, setRawProgress] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
-  const { isMobile, shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe();
+  const [isVisible, setIsVisible] = useState(true)
+  const logoFillRef = useRef<HTMLImageElement | null>(null)
+  const progressBarRef = useRef<HTMLSpanElement | null>(null)
+  const progressTextRef = useRef<HTMLSpanElement | null>(null)
+  const labelRef = useRef<HTMLSpanElement | null>(null)
+  const { isMobile, shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe()
 
-  const rootClasses = 'bg-[#050505] text-[#F5F5F0]';
-  const mutedTextClass = 'text-[#A4A4A4]';
-  const progressTextClass = 'text-[#F5F5F0]';
-  const vignetteClass = 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.95)_100%)]';
+  const rootClasses = 'bg-[#050505] text-[#F5F5F0]'
+  const mutedTextClass = 'text-[#A4A4A4]'
+  const progressTextClass = 'text-[#F5F5F0]'
+  const vignetteClass = 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.95)_100%)]'
+
   const prefersReducedMotionRuntime =
     shouldReduceMotion ||
-    (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   const isMobileViewport =
-    isMobile || (typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches);
-  const isLightweightMotion = shouldReduceHeavyMotion || isMobileViewport || prefersReducedMotionRuntime;
-  const preloaderDuration = prefersReducedMotionRuntime ? 900 : isMobileViewport ? 1400 : 2500;
-  const completedHoldDuration = prefersReducedMotionRuntime ? 80 : isMobileViewport ? 140 : 600;
-  const exitDuration = prefersReducedMotionRuntime ? 0.3 : isMobileViewport ? 0.45 : 0.8;
-  const exitDurationMs = exitDuration * 1000;
+    isMobile || (typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches)
+  const isLightweightMotion = shouldReduceHeavyMotion || isMobileViewport || prefersReducedMotionRuntime
+  const preloaderDuration = prefersReducedMotionRuntime ? 700 : isMobileViewport ? 1150 : 1900
+  const completedHoldDuration = prefersReducedMotionRuntime ? 60 : isMobileViewport ? 100 : 260
+  const exitDuration = prefersReducedMotionRuntime ? 0.2 : isMobileViewport ? 0.28 : 0.48
+  const exitDurationMs = exitDuration * 1000
 
   useEffect(() => {
-    // Prevent scrolling while preloader is active
-    const previousBodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const previousBodyOverflow = document.body.style.overflow
+    const previousHtmlOverflow = document.documentElement.style.overflow
+    const previousBodyTouchAction = document.body.style.touchAction
 
-    let startTime: number | null = null;
-    let animationFrameId: number;
-    let timeout1: any;
-    let timeout2: any;
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.touchAction = 'none'
+
+    let startTime: number | null = null
+    let animationFrameId = 0
+    let holdTimeout: ReturnType<typeof setTimeout> | null = null
+    let exitTimeout: ReturnType<typeof setTimeout> | null = null
+    let lastIntegerProgress = -1
+    let lastLabel = ''
+
+    const setProgressDom = (value: number) => {
+      const clamped = Math.min(100, Math.max(0, value))
+      const ratio = clamped / 100
+      const integerProgress = Math.floor(clamped)
+
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${ratio})`
+      }
+
+      if (logoFillRef.current) {
+        if (isLightweightMotion) {
+          logoFillRef.current.style.opacity = String(0.22 + ratio * 0.78)
+          logoFillRef.current.style.transform = `scale(${0.985 + ratio * 0.015})`
+        } else {
+          logoFillRef.current.style.clipPath = `inset(${100 - clamped}% 0 0 0)`
+        }
+      }
+
+      if (integerProgress !== lastIntegerProgress) {
+        lastIntegerProgress = integerProgress
+        if (progressTextRef.current) {
+          progressTextRef.current.textContent = String(integerProgress).padStart(3, '0')
+        }
+
+        const nextLabel = getLoadingLabel(integerProgress)
+        if (nextLabel !== lastLabel) {
+          lastLabel = nextLabel
+          if (labelRef.current) {
+            labelRef.current.textContent = nextLabel
+          }
+        }
+      }
+    }
 
     const animateLoader = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const t = Math.min(elapsed / preloaderDuration, 1);
+      if (!startTime) startTime = timestamp
+      const elapsed = timestamp - startTime
+      const t = Math.min(elapsed / preloaderDuration, 1)
+      const easedProgress = prefersReducedMotionRuntime
+        ? t
+        : isMobileViewport
+          ? 1 - Math.pow(1 - t, 2.2)
+          : 1 - Math.pow(1 - t, 3.4)
 
-      // Mobile uses a softer curve so the counter remains readable.
-      const easeOutQuad = 1 - Math.pow(1 - t, 2);
-      const easeOutQuart = 1 - Math.pow(1 - t, 4);
-      const easedProgress = prefersReducedMotionRuntime ? t : isMobileViewport ? easeOutQuad : easeOutQuart;
-      const currentProgress = easedProgress * 100;
-
-      setProgress(Math.floor(currentProgress));
-      setRawProgress(currentProgress);
+      setProgressDom(easedProgress * 100)
 
       if (t < 1) {
-        animationFrameId = requestAnimationFrame(animateLoader);
-      } else {
-        // Wait a brief moment at 100% to let user savor the completed logo
-        timeout1 = setTimeout(() => {
-          setIsVisible(false);
-
-          // Wait for exit animation to finish before notifying parent to unmount
-          timeout2 = setTimeout(() => {
-            document.body.style.overflow = previousBodyOverflow;
-            onComplete();
-          }, exitDurationMs);
-        }, completedHoldDuration);
+        animationFrameId = requestAnimationFrame(animateLoader)
+        return
       }
-    };
 
-    animationFrameId = requestAnimationFrame(animateLoader);
+      holdTimeout = setTimeout(() => {
+        setIsVisible(false)
+        exitTimeout = setTimeout(() => {
+          document.body.style.overflow = previousBodyOverflow
+          document.documentElement.style.overflow = previousHtmlOverflow
+          document.body.style.touchAction = previousBodyTouchAction
+          onComplete()
+        }, exitDurationMs)
+      }, completedHoldDuration)
+    }
+
+    setProgressDom(0)
+    animationFrameId = requestAnimationFrame(animateLoader)
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      clearTimeout(timeout1);
-      clearTimeout(timeout2);
-      document.body.style.overflow = previousBodyOverflow;
-    };
+      cancelAnimationFrame(animationFrameId)
+      if (holdTimeout) clearTimeout(holdTimeout)
+      if (exitTimeout) clearTimeout(exitTimeout)
+      document.body.style.overflow = previousBodyOverflow
+      document.documentElement.style.overflow = previousHtmlOverflow
+      document.body.style.touchAction = previousBodyTouchAction
+    }
   }, [
     completedHoldDuration,
     exitDurationMs,
+    isLightweightMotion,
     isMobileViewport,
     onComplete,
     prefersReducedMotionRuntime,
     preloaderDuration,
-  ]);
-
-  // Determine current label based on progress for a dynamic storytelling feel
-  let loadingLabel = 'Initializing';
-  if (progress > 15) loadingLabel = 'Menyiapkan Undangan';
-  if (progress > 45) loadingLabel = 'Curating Memories';
-  if (progress > 75) loadingLabel = 'Opening Invitation';
-  if (progress === 100) loadingLabel = 'Ready';
+  ])
 
   return (
     <AnimatePresence>
@@ -101,121 +147,95 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
-            scale: prefersReducedMotionRuntime ? 1 : isMobileViewport ? 0.985 : 1,
             transition: { duration: exitDuration, ease: [0.22, 1, 0.36, 1] },
           }}
           role="status"
           aria-label="Loading wedding invitation"
         >
-          {/* Subtle Film Grain / Vignette */}
-          <div className={`absolute inset-0 pointer-events-none opacity-90 z-0 transition-colors duration-500 ${vignetteClass}`} aria-hidden="true" />
-          
-          {/* Top Left Editorial Mark */}
-          <div className="absolute top-8 left-8 md:top-12 md:left-12 overflow-hidden z-10">
-            <motion.div 
-              initial={{ y: '100%', opacity: 0 }} 
-              animate={{ y: 0, opacity: 1 }} 
-              transition={{ delay: 0.2, duration: 1, ease: 'easeOut' }}
-              className="font-mono text-[9px] md:text-[10px] tracking-[0.4em] text-[#A4A4A4] uppercase"
-            >
-            </motion.div>
-          </div>
+          <div className={`pointer-events-none absolute inset-0 z-0 opacity-80 transition-colors duration-500 ${vignetteClass}`} aria-hidden="true" />
 
-          {/* Top Right Date */}
-          <div className="absolute top-8 right-8 md:top-12 md:right-12 overflow-hidden z-10">
-            <motion.div 
-              initial={{ y: '100%', opacity: 0 }} 
-              animate={{ y: 0, opacity: 1 }} 
-              transition={{ delay: 0.3, duration: 1, ease: 'easeOut' }}
-              className={`font-mono text-[9px] md:text-[10px] tracking-[0.4em] uppercase transition-colors duration-500 ${mutedTextClass}`}
+          <div className="absolute right-6 top-7 z-10 overflow-hidden md:right-12 md:top-12">
+            <motion.div
+              initial={isLightweightMotion ? false : { y: '100%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.12, duration: 0.55, ease: 'easeOut' }}
+              className={`font-mono text-[9px] uppercase tracking-[0.34em] transition-colors duration-500 md:text-[10px] ${mutedTextClass}`}
             >
               {weddingData.wedding.dateFormatted}
             </motion.div>
           </div>
 
-          <div className="relative z-10 flex flex-col items-center justify-center w-full px-6 flex-1 mt-8">
-            
-            {/* The Logo Silhouette Fill */}
-            <motion.div 
-              className="relative flex justify-center items-center w-[min(80vw,320px)] md:w-[min(65vw,480px)] h-auto max-h-[50vh]"
-              initial={{ 
-                scale: isLightweightMotion ? 1 : 0.92,
-                opacity: isLightweightMotion ? 1 : 0,
-                filter: isLightweightMotion ? 'none' : 'blur(8px)'
-              }}
-              animate={{ 
-                scale: 1, 
-                opacity: 1,
-                filter: isLightweightMotion ? 'none' : 'blur(0px)'
-              }}
-              transition={{ duration: isLightweightMotion ? 0.45 : 4, ease: 'easeOut' }}
+          <div className="relative z-10 mt-8 flex w-full flex-1 flex-col items-center justify-center px-6">
+            <motion.div
+              className="relative flex h-auto max-h-[44vh] w-[min(72vw,260px)] items-center justify-center md:w-[min(65vw,420px)]"
+              initial={isLightweightMotion ? false : { scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: isLightweightMotion ? 0 : 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Dim/Background Logo */}
-              <img 
-                src={logo} 
-                alt="" 
+              <img
+                src={logo}
+                alt=""
                 width="400"
                 height="400"
                 fetchPriority="high"
-                className={`absolute w-full h-full object-contain pointer-events-none select-none opacity-15 filter grayscale ${isLightweightMotion ? '' : 'blur-[2px]'}`}
+                decoding="async"
+                className="pointer-events-none absolute h-full w-full select-none object-contain opacity-14 grayscale"
                 aria-hidden="true"
               />
-              
-              {/* Bright/Filled Logo with Mask */}
-              <img 
-                src={logo} 
-                alt="Wedding logo" 
+
+              <img
+                ref={logoFillRef}
+                src={logo}
+                alt="Wedding logo"
                 width="400"
                 height="400"
                 fetchPriority="high"
-                className="relative w-full h-full object-contain pointer-events-none select-none opacity-100 will-change-[clip-path]"
-                style={{ 
-                  clipPath: isLightweightMotion ? 'none' : `inset(${100 - rawProgress}% 0 0 0)`,
-                  opacity: isLightweightMotion ? (rawProgress / 100) : 1
+                decoding="async"
+                className="pointer-events-none relative h-full w-full select-none object-contain opacity-25"
+                style={{
+                  clipPath: isLightweightMotion ? 'none' : 'inset(100% 0 0 0)',
+                  transform: 'scale(0.985)',
+                  transformOrigin: 'center center',
                 }}
               />
             </motion.div>
+
+            <div className="mt-8 h-px w-[min(220px,56vw)] overflow-hidden bg-[#F5F5F0]/10 md:mt-10">
+              <span
+                ref={progressBarRef}
+                className="block h-full origin-left scale-x-0 bg-[#F5F5F0]/80"
+                aria-hidden="true"
+              />
+            </div>
           </div>
 
-          {/* Bottom Cinematic Counter & Narrative */}
-          <div className="absolute bottom-12 md:bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6 z-10 w-full">
-            <motion.div 
+          <div className="absolute bottom-10 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col items-center gap-5 md:bottom-16">
+            <motion.div
               className="flex flex-col items-center gap-2"
-              initial={{ opacity: 0, y: 20 }}
+              initial={isLightweightMotion ? false : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 1, ease: 'easeOut' }}
+              transition={{ delay: 0.18, duration: 0.55, ease: 'easeOut' }}
             >
               <div className="flex items-baseline gap-2">
-                <span className={`font-serif text-4xl md:text-5xl lg:text-6xl font-light italic tabular-nums lining-nums tracking-widest transition-colors duration-500 ${progressTextClass}`}>
-                  {String(progress).padStart(3, '0')}
+                <span
+                  ref={progressTextRef}
+                  className={`font-serif text-4xl font-light italic tracking-widest tabular-nums lining-nums transition-colors duration-500 md:text-5xl lg:text-6xl ${progressTextClass}`}
+                >
+                  000
                 </span>
-                <span className={`font-serif text-lg md:text-xl italic transition-colors duration-500 ${mutedTextClass}`}>%</span>
+                <span className={`font-serif text-lg italic transition-colors duration-500 md:text-xl ${mutedTextClass}`}>%</span>
               </div>
             </motion.div>
 
-            <motion.div 
-              className="overflow-hidden h-[16px] flex items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 1 }}
+            <span
+              ref={labelRef}
+              className={`block min-h-[16px] whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.42em] transition-colors duration-500 md:text-[9px] ${mutedTextClass}`}
             >
-              <AnimatePresence mode="wait">
-                <motion.span 
-                  key={loadingLabel}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  className={`block font-mono text-[8px] md:text-[9px] tracking-[0.5em] uppercase whitespace-nowrap transition-colors duration-500 ${mutedTextClass}`}
-                >
-                  {loadingLabel}
-                </motion.span>
-              </AnimatePresence>
-            </motion.div>
+              Initializing
+            </span>
           </div>
-
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }

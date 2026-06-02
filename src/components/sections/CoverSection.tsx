@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { gsap } from '../../lib/gsap'
-import { animate } from 'animejs'
+import { Mail } from 'lucide-react'
 import { weddingData } from '../../data/wedding.data'
 import { useScrollLock } from '../../hooks/useScrollLock'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import coverImage from '../../assets/lainnya/foto/galeri-1.webp'
+import coverLogo from '../../assets/logo-cover.webp'
 
 interface CoverSectionProps {
   onOpen?: () => void
@@ -12,59 +13,16 @@ interface CoverSectionProps {
   isPreloaderDone?: boolean
 }
 
-/**
- * Splits a string into individual <span> elements for letter stagger animation.
- * Spaces are preserved as non-breaking spaces with explicit width.
- */
-function LetterSplit({ text, className }: { text: string; className?: string }) {
-  const parts = text.split(/(\s+)/)
-
-  return (
-    <span className={className} aria-label={text}>
-      {parts.map((part, partIndex) => {
-        if (/^\s+$/.test(part)) {
-          return (
-            <span
-              key={`space-${partIndex}`}
-              className="cover-char inline-block"
-              aria-hidden="true"
-              style={{ opacity: 0, width: '0.28em' }}
-            >
-              {'\u00A0'}
-            </span>
-          )
-        }
-
-        return (
-          <span key={`word-${partIndex}`} className="inline-block whitespace-nowrap" aria-hidden="true">
-            {part.split('').map((char, charIndex) => (
-              <span
-                key={`${partIndex}-${charIndex}`}
-                className="cover-char"
-                style={{ opacity: 0 }}
-              >
-                {char}
-              </span>
-            ))}
-          </span>
-        )
-      })}
-    </span>
-  )
-}
-
 export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: CoverSectionProps) {
   const [isOpened, setIsOpened] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
-  const rootClass = 'bg-[#050505]';
-  const lineClass = 'bg-[rgba(245,242,236,0.15)]';
-  const mutedClass = 'text-[rgba(164,164,164,0.7)]';
-  const titleClass = 'text-[#F5F2EC]';
-  const gradientClass = 'from-[#050505] via-[#050505]/60 to-[#050505]/30';
-  const radialClass = 'radial-gradient(ellipse at center, transparent 30%, #050505 100%)';
-  const buttonClass = 'text-[rgba(245,242,236,0.8)] border-[rgba(245,242,236,0.25)] hover:bg-[rgba(245,242,236,0.06)] hover:border-[rgba(245,242,236,0.4)] hover:text-[#F5F2EC] focus-visible:outline-[rgba(245,242,236,0.5)]';
+  const rootClass = 'bg-[#202020]';
+  const lineClass = 'bg-[rgba(245,242,236,0.22)]';
+  const gradientClass = 'from-[#202020]/82 via-[#202020]/44 to-[#202020]/24';
+  const radialClass = 'radial-gradient(ellipse at center, rgba(32,32,32,0.02) 0%, rgba(32,32,32,0.74) 100%)';
+  const buttonClass = 'bg-[#C49A6C] text-[#F5F2EC] hover:bg-[#D0A777] focus-visible:outline-[rgba(196,154,108,0.7)]';
 
   const introTlRef = useRef<gsap.core.Timeline | null>(null)
   const exitTlRef = useRef<gsap.core.Timeline | null>(null)
@@ -83,18 +41,17 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
       if (shouldReduceMotion) {
         // Reduced motion: make everything visible instantly
         const coverParts = Array.from(
-          root.querySelectorAll<HTMLElement>('[data-cover-line], [data-cover-label], [data-cover-date], [data-cover-guest], [data-cover-button]')
+          root.querySelectorAll<HTMLElement>('[data-cover-line], [data-cover-logo], [data-cover-guest], [data-cover-button]')
         )
-        const coverChars = Array.from(root.querySelectorAll<HTMLElement>('.cover-char'))
         const coverBg = root.querySelector<HTMLElement>('[data-cover-bg]')
 
         if (coverParts.length) {
           gsap.set(coverParts, {
             opacity: 1,
             y: 0,
+            scale: 1,
           })
         }
-        if (coverChars.length) gsap.set(coverChars, { opacity: 1 })
         if (coverBg) gsap.set(coverBg, { scale: 1, opacity: 1 })
         return
       }
@@ -113,47 +70,25 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
       // Decorative line draws in
       tl.fromTo(
         '[data-cover-line]',
-        { scaleY: 0, opacity: 0 },
-        { scaleY: 1, opacity: 1, duration: 0.8, ease: 'power2.out', transformOrigin: 'top center' },
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.8, ease: 'power2.out', transformOrigin: 'center center' },
         0.4
       )
 
-      // Label fade up
+      // Title logo fade up
       tl.fromTo(
-        '[data-cover-label]',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+        '[data-cover-logo]',
+        { opacity: 0, y: 18, scale: 0.96 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.95, ease: 'power3.out' },
         0.7
-      )
-
-      // Letter stagger for couple name (anime.js)
-      tl.call(() => {
-        const chars = root.querySelectorAll('.cover-char')
-        if (chars.length > 0) {
-          animate(chars, {
-            opacity: [0, 1],
-            translateY: [24, 0],
-            duration: 800,
-            delay: (_el: Element, i: number) => i * 35,
-            ease: 'outExpo',
-          })
-        }
-      }, [], 1.0)
-
-      // Date fade in
-      tl.fromTo(
-        '[data-cover-date]',
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
-        1.6
       )
 
       // Guest greeting fade in
       tl.fromTo(
         '[data-cover-guest]',
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6, ease: 'power2.out' },
-        2.0
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' },
+        1.75
       )
 
       // Button fade up (last)
@@ -161,7 +96,7 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
         '[data-cover-button]',
         { opacity: 0, y: 16 },
         { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
-        2.3
+        2.05
       )
     }, sectionRef)
 
@@ -280,8 +215,6 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
     return null
   }
 
-  const coupleText = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
-
   return (
     <section
       ref={sectionRef}
@@ -297,7 +230,7 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
         <img
           src={coverImage}
           alt=""
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
           loading="eager"
           fetchPriority="high"
           decoding="async"
@@ -308,69 +241,55 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
       </div>
 
       {/* Content */}
-      <div data-cover-content className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl">
-
-        {/* Decorative line */}
-        <div
-          data-cover-line
-          className={`w-px h-16 md:h-20 mb-8 transition-colors duration-500 ${lineClass}`}
-          style={{ opacity: 0, transformOrigin: 'top center' }}
-        />
-
-        {/* Label */}
-        <span
-          data-cover-label
-          className={`label-caps tracking-[0.4em] mb-6 block transition-colors duration-500 ${mutedClass}`}
-          style={{ opacity: 0 }}
-        >
-          The Wedding of
-        </span>
-
-        {/* Couple name with letter stagger */}
-        <h1
-          data-cover-title
-          className="mb-4 w-[min(92vw,860px)] whitespace-nowrap font-athene"
-          style={{ fontSize: 'clamp(38px, 10vw, 96px)', lineHeight: 1.05 }}
-        >
-          <LetterSplit text={coupleText} className={`inline-block transition-colors duration-500 ${titleClass}`} />
-        </h1>
-
-        {/* Date */}
-        <p
-          data-cover-date
-          className={`font-sans text-[13px] md:text-[14px] tracking-[0.3em] mb-10 md:mb-14 transition-colors duration-500 ${mutedClass}`}
-          style={{ opacity: 0 }}
-        >
-          {weddingData.wedding.dateFormatted}
-        </p>
-
-        {/* Guest greeting */}
-        <div
-          data-cover-guest
-          className="flex flex-col items-center gap-2 mb-10 md:mb-12"
-          style={{ opacity: 0 }}
-        >
-          <p className="font-montserrat text-[12px] font-semibold tracking-[0.2em] uppercase transition-colors duration-500 text-[rgba(164,164,164,0.5)]">
-            Dear, Bapak/Ibu/Saudara/i
-          </p>
-          <p
-            className="max-w-sm font-montserrat font-semibold transition-colors duration-500 text-[rgba(245,242,236,0.7)]"
-            style={{ fontSize: 'clamp(14px, 2vw, 17px)', lineHeight: 1.7 }}
-          >
-            {weddingData.wedding.openingQuote}
-          </p>
+      <div
+        data-cover-content
+        className="relative z-10 flex h-full min-h-[100svh] w-full flex-col items-center justify-between px-6 pb-8 pt-8 text-center sm:pb-10 sm:pt-10 md:px-10 md:pb-12 md:pt-12"
+      >
+        <div className="flex w-full flex-col items-center">
+          <h1 className="sr-only">
+            The Wedding of {weddingData.groom.firstName} & {weddingData.bride.firstName}
+          </h1>
+          <img
+            data-cover-logo
+            src={coverLogo}
+            alt=""
+            className="mx-auto h-auto max-h-[170px] w-[min(52vw,190px)] select-none object-contain sm:max-h-[185px] sm:w-[min(34vw,210px)] md:max-h-[205px] md:w-[min(20vw,230px)] lg:w-[240px]"
+            style={{ opacity: 0 }}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
         </div>
 
-        {/* Open button */}
-        <div data-cover-button style={{ opacity: 0 }}>
-          <button
-            onClick={handleOpen}
-            disabled={isAnimating}
-            aria-label="Buka undangan pernikahan"
-            className={`relative inline-flex items-center justify-center px-10 py-4 font-mono text-[11px] tracking-[0.3em] uppercase bg-transparent border transition-all duration-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-wait ${buttonClass}`}
-          >
-            Open Invitation
-          </button>
+        <div className="flex min-h-[28vh] w-full flex-1 items-end justify-center md:min-h-[34vh]">
+          <div className="w-full max-w-[360px]">
+            <div
+              data-cover-guest
+              className="mb-4 flex flex-col items-center"
+              style={{ opacity: 0 }}
+            >
+              <div
+                data-cover-line
+                className={`mt-4 h-px w-full origin-center transition-colors duration-500 ${lineClass}`}
+                style={{ opacity: 0 }}
+              />
+              <p className="mt-3 font-montserrat text-[10px] font-semibold italic leading-relaxed text-[#F5F2EC]/82 md:text-[11px]">
+                Kami mohon maaf jika ada kesalahan ejaan nama atau gelar.
+              </p>
+            </div>
+
+            <div data-cover-button style={{ opacity: 0 }}>
+              <button
+                onClick={handleOpen}
+                disabled={isAnimating}
+                aria-label="Buka undangan pernikahan"
+                className={`relative inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[4px] px-6 py-3 font-montserrat text-[12px] font-semibold uppercase tracking-[0.03em] shadow-[0_12px_34px_rgba(0,0,0,0.24)] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-wait disabled:opacity-50 md:px-7 md:text-[13px] ${buttonClass}`}
+              >
+                <Mail size={16} strokeWidth={2} aria-hidden="true" />
+                <span>Open Invitation</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

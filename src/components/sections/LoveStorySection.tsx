@@ -5,6 +5,19 @@ import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe';
 import { Container } from '../ui/Container';
 import loveStoryBackground from '../../assets/lainnya/foto/story.webp';
 import loveStoryFeatureImage from '../../assets/lainnya/foto/story-thumbnail.webp';
+import loveStoryCard1 from '../../assets/lainnya/love-story/1.webp';
+import loveStoryCard2 from '../../assets/lainnya/love-story/2.webp';
+import loveStoryCard3 from '../../assets/lainnya/love-story/3.webp';
+import loveStoryCard4 from '../../assets/lainnya/love-story/4.webp';
+import loveStoryCard5 from '../../assets/lainnya/love-story/5.webp';
+
+const loveStoryCards = [
+  loveStoryCard1,
+  loveStoryCard2,
+  loveStoryCard3,
+  loveStoryCard4,
+  loveStoryCard5,
+];
 
 export function LoveStorySection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -25,7 +38,10 @@ export function LoveStorySection() {
         { date: '2023', title: 'The Proposal', description: 'A simple question, a profound answer.' }
       ];
 
-  const storyData = rawStoryData.slice(0, 5);
+  const storyData = rawStoryData.slice(0, 5).map((story, index) => ({
+    ...story,
+    image: loveStoryCards[index],
+  }));
 
   const mapNodes = [
     { x: 15, y: 10, align: 'right' },
@@ -313,7 +329,7 @@ export function LoveStorySection() {
               </div>
 
               {storyData.map((story: any, i: number) => {
-                const imageUrl = story.image || story.photo || story.src || story.imageUrl;
+                const imageUrl = story.image;
                 return (
                   <div key={story.id || i} className="mobile-item relative w-full flex items-start group">
                     {/* Dot with Tick Marks */}
@@ -332,10 +348,9 @@ export function LoveStorySection() {
                       style={{ background: 'linear-gradient(to right, rgba(245,245,240,0.32), rgba(245,245,240,0.14), transparent)' }}
                     />
 
-                    {/* Content Card (Premium Static Mobile Design with elegant hover) */}
+                    {/* Story Artwork Card */}
                     <div className="mobile-card w-full pl-[60px] pr-3 relative z-10">
-                      <div className="w-full p-5 rounded-[2px] bg-[#101010]/94 border border-[#F5F5F0]/18 shadow-[0_10px_28px_rgba(0,0,0,0.30)] flex flex-col relative overflow-hidden transition-all duration-500 ease-out group-hover:bg-[#0B0B0B]/95 group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_16px_32px_rgba(0,0,0,0.40)] group-hover:-translate-y-1 active:scale-[0.99] active:border-[#F5F5F0]/35">
-                        {/* Elegant Shine Sweep Effect on Hover */}
+                      <figure className="w-full rounded-[2px] border border-[#F5F5F0]/16 bg-[#050505]/82 p-2 shadow-[0_14px_34px_rgba(0,0,0,0.34)] relative overflow-hidden transition-all duration-500 ease-out group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_20px_42px_rgba(0,0,0,0.46)] group-hover:-translate-y-1 active:scale-[0.99]">
                         <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
                           <div 
                             className="absolute top-0 h-full w-[250%]"
@@ -347,29 +362,16 @@ export function LoveStorySection() {
                           />
                         </div>
 
-                        {/* Top subtle hairline */}
-                        <div className="absolute top-0 left-6 right-6 h-px bg-[#F5F5F0]/12 group-hover:bg-[#F5F5F0]/25 transition-colors duration-500" />
-
-                        {imageUrl && (
-                          <div className="w-full aspect-[16/10] overflow-hidden rounded-[2px] mb-4 border border-[#F5F5F0]/10 relative z-10">
-                            <img src={imageUrl} alt={story.title} className="w-full h-full object-cover opacity-90 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-100" loading="lazy" decoding="async" />
-                          </div>
-                        )}
-                        <div className="flex items-center gap-3 mb-2 relative z-10">
-                          {story.date && (
-                            <span className="font-mono text-[10px] tracking-[0.25em] text-[#F5F5F0]/70 uppercase group-hover:text-[#F5F5F0]/90 transition-colors duration-500">
-                              {story.date}
-                            </span>
-                          )}
-                          <div className="flex-1 h-px bg-gradient-to-r from-[#F5F5F0]/15 to-transparent" />
+                        <div className="relative z-10 overflow-hidden rounded-[2px]">
+                          <img
+                            src={imageUrl}
+                            alt={`${story.title} - ${story.date || `Cerita ${i + 1}`}`}
+                            className="block h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.015]"
+                            loading="lazy"
+                            decoding="async"
+                          />
                         </div>
-                        <h3 className="relative z-10 mb-2 font-athene text-[22px] leading-tight text-[#F5F5F0]/80 transition-colors duration-500 group-hover:text-[#F5F5F0]">
-                          {story.title}
-                        </h3>
-                        <p className="relative z-10 whitespace-pre-line font-montserrat text-[14px] font-semibold leading-7 text-[#F5F5F0]/72 transition-colors duration-500 group-hover:text-[#F5F5F0]/85">
-                          {story.description}
-                        </p>
-                      </div>
+                      </figure>
                     </div>
                   </div>
                 );
@@ -419,7 +421,7 @@ export function LoveStorySection() {
                   const node = mapNodes[i];
                   if (!node) return null;
 
-                  const imageUrl = story.image || story.photo || story.src || story.imageUrl;
+                  const imageUrl = story.image;
                   const connectorDir = node.align === 'right' ? 'right' : 'left';
                   
                   return (
@@ -450,13 +452,8 @@ export function LoveStorySection() {
                           node.align === 'right' ? 'left-8 xl:left-12' : 'right-8 xl:right-12'
                         }`}
                       >
-                        {/* Content Card */}
-                        <div
-                          className={`desktop-card relative overflow-hidden w-[340px] xl:w-[400px] p-8 xl:p-10 border rounded-[2px] bg-[#0A0A0A]/90 border-[#F5F5F0]/15 shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col justify-center transition-all duration-500 ease-out group-hover:bg-[#0B0B0B]/95 group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_16px_40px_rgba(0,0,0,0.45)] group-hover:-translate-y-[6px] ${
-                            node.align === 'right' ? '' : 'text-right'
-                          }`}
-                        >
-                          {/* Elegant Shine Sweep Effect on Hover */}
+                        {/* Story Artwork Card */}
+                        <figure className="desktop-card relative w-[360px] overflow-hidden rounded-[2px] border border-[#F5F5F0]/16 bg-[#050505]/82 p-2 shadow-[0_16px_38px_rgba(0,0,0,0.34)] transition-all duration-500 ease-out group-hover:-translate-y-[6px] group-hover:border-[#F5F5F0]/30 group-hover:shadow-[0_22px_48px_rgba(0,0,0,0.50)] xl:w-[440px]">
                           <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden" aria-hidden="true">
                             <div 
                               className="absolute top-0 h-full w-[250%]"
@@ -468,30 +465,16 @@ export function LoveStorySection() {
                             />
                           </div>
 
-                          <div className="absolute top-0 left-8 right-8 h-px bg-[#F5F5F0]/10 group-hover:bg-[#F5F5F0]/25 transition-colors duration-500" />
-
-                          {imageUrl && (
-                            <div className="w-full aspect-[16/10] overflow-hidden rounded-[2px] mb-5 border border-[#F5F5F0]/10 relative z-10">
-                              <img src={imageUrl} alt={story.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" loading="lazy" decoding="async" />
-                            </div>
-                          )}
-
-                          <div className={`flex items-center gap-3 mb-2.5 relative z-10 ${node.align === 'right' ? '' : 'flex-row-reverse'}`}>
-                            {story.date && (
-                              <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-[#F5F5F0]/60 group-hover:text-[#F5F5F0]/90 transition-colors duration-500">
-                                {story.date}
-                              </span>
-                            )}
-                            <div className="w-8 h-px bg-gradient-to-r from-[#F5F5F0]/20 to-transparent" />
+                          <div className="relative z-10 overflow-hidden rounded-[2px]">
+                            <img
+                              src={imageUrl}
+                              alt={`${story.title} - ${story.date || `Cerita ${i + 1}`}`}
+                              className="block h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.012]"
+                              loading="lazy"
+                              decoding="async"
+                            />
                           </div>
-
-                          <h3 className="relative z-10 mb-3 font-athene text-[26px] leading-[1.2] text-[#F5F5F0]/80 transition-colors duration-500 group-hover:text-[#F5F5F0] xl:text-[30px]">
-                            {story.title}
-                          </h3>
-                          <p className="relative z-10 max-w-prose whitespace-pre-line font-montserrat text-[14px] font-semibold leading-relaxed text-[#A4A4A4]/70 transition-colors duration-500 group-hover:text-[#A4A4A4]">
-                            {story.description}
-                          </p>
-                        </div>
+                        </figure>
                       </div>
                     </div>
                   );
