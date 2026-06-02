@@ -32,12 +32,10 @@ function CompactWishCard({
   wish,
   onHoverChange,
   className = '',
-  layout = 'marquee',
 }: {
   wish: GuestWish
   onHoverChange?: (isHovered: boolean) => void
   className?: string
-  layout?: 'marquee' | 'mobile'
 }) {
   const isNew = wish.source === 'rsvp'
 
