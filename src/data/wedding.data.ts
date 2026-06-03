@@ -131,7 +131,7 @@ export const weddingData = {
       id: 'mandiri',
       bank: 'Bank Mandiri',
       accountNumber: '1010013845977',
-      accountName: 'Reny Nur Khayti',
+      accountName: 'Reny Nur Khayati',
     },
   ],
   wishes: [] as { id: number; name: string; message: string; attending: boolean; time: string }[],
