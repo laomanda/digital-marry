@@ -305,7 +305,7 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
             <h1
               ref={nameRef}
               aria-label={coupleName}
-              className={`max-w-[11ch] font-athene text-[clamp(58px,13vw,172px)] leading-[0.82] tracking-normal md:max-w-[10.5ch] transition-colors duration-500 ${textClass}`}
+              className={`max-w-[12ch] font-athene text-[clamp(48px,11vw,172px)] leading-[0.95] md:leading-[0.82] tracking-normal md:max-w-[10.5ch] py-2 pr-4 transition-colors duration-500 ${textClass}`}
             >
               <HeroNameLine text={weddingData.groom.firstName} className="block" />
               <span className="block">

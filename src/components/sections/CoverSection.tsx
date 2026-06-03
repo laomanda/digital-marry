@@ -296,33 +296,33 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
               style={{ opacity: 0 }}
             >
               {guestName && (
-                <div className="my-5 flex flex-col items-center text-center px-4 animate-reveal">
-                  <span className="bg-[#C49A6C] px-3.5 py-1.5 rounded-full border border-[#F5F2EC]/20 font-montserrat text-[10px] font-semibold uppercase tracking-[0.24em] text-[#F5F2EC] shadow-[0_4px_12px_rgba(196,154,108,0.25)]">
+                <div className="my-3 sm:my-5 flex flex-col items-center text-center px-4 animate-reveal">
+                  <span className="bg-[#C49A6C] px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-[#F5F2EC]/20 font-montserrat text-[7.5px] sm:text-[10px] font-semibold uppercase tracking-[0.1em] sm:tracking-[0.24em] text-[#F5F2EC] shadow-[0_4px_12px_rgba(196,154,108,0.25)] text-center leading-relaxed">
                     Kepada Yth. Bapak/Ibu/Saudara/i:
                   </span>
-                  <h2 className="mt-4 font-athene text-[28px] font-medium tracking-wide text-[#F5F2EC] drop-shadow-[0_3px_12px_rgba(0,0,0,0.85)] md:text-[34px]">
+                  <h2 className="mt-2.5 sm:mt-4 font-athene text-[20px] sm:text-[28px] md:text-[34px] font-medium tracking-wide text-[#F5F2EC] drop-shadow-[0_3px_12px_rgba(0,0,0,0.85)] leading-tight px-2">
                     {guestName}
                   </h2>
                 </div>
               )}
               <div
                 data-cover-line
-                className={`mt-4 h-px w-full origin-center transition-colors duration-500 ${lineClass}`}
+                className={`mt-1.5 sm:mt-4 h-px w-full origin-center transition-colors duration-500 ${lineClass}`}
                 style={{ opacity: 0 }}
               />
-              <p className="mt-3 font-montserrat text-[10px] font-semibold italic leading-relaxed text-[#F5F2EC]/82 md:text-[11px]">
+              <p className="mt-2 sm:mt-3 font-montserrat text-[8px] sm:text-[10px] font-medium italic leading-relaxed text-[#F5F2EC]/80 md:text-[11px] px-2 text-center">
                 Kami mohon maaf jika ada kesalahan ejaan nama atau gelar.
               </p>
             </div>
 
-            <div data-cover-button style={{ opacity: 0 }}>
+            <div data-cover-button style={{ opacity: 0 }} className="flex justify-center">
               <button
                 onClick={handleOpen}
                 disabled={isAnimating}
                 aria-label="Buka undangan pernikahan"
-                className={`relative inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[4px] px-6 py-3 font-montserrat text-[12px] font-semibold uppercase tracking-[0.03em] shadow-[0_12px_34px_rgba(0,0,0,0.24)] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-wait disabled:opacity-50 md:px-7 md:text-[13px] ${buttonClass}`}
+                className={`relative inline-flex min-h-[36px] sm:min-h-[44px] items-center justify-center gap-1.5 sm:gap-2 rounded-[4px] px-4 py-2 sm:px-6 sm:py-3 font-montserrat text-[9px] sm:text-[12px] md:text-[13px] font-semibold uppercase tracking-[0.05em] shadow-[0_12px_34px_rgba(0,0,0,0.24)] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-wait disabled:opacity-50 ${buttonClass}`}
               >
-                <Mail size={16} strokeWidth={2} aria-hidden="true" />
+                <Mail size={13} className="sm:w-4 sm:h-4" strokeWidth={2} aria-hidden="true" />
                 <span>Open Invitation</span>
               </button>
             </div>

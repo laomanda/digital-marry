@@ -8,6 +8,8 @@ import galeri5 from '../assets/lainnya/foto/galeri-5.webp'
 import galeri6 from '../assets/lainnya/foto/galeri-6.webp'
 import galeri7 from '../assets/lainnya/foto/galeri-7.webp'
 import galeri8 from '../assets/lainnya/foto/galeri-8.webp'
+import galeri9 from '../assets/lainnya/foto/galeri-9.webp'
+import galeri11 from '../assets/lainnya/foto/galeri-11.webp'
 
 export const weddingData = {
   bride: {
@@ -119,6 +121,8 @@ export const weddingData = {
     { id: 8, src: galeri6, alt: 'Gallery 6', span: 'wide' },
     { id: 9, src: galeri7, alt: 'Gallery 7', span: 'normal' },
     { id: 10, src: galeri8, alt: 'Gallery 8', span: 'normal' },
+    { id: 11, src: galeri9, alt: 'Gallery 9', span: 'tall' },
+    { id: 12, src: galeri11, alt: 'Gallery 11', span: 'wide' },
   ],
   gifts: [
     {

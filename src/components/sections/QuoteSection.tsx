@@ -6,10 +6,11 @@ import slide3 from '../../assets/lainnya/foto/galeri-5.webp'
 import slide4 from '../../assets/lainnya/foto/galeri-6.webp'
 import slide5 from '../../assets/lainnya/foto/galeri-7.webp'
 import slide6 from '../../assets/lainnya/foto/galeri-8.webp'
+import slide7 from '../../assets/lainnya/foto/galeri-10.webp'
 import quoteTopOrnament from '../../assets/lainnya/section-qoute.webp'
 import quoteBottomOrnament from '../../assets/lainnya/section-qoute-1.webp'
 
-const backgroundSlides = [slide1, slide2, slide3, slide4, slide5, slide6]
+const backgroundSlides = [slide1, slide2, slide3, slide4, slide5, slide6, slide7]
 
 export function QuoteSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -52,7 +53,9 @@ export function QuoteSection() {
               aria-hidden="true"
             />
           ))}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050505]/18 via-transparent to-[#050505]/30" aria-hidden="true" />
+          {/* Dark overlay to ensure white text/ornaments are readable against bright photos */}
+          <div className="pointer-events-none absolute inset-0 bg-[#050505]/30" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-transparent to-[#050505]/70" aria-hidden="true" />
 
           <img
             src={quoteTopOrnament}
