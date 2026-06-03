@@ -47,11 +47,8 @@ export function CoverSection({ onOpen, onOpened, isPreloaderDone = true }: Cover
       if (toParam) {
         let decoded = decodeURIComponent(toParam.replace(/\+/g, ' ')).trim()
         
-        // Add '&' if there are more than 2 words (i.e. more than one '+' sign originally)
-        // and it doesn't already contain standard conjunctions like 'dan', 'and', or '&'
-        if (!/\b(dan|and|&|%26)\b/i.test(decoded)) {
-          decoded = decoded.split(/\s+/).filter(Boolean).join(' & ')
-        }
+        // Convert the word 'dan' to '&' for couples (e.g. "Budi dan Ani" -> "Budi & Ani")
+        decoded = decoded.replace(/\b(dan|and)\b/gi, '&')
         
         setGuestName(decoded)
       }

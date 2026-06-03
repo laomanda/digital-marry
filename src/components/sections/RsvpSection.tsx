@@ -98,9 +98,8 @@ export default function RsvpSection({ onWishSubmit }: { onWishSubmit?: (wish: Gu
       if (toParam) {
         let decoded = decodeURIComponent(toParam.replace(/\+/g, ' ')).trim()
         
-        if (!/\b(dan|and|&|%26)\b/i.test(decoded)) {
-          decoded = decoded.split(/\s+/).filter(Boolean).join(' & ')
-        }
+        // Convert the word 'dan' to '&' for couples (e.g. "Budi dan Ani" -> "Budi & Ani")
+        decoded = decoded.replace(/\b(dan|and)\b/gi, '&')
         
         setValue('name', decoded)
       }
