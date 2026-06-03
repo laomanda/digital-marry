@@ -305,18 +305,18 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
             <h1
               ref={nameRef}
               aria-label={coupleName}
-              className={`max-w-[12ch] font-athene text-[clamp(48px,11vw,172px)] leading-[0.95] md:leading-[0.82] tracking-normal md:max-w-[10.5ch] py-2 pr-4 transition-colors duration-500 ${textClass}`}
+              className={`max-w-[12ch] font-athene text-[clamp(44px,11vw,172px)] leading-[1.05] md:leading-[0.82] tracking-normal md:max-w-[10.5ch] py-2 pr-4 pb-4 md:pb-2 transition-colors duration-500 overflow-visible ${textClass}`}
             >
-              <HeroNameLine text={weddingData.groom.firstName} className="block" />
-              <span className="block">
+              <HeroNameLine text={weddingData.groom.firstName} className="block overflow-visible" />
+              <span className="block overflow-visible">
                 <span
                   data-hero-char
-                  className={`mr-4 inline-block italic text-[0.44em] will-change-transform md:mr-6 transition-colors duration-500 ${dimClass}`}
+                  className={`mr-3 inline-block italic text-[0.44em] will-change-transform md:mr-6 transition-colors duration-500 ${dimClass}`}
                   style={{ opacity: 0 }}
                 >
                   &amp;
                 </span>
-                <HeroNameLine text={weddingData.bride.firstName} className="inline" />
+                <HeroNameLine text={weddingData.bride.firstName} className="inline overflow-visible" />
               </span>
             </h1>
 
