@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import DomeGallery from '../ui/DomeGallery'
+import galleryBackground from '../../assets/lainnya/foto/galeri-2.webp'
 
 export default function GallerySection() {
   const { shouldReduceMotion, shouldReduceHeavyMotion } = useReducedMotionSafe()
@@ -49,7 +50,16 @@ export default function GallerySection() {
       data-wow="true"
       className={`relative overflow-hidden py-24 md:py-32 transition-colors duration-500 ${sectionClass}`}
     >
-      <div className="pointer-events-none absolute inset-0 opacity-45" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <img
+          src={galleryBackground}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+          loading="lazy"
+        />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050505] to-transparent" />
         <div className="absolute left-1/2 top-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-500 border-[#F5F5F0]/[0.055]" />
         <div className="absolute inset-x-0 top-1/2 h-px transition-colors duration-500 bg-[#F5F5F0]/[0.055]" />
       </div>
@@ -75,7 +85,7 @@ export default function GallerySection() {
             </div>
           )}
 
-          <div className="absolute inset-0 transition-colors duration-500 bg-[#050505]/72" aria-hidden="true" />
+          <div className="absolute inset-0 transition-colors duration-500 bg-[#050505]/60 backdrop-blur-[8px]" aria-hidden="true" />
           <div className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t transition-colors duration-500 border-[#F5F5F0]/30" aria-hidden="true" />
           <div className="pointer-events-none absolute right-0 top-0 h-3 w-3 border-r border-t transition-colors duration-500 border-[#F5F5F0]/30" aria-hidden="true" />
           <div className="pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b border-l transition-colors duration-500 border-[#F5F5F0]/20" aria-hidden="true" />

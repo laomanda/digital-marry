@@ -89,6 +89,92 @@ export default function CountdownSection() {
       data-theme="dark"
       className={`relative overflow-hidden py-20 md:py-32 lg:py-40 transition-colors duration-500 ${sectionBgClass}`}
     >
+      {/* Base warm tint */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background: 'linear-gradient(180deg, rgba(18,12,8,1) 0%, rgba(12,8,5,1) 40%, rgba(18,14,10,1) 100%)',
+        }}
+      />
+
+      {/* Fabric weave texture (CSS only) */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.12]" aria-hidden="true"
+        style={{
+          backgroundImage: `
+            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(245,242,236,0.35) 2px, rgba(245,242,236,0.35) 3px),
+            repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(245,242,236,0.35) 2px, rgba(245,242,236,0.35) 3px)
+          `,
+          backgroundSize: '6px 6px',
+        }}
+      />
+
+      {/* Secondary fine linen texture */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.06]" aria-hidden="true"
+        style={{
+          backgroundImage: `
+            repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(211,165,117,0.2) 1px, rgba(211,165,117,0.2) 2px),
+            repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(211,165,117,0.15) 1px, rgba(211,165,117,0.15) 2px)
+          `,
+          backgroundSize: '12px 12px',
+        }}
+      />
+
+      {/* Diagonal silk sheen stripes */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.14]" aria-hidden="true"
+        style={{
+          backgroundImage: `
+            repeating-linear-gradient(
+              135deg,
+              transparent, transparent 28px,
+              rgba(211,165,117,0.12) 28px, rgba(211,165,117,0.12) 30px,
+              transparent 30px, transparent 58px
+            )
+          `,
+        }}
+      />
+
+      {/* Smooth transition gradients to blend textures seamlessly */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-40 md:h-64 z-[2] bg-gradient-to-b from-[#050505] to-transparent" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 md:h-64 z-[2] bg-gradient-to-t from-[#050505] to-transparent" aria-hidden="true" />
+
+      {/* Main radial warm glow (center) */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background: 'radial-gradient(ellipse 70% 60% at 50% 45%, rgba(211,165,117,0.14) 0%, rgba(211,165,117,0.04) 40%, transparent 70%)',
+        }}
+      />
+
+      {/* Secondary glow (bottom-left) */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background: 'radial-gradient(ellipse 40% 50% at 15% 80%, rgba(211,165,117,0.08) 0%, transparent 60%)',
+        }}
+      />
+
+      {/* Secondary glow (top-right) */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background: 'radial-gradient(ellipse 35% 45% at 85% 20%, rgba(211,165,117,0.07) 0%, transparent 60%)',
+        }}
+      />
+
+
+      {/* Subtle corner vignette */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 35%, rgba(5,5,5,0.6) 100%)',
+        }}
+      />
+
       <Container>
         <div className="relative mx-auto flex w-full max-w-[1080px] flex-col items-center">
           <div
