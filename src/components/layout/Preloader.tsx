@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
-import logo from '../../assets/logo-white.webp'
+import logo from '../../assets/logo-400.webp'
 
 interface PreloaderProps {
   onComplete: () => void
