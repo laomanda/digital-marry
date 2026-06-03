@@ -1,14 +1,30 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Container } from '../ui/Container'
-import quoteBackground from '../../assets/lainnya/foto/galeri-6.webp'
+import slide1 from '../../assets/lainnya/foto/galeri-4.webp'
+import slide2 from '../../assets/lainnya/foto/galeri-3.webp'
+import slide3 from '../../assets/lainnya/foto/galeri-5.webp'
+import slide4 from '../../assets/lainnya/foto/galeri-6.webp'
+import slide5 from '../../assets/lainnya/foto/galeri-7.webp'
+import slide6 from '../../assets/lainnya/foto/galeri-8.webp'
 import quoteTopOrnament from '../../assets/lainnya/section-qoute.webp'
 import quoteBottomOrnament from '../../assets/lainnya/section-qoute-1.webp'
+
+const backgroundSlides = [slide1, slide2, slide3, slide4, slide5, slide6]
 
 export function QuoteSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
   const sectionClass = 'bg-[#050505] text-[#F5F5F0]'
+
+  const [currentSlide, setCurrentSlide] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % backgroundSlides.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <section
@@ -23,14 +39,19 @@ export function QuoteSection() {
           ref={contentRef}
           className="relative mx-auto aspect-[9/16] w-full max-w-[min(100vw,calc(100svh*9/16),760px)] overflow-hidden bg-[#050505] text-center"
         >
-          <img
-            src={quoteBackground}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover object-center"
-            loading="lazy"
-            decoding="async"
-            aria-hidden="true"
-          />
+          {backgroundSlides.map((slide, index) => (
+            <img
+              key={slide}
+              src={slide}
+              alt=""
+              className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ease-in-out ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              aria-hidden="true"
+            />
+          ))}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050505]/18 via-transparent to-[#050505]/30" aria-hidden="true" />
 
           <img

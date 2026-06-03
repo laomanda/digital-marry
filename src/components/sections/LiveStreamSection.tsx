@@ -38,7 +38,7 @@ export default function LiveStreamSection() {
 
         <div>
           <a
-            href="https://youtube.com" 
+            href="https://youtube.com/@albianshoting?si=VwQ_Ba9Hx6QPbIiw" 
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex items-center justify-center gap-4 border border-[#F5F5F0]/20 bg-[#F5F5F0]/[0.03] px-8 py-4 transition-all duration-500 hover:border-[#F5F5F0]/50 hover:bg-[#F5F5F0]/[0.08]"
