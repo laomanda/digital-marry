@@ -12,8 +12,8 @@ import galeri8 from '../assets/lainnya/foto/galeri-8.webp'
 export const weddingData = {
   bride: {
     firstName: 'Reny',
-    lastName: 'Nur Khayti, S.M.',
-    fullName: 'Reny Nur Khayti, S.M.',
+    lastName: 'Nur Khayati, S.M.',
+    fullName: 'Reny Nur Khayati, S.M.',
     parents: 'Putri ke-3 dari Bpk. Mungin & Ibu Kamsini',
     description: 'Seorang pecinta pagi yang tenang, sastra klasik, dan keindahan sederhana alam semesta.',
     photo: bridePhoto,
