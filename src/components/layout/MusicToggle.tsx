@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 
-import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import { gsap } from '../../lib/gsap'
 import { Volume2, VolumeX } from 'lucide-react'
 import soundUrl from '../../assets/audio/sound.mpeg'
@@ -14,7 +13,6 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [hasError, setHasError] = useState(false)
-  const { isMobile } = useReducedMotionSafe()
   const paletteClasses = 'border-[rgba(245,242,236,0.15)] bg-[rgba(5,5,5,0.7)] text-[rgba(245,242,236,0.6)] hover:text-[#F5F2EC] hover:border-[rgba(245,242,236,0.3)] focus-visible:outline-[rgba(245,242,236,0.5)] disabled:hover:text-[rgba(245,242,236,0.6)] disabled:hover:border-[rgba(245,242,236,0.15)]';
 
   // Initialize audio element

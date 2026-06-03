@@ -55,7 +55,6 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
   const bottomFadeClass = 'from-[#050505] via-[#050505]/78'
 
   const coupleName = `${weddingData.groom.firstName} & ${weddingData.bride.firstName}`
-  const heroImage = heroImageLocal
 
   useEffect(() => {
     if (!isInvitationOpen) return
