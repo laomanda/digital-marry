@@ -3,7 +3,7 @@ import { gsap } from '../../lib/gsap'
 import { weddingData } from '../../data/wedding.data'
 import { useReducedMotionSafe } from '../../hooks/useReducedMotionSafe'
 import heroImageLocal from '../../assets/lainnya/foto/hero-section.webp'
-
+import heroImageMobile from '../../assets/lainnya/foto/galeri-4.webp'
 type HeroSectionProps = {
   isInvitationOpen: boolean
 }
@@ -256,14 +256,17 @@ export default function HeroSection({ isInvitationOpen }: HeroSectionProps) {
     >
       <div ref={bgRef} className="absolute inset-0 will-change-transform" aria-hidden="true">
         <div data-hero-bg-scale className="absolute inset-0 will-change-transform">
-          <img
-            src={heroImage}
-            alt=""
-            aria-hidden="true"
-            className={`h-full w-full scale-[1.02] object-cover transition-all duration-500 contrast-[1.06] brightness-[0.96]`}
-            loading="eager"
-            decoding="async"
-          />
+          <picture className="h-full w-full">
+            <source media="(max-width: 767px)" srcSet={heroImageMobile} />
+            <img
+              src={heroImageLocal}
+              alt=""
+              aria-hidden="true"
+              className={`h-full w-full scale-[1.02] object-cover transition-all duration-500 contrast-[1.06] brightness-[0.96]`}
+              loading="eager"
+              decoding="async"
+            />
+          </picture>
         </div>
       </div>
 

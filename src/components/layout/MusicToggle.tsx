@@ -51,7 +51,7 @@ export default function MusicToggle({ visible }: MusicToggleProps) {
 
       // Try autoplay on first visibility (user gesture already happened via Open Invitation)
       const audio = audioRef.current
-      if (audio && !isPlaying && !hasError && !isMobile) {
+      if (audio && !isPlaying && !hasError) {
         audio.play()
           .then(() => setIsPlaying(true))
           .catch(() => {
