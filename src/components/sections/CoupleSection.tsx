@@ -60,16 +60,21 @@ function EditorialHeart({
 function SplitHeaderTitle({ text }: { text: string }) {
   return (
     <>
-      {text.split('').map((ch, i) => (
-        <span
-          key={`${ch}-${i}`}
-          data-couple-header-char
-          aria-hidden="true"
-          className="inline-block"
-        >
-          {ch === ' ' ? '\u00A0' : ch}
-        </span>
-      ))}
+      {text.split('').map((ch, i) => {
+        if (ch === ' ') {
+          return <span key={`${ch}-${i}`}> </span>
+        }
+        return (
+          <span
+            key={`${ch}-${i}`}
+            data-couple-header-char
+            aria-hidden="true"
+            className="inline-block"
+          >
+            {ch}
+          </span>
+        )
+      })}
     </>
   )
 }
@@ -77,16 +82,21 @@ function SplitHeaderTitle({ text }: { text: string }) {
 function SplitName({ name }: { name: string }) {
   return (
     <>
-      {name.split('').map((ch, i) => (
-        <span
-          key={`${ch}-${i}`}
-          data-couple-char
-          aria-hidden="true"
-          className="inline-block"
-        >
-          {ch === ' ' ? '\u00A0' : ch}
-        </span>
-      ))}
+      {name.split('').map((ch, i) => {
+        if (ch === ' ') {
+          return <span key={`${ch}-${i}`}> </span>
+        }
+        return (
+          <span
+            key={`${ch}-${i}`}
+            data-couple-char
+            aria-hidden="true"
+            className="inline-block"
+          >
+            {ch}
+          </span>
+        )
+      })}
     </>
   )
 }
