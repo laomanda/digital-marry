@@ -58,45 +58,51 @@ function EditorialHeart({
 }
 
 function SplitHeaderTitle({ text }: { text: string }) {
+  const words = text.split(' ')
   return (
     <>
-      {text.split('').map((ch, i) => {
-        if (ch === ' ') {
-          return <span key={`${ch}-${i}`}> </span>
-        }
-        return (
-          <span
-            key={`${ch}-${i}`}
-            data-couple-header-char
-            aria-hidden="true"
-            className="inline-block"
-          >
-            {ch}
+      {words.map((word, wIdx) => (
+        <span key={`word-${wIdx}`}>
+          <span className="inline-block whitespace-nowrap">
+            {word.split('').map((ch, i) => (
+              <span
+                key={`${ch}-${i}`}
+                data-couple-header-char
+                aria-hidden="true"
+                className="inline-block"
+              >
+                {ch}
+              </span>
+            ))}
           </span>
-        )
-      })}
+          {wIdx < words.length - 1 && ' '}
+        </span>
+      ))}
     </>
   )
 }
 
 function SplitName({ name }: { name: string }) {
+  const words = name.split(' ')
   return (
     <>
-      {name.split('').map((ch, i) => {
-        if (ch === ' ') {
-          return <span key={`${ch}-${i}`}> </span>
-        }
-        return (
-          <span
-            key={`${ch}-${i}`}
-            data-couple-char
-            aria-hidden="true"
-            className="inline-block"
-          >
-            {ch}
+      {words.map((word, wIdx) => (
+        <span key={`word-${wIdx}`}>
+          <span className="inline-block whitespace-nowrap">
+            {word.split('').map((ch, i) => (
+              <span
+                key={`${ch}-${i}`}
+                data-couple-char
+                aria-hidden="true"
+                className="inline-block"
+              >
+                {ch}
+              </span>
+            ))}
           </span>
-        )
-      })}
+          {wIdx < words.length - 1 && ' '}
+        </span>
+      ))}
     </>
   )
 }
