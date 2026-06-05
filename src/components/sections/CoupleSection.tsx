@@ -244,7 +244,7 @@ export function CoupleSection() {
             The Couple
           </span>
           <h2
-            className={`font-athene text-[clamp(40px,7vw,96px)] leading-[0.92] transition-colors duration-500 ${headingClass}`}
+            className={`font-athene text-[clamp(32px,8.5vw,96px)] leading-[0.92] transition-colors duration-500 whitespace-nowrap ${headingClass}`}
             aria-label={`${weddingData.groom.firstName} & ${weddingData.bride.firstName}`}
           >
             <SplitHeaderTitle text={`${weddingData.groom.firstName} & ${weddingData.bride.firstName}`} />
